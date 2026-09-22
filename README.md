@@ -1,11 +1,13 @@
 # ENS Compliance Studio
 
-**Categorización, análisis de riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría del Esquema Nacional de Seguridad, en una sola herramienta que cabe en un fichero.**
+Categorización, análisis de riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría del Esquema Nacional de Seguridad.
+
+Es una sola herramienta, y cabe en un fichero.
 
 ![Panel de conformidad](docs/img/panel.png)
 
 > Proyecto de fin de máster · Máster en Ciberseguridad & IA (Evolve Academy) · Módulo de Gobierno, Riesgo y Cumplimiento
-> Autor: **Yoandy Ramírez Delgado** · Septiembre de 2026 · Versión 2.0
+> Autor: **Yoandy Ramírez Delgado** · Septiembre de 2026 · Versión 2.0.1
 
 ---
 
@@ -34,7 +36,7 @@ ENS Compliance Studio los concilia y señala lo que no cuadra antes de que lo ha
 | **Proyectos propios** | Asistente en tres pasos, o importación directa de tu SoA en Excel. |
 | **5 casos de ejemplo** | TechServ (ALTA), un ayuntamiento (MEDIA), una universidad (MEDIA), un hospital (ALTA) y un SaaS (BÁSICA), cada uno con problemas distintos que descubrir. |
 | **Exportación** | SoA en Excel con la estructura de la plantilla y la trazabilidad añadida, informe de preauditoría en Markdown, plan de acción y registro de riesgos en CSV, y el proyecto en JSON. |
-| **Hecha para el uso diario** | Buscador de comandos (Ctrl + K), atajos de teclado, perfil, ajustes, tema claro y oscuro, cuatro acentos, densidad compacta, centro de ayuda con glosario, copia de seguridad y diseño responsive. |
+| **Hecha para el uso diario** | Buscador de comandos (Ctrl + K), atajos de teclado, perfil, ajustes, tema claro y oscuro con paneles translúcidos, seis acentos (verde agua, azul, verde, amarillo, rojo y grafito), interfaz en español e inglés, densidad compacta, centro de ayuda con glosario, copia de seguridad y diseño responsive. |
 | **Auditor por línea de comandos** | `ens_soa_audit.py` audita cualquier SoA en Excel con la plantilla, apto para CI. |
 
 <table><tr>
@@ -67,8 +69,7 @@ node app/build.js
 
 Sobre el Excel y el MAGERIT Lab del profesor, tal cual se entregaron:
 
-- **2 valores no válidos** en la categorización (`'m'` en la disponibilidad de S-01 y S-04).
-- **1 cabecera corrupta** en la hoja SoA (columna O).
+- **1 cabecera corrupta** en la hoja SoA (columna O). La disponibilidad de S-01 y S-04 viene abreviada como `m`: se lee como MEDIO y no cambia la categoría, porque I-04 ya es ALTO.
 - **4 contradicciones entre la SoA y el análisis de riesgos**: medidas declaradas implantadas al 100 % cuyas salvaguardas el análisis valora en madurez L2.
 - Con seis hallazgos de pentest de ejemplo: **11 no conformidades mayores** por evidencia técnica, los riesgos fuera de apetito pasan **de 2 a 5**, y solo **55 de 66** medidas «implantadas» quedan sin objeciones.
 

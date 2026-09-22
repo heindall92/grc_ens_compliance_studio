@@ -34,7 +34,10 @@ function sanitizeState(raw) {
   st.categorizacion = arr(r.categorizacion, 200).filter(isObj).map((a, i) => {
     let id = idOk(a.id) || `S-${String(i + 1).padStart(2, '0')}`; if (seenCat.has(id)) id = `${id}-${i}`; seenCat.add(id);
     const o = { tipo: oneOf(a.tipo, ['Servicio', 'Información'], 'Servicio'), id, nombre: s(a.nombre, 300), responsable: s(a.responsable, 200), justificacion: s(a.justificacion, 2000) };
-    for (const d of E.DIMS) o[d] = s(a[d], 20); // se conservan valores no válidos para que el auditor los señale (CAT-01)
+    for (const d of E.DIMS) {
+      const lv = E.ensLevel(a[d]);
+      o[d] = lv === undefined ? s(a[d], 20) : (lv || ''); // B/M/ALT pasan a BAJO/MEDIO/ALTO; lo ilegible se conserva para CAT-01
+    }
     return o;
   });
   st.soa = {};
@@ -74,7 +77,8 @@ function sanitizeWs(raw) {
   const pr = isObj(r.profile) ? r.profile : {}; const se = isObj(r.settings) ? r.settings : {}; const cv = isObj(se.cvss) ? se.cvss : {};
   return {
     profile: { nombre: s(pr.nombre, 120), rol: s(pr.rol, 80), organizacion: s(pr.organizacion, 160), email: s(pr.email, 160), color: oneOf(pr.color, COLOR_IDS, 'teal') },
-    settings: { tema: oneOf(se.tema, ['sistema', 'claro', 'oscuro'], 'sistema'), acento: oneOf(se.acento, ['teal', 'blue', 'green', 'graphite'], 'teal'), densidad: oneOf(se.densidad, ['comoda', 'compacta'], 'comoda'),
+    settings: { tema: oneOf(se.tema, ['sistema', 'claro', 'oscuro'], 'sistema'), acento: oneOf(se.acento, ['teal', 'blue', 'green', 'amber', 'rose', 'graphite'], 'teal'), densidad: oneOf(se.densidad, ['comoda', 'compacta'], 'comoda'),
+      idioma: oneOf(se.idioma, ['es', 'en'], 'es'),
       apetito: oneOf(se.apetito, E.NIVELES, 'M'), cvss: { ma: num(cv.ma, 0, 10, 9), a: num(cv.a, 0, 10, 7), m: num(cv.m, 0, 10, 4) }, conHallazgos: se.conHallazgos !== false,
       madurezMin: oneOf(se.madurezMin, ['L1', 'L2', 'L3'], 'L2'), reglasOff: arr(se.reglasOff, 60).filter((x) => /^[A-Z]{2,3}-\d{2}$/.test(String(x))), asistente: se.asistente === true, mostrarCasos: se.mostrarCasos !== false },
     projects: arr(r.projects, 300).filter((p) => isObj(p) && PROJ_ID.test(String(p.id))).map((p) => ({ id: p.id, kind: oneOf(p.kind, ['own', 'demo'], 'own'), caseId: CASE_IDS.includes(p.caseId) ? p.caseId : undefined, nombre: s(p.nombre, 200), organizacion: s(p.organizacion, 200), created: s(p.created, 40), updated: s(p.updated, 40), categoria: oneOf(p.categoria, ['ALTA', 'MEDIA', 'BÁSICA'], undefined), grado: p.grado === undefined ? undefined : num(p.grado, 0, 1, 0), ncMayor: Math.round(num(p.ncMayor, 0, 9999, 0)) })),

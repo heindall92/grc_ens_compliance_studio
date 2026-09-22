@@ -43,10 +43,12 @@
 
   /* ---------- Utilidades ---------- */
   const isBlank = (v) => v === null || v === undefined || String(v).trim() === '' || String(v).trim() === '—' || String(v).trim() === '-';
+  const ENS_ALIAS = { B: 'BAJO', BAJ: 'BAJO', BAJA: 'BAJO', BASICA: 'BAJO', 'BÁSICA': 'BAJO', M: 'MEDIO', MED: 'MEDIO', MEDIA: 'MEDIO', ALT: 'ALTO', ALTA: 'ALTO' };
   function ensLevel(v) {
     if (isBlank(v)) return null;
-    const s = String(v).trim().toUpperCase();
-    return ENS_LV[s] ? s : undefined; // undefined = valor inválido
+    const s = String(v).trim().toUpperCase().replace(/\.$/, '');
+    if (ENS_LV[s]) return s;
+    return ENS_ALIAS[s] || undefined; // undefined = valor inválido
   }
   const maxEns = (a, b) => (!a ? b : !b ? a : (ENS_LV[a] >= ENS_LV[b] ? a : b));
   const maxNivel = (a, b) => (!a ? b : !b ? a : (NN[a] >= NN[b] ? a : b));

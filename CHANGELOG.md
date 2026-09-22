@@ -1,5 +1,13 @@
 # Cambios
 
+## 2.0.1 · septiembre de 2026
+- Los círculos de acento y de avatar se ven en tema claro y oscuro, y el color activo tiñe la navegación, los botones y las tarjetas seleccionadas (verde agua, azul, verde, amarillo, rojo y grafito).
+- Las tarjetas de los casos de ejemplo conservan su color en tema oscuro.
+- Paneles translúcidos en tema claro y oscuro.
+- Interruptor de idioma español / inglés en la barra superior y en Ajustes.
+- El menú de proyecto avisa, en lugar de parecer desactivado, cuando todavía no hay un proyecto abierto. El rol no lo bloquea.
+- La abreviatura `m` (y B / ALT) en la categorización se lee como MEDIO. En TechServ no cambia la categoría: la disponibilidad ya es ALTO por I-04.
+
 ## 2.0.0 · septiembre de 2026
 - Nueva interfaz: sistema de diseño propio, iconografía, tema claro y oscuro, 4 colores de acento, densidad compacta y diseño responsive con menú en cajón.
 - Espacio de trabajo con varios proyectos: asistente de nuevo proyecto en 3 pasos, importación de la SoA desde Excel y conmutador de proyectos.

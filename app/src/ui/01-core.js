@@ -13,9 +13,9 @@ const clone = (o) => JSON.parse(JSON.stringify(o));
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const blank = E.isBlank;
-const pct = (x, d = 1) => (Number(x) * 100).toLocaleString('es-ES', { maximumFractionDigits: d, minimumFractionDigits: d }) + ' %';
+const pct = (x, d = 1) => (Number(x) * 100).toLocaleString(locale(), { maximumFractionDigits: d, minimumFractionDigits: d }) + ' %';
 const today = () => new Date().toISOString().slice(0, 10);
-const fmtDate = (iso) => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T00:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }); };
+const fmtDate = (iso) => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T00:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString(locale(), { day: 'numeric', month: 'short', year: 'numeric' }); };
 const plural = (n, s, p) => `${n} ${n === 1 ? s : p}`;
 const uid = () => Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
 const initials = (name) => String(name || '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || '··';
@@ -142,4 +142,5 @@ function applyTheme() {
   else r.removeAttribute('data-theme');
   r.setAttribute('data-accent', ws.settings.acento);
   r.setAttribute('data-density', ws.settings.densidad);
+  r.lang = ws.settings.idioma === 'en' ? 'en' : 'es';
 }

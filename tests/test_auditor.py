@@ -44,10 +44,10 @@ def soa_row(ws, code):
 def test_original_resultado_exacto():
     res = A.audit(ORIG, HOY)
     assert res.categoria == "ALTA"
-    assert res.niveles == {"D": "ALTO", "I": "ALTO", "C": "ALTO", "A": "ALTO", "T": "MEDIO"}
+    assert res.niveles == {"D": "ALTO", "I": "ALTO", "C": "ALTO", "A": "ALTO", "T": "MEDIO"}  # 'm' = MEDIO; I-04 ya deja D en ALTO
     assert (res.medidas, res.aplicables) == (73, 72)
     assert abs(res.grado - 0.98888888) < 1e-6
-    assert ids(res) == ["CAT-01|S-01 · D", "CAT-01|S-04 · D", "STR-01|Cabecera col. O"]
+    assert ids(res) == ["STR-01|Cabecera col. O"]
 
 
 def test_recategorizacion_al_alza_detecta_exclusion_y_refuerzo(tmp_path):
@@ -115,9 +115,9 @@ def test_soa_caducada_y_sin_firma(tmp_path):
 def test_cli_codigo_de_salida_y_salidas(tmp_path):
     md, js = tmp_path / "r.md", tmp_path / "r.json"
     assert A.main([str(ORIG), "-q", "--fecha", "2026-09-22", "--md", str(md), "--json", str(js), "--fail-on", "mayor"]) == 0
-    assert A.main([str(ORIG), "-q", "--fecha", "2026-09-22", "--fail-on", "menor"]) == 2
-    assert "CAT-01" in md.read_text(encoding="utf-8")
-    assert '"NC menor": 2' in js.read_text(encoding="utf-8")
+    assert A.main([str(ORIG), "-q", "--fecha", "2026-09-22", "--fail-on", "menor"]) == 0
+    assert "CAT-01" not in md.read_text(encoding="utf-8")
+    assert '"NC menor": 0' in js.read_text(encoding="utf-8")
 
 
 PARIDAD = ROOT / "tests" / "artifacts" / "paridad_SoA_ENS.xlsx"
@@ -150,4 +150,4 @@ def test_paridad_python_js_con_hallazgos_documentales(tmp_path):
     out = subprocess.run(["node", str(script), str(ROOT)], capture_output=True, text=True, check=True).stdout
     js = {x for x in json.loads(out) if x.split("-")[0] in {"CAT", "SOA", "REF", "MC", "DOC"} and not x.startswith("MC-04")}
     py = {f"{f.id}|{f.ambito}" for f in A.audit(dst, HOY).hallazgos if f.id.split("-")[0] in {"CAT", "SOA", "REF", "MC", "DOC"}}
-    assert py == js == {"CAT-01|S-01 · D", "CAT-01|S-04 · D"}
+    assert py == js == set()
