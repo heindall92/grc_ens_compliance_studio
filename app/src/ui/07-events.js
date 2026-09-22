@@ -51,7 +51,7 @@ document.addEventListener('input', (ev) => {
   if (el.dataset.uiq) { ui[el.dataset.uiq] = el.value; clearTimeout(ui._qT); ui._qT = setTimeout(render, 150); }
   if (el.id === 'glo-q') { ui.glosarioQ = el.value; clearTimeout(ui._qT); ui._qT = setTimeout(render, 150); }
   if (el.id === 'pal-q') { ui.paletteQ = el.value; ui.paletteIdx = 0; renderPalette(); }
-  if (el.dataset.ws === 'profile.nombre' && el.id === 'pf-n') { ws.profile.nombre = el.value; saveWs(); $('#side').innerHTML = renderSide(); $('#top').innerHTML = renderTop(); }
+  if (el.dataset.ws === 'profile.nombre' && el.id === 'pf-n') { ws.profile.nombre = el.value; saveWs(); $('#side').innerHTML = renderSide(); $('#top').innerHTML = renderTop(); localize(); }
 });
 
 let gPending = false;
@@ -96,7 +96,10 @@ document.addEventListener('click', (ev) => {
   if (!el || el.disabled) return;
   const act = el.dataset.act; const i = el.dataset.i !== undefined ? +el.dataset.i : null;
   switch (act) {
-    case 'nav': if (el.dataset.view === 'nuevo' && ui.view !== 'nuevo') ui.wizard = null; go(el.dataset.view); break;
+    case 'nav': {
+      if (el.dataset.locked === '1') { toast('Abre o crea un proyecto para entrar aquí. El rol no bloquea el menú.'); break; }
+      if (el.dataset.view === 'nuevo' && ui.view !== 'nuevo') ui.wizard = null; go(el.dataset.view); break;
+    }
     case 'menu': ui.menu = ui.menu === el.dataset.menu ? null : el.dataset.menu; render(); break;
     case 'drawer': ui.drawer = !ui.drawer; render(); break;
     case 'palette': ui.palette = true; ui.paletteQ = ''; ui.paletteIdx = 0; renderPalette(); break;
@@ -104,7 +107,12 @@ document.addEventListener('click', (ev) => {
     case 'pal-run': { const it = (ui._pItems || [])[i]; ui.palette = false; renderPalette(); if (it) it.act(); break; }
     case 'cycle-theme': { const order = ['sistema', 'claro', 'oscuro']; ws.settings.tema = order[(order.indexOf(ws.settings.tema) + 1) % 3]; saveWs(); applyTheme(); render(); toast(`Tema: ${ws.settings.tema}`); break; }
     case 'set': ws.settings[el.dataset.k] = el.dataset.v; saveWs(); applyTheme(); render(); break;
-    case 'set-color': ws.profile.color = el.dataset.c; saveWs(); render(); break;
+    case 'set-color': {
+      ws.profile.color = el.dataset.c;
+      const asAccent = { teal: 'teal', blue: 'blue', green: 'green', amber: 'amber', rose: 'rose' }[el.dataset.c];
+      if (asAccent) { ws.settings.acento = asAccent; applyTheme(); }
+      saveWs(); render(); break;
+    }
     case 'help-tab': ui.helpTab = el.dataset.tab; render(); break;
     case 'open-project': openProject(el.dataset.id); break;
     case 'open-case': openCase(el.dataset.case); break;
@@ -176,7 +184,10 @@ document.addEventListener('click', (ev) => {
 });
 
 /* ---------- Arranque ---------- */
-ws = sanitizeWs(store.get(WS_KEY)); ui.conHallazgos = ws.settings.conHallazgos;
+ws = sanitizeWs(store.get(WS_KEY));
+const avatarAccent = { teal: 'teal', blue: 'blue', green: 'green', amber: 'amber', rose: 'rose' }[ws.profile.color];
+if (avatarAccent && avatarAccent !== 'teal' && ws.settings.acento === 'teal') { ws.settings.acento = avatarAccent; saveWs(); }
+ui.conHallazgos = ws.settings.conHallazgos;
 try { Object.freeze(Object.prototype); } catch (e) { /* entorno que no lo permite */ }
 applyTheme();
 if (ws.activeId && store.get(PKEY(ws.activeId))) { state = migrate(store.get(PKEY(ws.activeId))); recompute(); }

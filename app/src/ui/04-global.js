@@ -2,6 +2,8 @@
 const ROLES = ['Responsable de Seguridad (CISO)', 'Responsable del Sistema', 'Responsable de la Información', 'Auditor/a de seguridad', 'Consultor/a GRC', 'Delegado/a de Protección de Datos', 'Estudiante', 'Otro'];
 const SECTORES = ['Administración General del Estado', 'Administración autonómica', 'Administración local', 'Universidad', 'Sanidad', 'Proveedor TIC del sector público', 'Proveedor SaaS / nube', 'Otro'];
 const COLORS = ['teal', 'blue', 'green', 'amber', 'rose', 'slate'];
+const COLOR_NAME = { teal: 'Verde agua', blue: 'Azul', green: 'Verde', amber: 'Ámbar', rose: 'Rojo', slate: 'Pizarra' };
+const ACCENTS = [['teal', 'Verde agua'], ['blue', 'Azul'], ['green', 'Verde'], ['amber', 'Amarillo'], ['rose', 'Rojo'], ['graphite', 'Grafito']];
 
 function vInicio() {
   const own = ws.projects.filter((p) => p.kind === 'own');
@@ -24,7 +26,7 @@ function vInicio() {
       <p class="lead">Categoriza tu sistema, analiza sus riesgos, declara la aplicabilidad de las 73 medidas del Esquema Nacional de Seguridad y comprueba que todo cuadra, incluida la evidencia de tus pruebas de intrusión.</p></div>
   </section>
   ${!ws.onboarded && !ws.profileDone ? `<div class="card onboard">
-      <div class="ob-text"><h3>Antes de empezar, ¿quién eres?</h3><p class="muted small">Tu nombre y tu rol aparecen como autor en los informes y en la SoA exportada. Todo se guarda solo en este navegador.</p></div>
+      <div class="ob-text"><h3>Antes de empezar, ¿quién eres?</h3><p class="muted small">El nombre y el rol solo aparecen como autor en los informes. No hace falta rellenarlos: el menú de la izquierda se activa al crear o abrir un proyecto.</p></div>
       <div class="ob-form"><label class="fld">Nombre<input type="text" id="ob-nombre" data-ws="profile.nombre" value="${esc(ws.profile.nombre)}" placeholder="Nombre y apellidos"></label>
       <label class="fld">Rol<select id="ob-rol" data-ws="profile.rol">${opt('', 'Elige tu rol', ws.profile.rol)}${ROLES.map((r) => opt(r, r, ws.profile.rol)).join('')}</select></label>
       <div class="row span2"><button type="button" class="btn primary sm" data-act="ob-save">${icon('check', 15)}Guardar</button><button type="button" class="btn ghost sm" data-act="ob-skip">Ahora no</button></div></div></div>` : ''}
@@ -118,7 +120,8 @@ function vPerfil() {
   return `${pageHead('Cuenta', 'Tu perfil', 'Se usa como autor en los informes, en la portada de la SoA exportada y en el plan de acción. Se guarda solo en este navegador.')}
   <div class="grid g-side">
     <div class="card profile-card">${avatar(88)}<h2>${esc(p.nombre || 'Sin nombre')}</h2><p class="muted">${esc(p.rol || 'Sin rol')}</p>${p.organizacion ? `<p class="small">${esc(p.organizacion)}</p>` : ''}
-      <div class="swatches" role="group" aria-label="Color del avatar">${COLORS.map((c) => `<button type="button" class="swatch c-${c}${p.color === c ? ' on' : ''}" data-act="set-color" data-c="${c}" aria-label="Color ${c}"></button>`).join('')}</div>
+      <div class="swatches" role="group" aria-label="Color del avatar">${COLORS.map((c) => `<button type="button" class="swatch c-${c}${p.color === c ? ' on' : ''}" data-act="set-color" data-c="${c}" aria-label="${COLOR_NAME[c]}" title="${COLOR_NAME[c]}"></button>`).join('')}</div>
+      <p class="muted small">Este color es el del círculo de tu perfil. Verde agua, azul, verde, amarillo y rojo cambian también el acento de botones y tarjetas. La pizarra solo cambia el avatar.</p>
       <div class="pf-stats"><div><b class="num">${ws.projects.filter((x) => x.kind === 'own').length}</b><span>proyectos</span></div><div><b class="num">${ws.projects.filter((x) => x.kind === 'demo').length}</b><span>casos abiertos</span></div></div></div>
     <div class="card"><h3>Datos</h3><div class="form-grid" style="margin-top:14px">
       <label class="fld span2">Nombre y apellidos<input type="text" id="pf-n" data-ws="profile.nombre" value="${esc(p.nombre)}"></label>
@@ -140,8 +143,9 @@ function vAjustes() {
   return `${pageHead('Preferencias', 'Ajustes', 'Personaliza la apariencia y los criterios de análisis y auditoría. Los cambios se aplican al instante a todos los proyectos.')}
   <div class="settings">
     <section class="card"><h3>Apariencia</h3>
+      ${setRow('Idioma', 'Español o inglés para menús, ajustes y ayuda. El texto del Anexo II y los hallazgos del auditor siguen en español, que es el de la norma.', `<div class="seg" role="group" aria-label="Idioma">${[['es', 'Español'], ['en', 'English']].map(([v, l]) => `<button type="button" data-act="set" data-k="idioma" data-v="${v}" aria-pressed="${(s.idioma || 'es') === v}">${l}</button>`).join('')}</div>`)}
       ${setRow('Tema', 'Sistema sigue la configuración de tu equipo.', seg('tema', [['sistema', 'Sistema', 'monitor'], ['claro', 'Claro', 'sun'], ['oscuro', 'Oscuro', 'moon']]))}
-      ${setRow('Color de acento', '', `<div class="swatches">${['teal', 'blue', 'green', 'graphite'].map((c) => `<button type="button" class="swatch a-${c}${s.acento === c ? ' on' : ''}" data-act="set" data-k="acento" data-v="${c}" aria-label="Acento ${c}"></button>`).join('')}</div>`)}
+      ${setRow('Color de acento', 'Se aplica a botones, la navegación, las tarjetas activas y los resaltes.', `<div class="swatches" role="group" aria-label="Color de acento">${ACCENTS.map(([c, name]) => `<button type="button" class="swatch a-${c}${s.acento === c ? ' on' : ''}" data-act="set" data-k="acento" data-v="${c}" aria-label="${name}" title="${name}"></button>`).join('')}</div>`)}
       ${setRow('Densidad', 'Compacta muestra más filas en tablas y listas.', seg('densidad', [['comoda', 'Cómoda'], ['compacta', 'Compacta']]))}
     </section>
     <section class="card"><h3>Análisis de riesgos</h3>
@@ -171,7 +175,7 @@ function vAjustes() {
 
 /* --- Ayuda --- */
 const RULES = [
-  ['CAT-01', 'NC menor', 'Valor de categorización no válido (solo BAJO/MEDIO/ALTO).'], ['CAT-02', 'NC mayor', 'Activo esencial sin valorar.'],
+  ['CAT-01', 'NC menor', 'Valor de categorización no válido (BAJO, MEDIO, ALTO o las abreviaturas B, M y ALT).'], ['CAT-02', 'NC mayor', 'Activo esencial sin valorar.'],
   ['SOA-01', 'NC mayor', 'Exclusión indebida: medida exigida declarada NO aplicable.'], ['SOA-02', 'Observación', 'Medida no exigida declarada aplicable.'],
   ['SOA-03', 'NC mayor', 'Medida del Anexo II ausente de la SoA.'], ['SOA-04', 'NC menor', 'Medida aplicable sin evidencias.'],
   ['SOA-05', 'NC menor', 'Medida aplicable sin responsable.'], ['SOA-06', 'NC menor', 'Implantación parcial sin acción PTR ni MC.'],
@@ -234,7 +238,7 @@ function vAyuda() {
       <div class="card soft"><h4>Hallazgo técnico</h4><p class="small">CVSS ≥ ${ws.settings.cvss.ma} → MA, ≥ ${ws.settings.cvss.a} → A, ≥ ${ws.settings.cvss.m} → M. Un hallazgo abierto contra una medida «Implantada 100 %» es una no conformidad.</p></div></div>`;
   } else if (t === 'glosario') {
     const q = ui.glosarioQ.toLowerCase();
-    const items = GLOSARIO.filter(([a, b]) => !q || (a + b).toLowerCase().includes(q));
+    const items = GLOSARIO.filter(([a, b]) => !q || (a + ' ' + b + ' ' + tr(a) + ' ' + tr(b)).toLowerCase().includes(q));
     body = `<input type="search" id="glo-q" data-ui="glosarioQ" value="${esc(ui.glosarioQ)}" placeholder="Buscar un término…" class="w-full" style="margin-bottom:14px"><dl class="glossary">${items.map(([a, b]) => `<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join('') || '<p class="muted">Sin resultados.</p>'}</dl>`;
   } else if (t === 'reglas') {
     body = `<div class="table-wrap"><table class="tbl"><thead><tr><th>Regla</th><th>Severidad</th><th>Qué comprueba</th>${state ? '<th class="c">En este proyecto</th>' : ''}</tr></thead><tbody>${RULES.map(([id, s, d]) => `<tr><td><code>${id}</code></td><td>${sevBadge(s)}</td><td>${esc(d)}</td>${state ? `<td class="c num">${audit.filter((f) => f.id === id).length}</td>` : ''}</tr>`).join('')}</tbody></table></div>`;

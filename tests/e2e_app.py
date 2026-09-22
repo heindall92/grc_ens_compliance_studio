@@ -156,7 +156,7 @@ with sync_playwright() as p:
     fc.value.set_files(str(ROOT / "data" / "SoA_TechServ_original.xlsx")); page.wait_for_function("window.__ENS_STUDIO__.state && window.__ENS_STUDIO__.state.categorizacion.length === 8", timeout=15000)
     c = J("window.__ENS_STUDIO__.calc")
     ok(c["categoria"] == "ALTA" and c["kpi"]["aplicables"] == 72 and c["kpi"]["implantadas"] == 66, "Importada: ALTA, 72 exigidas, 66 implantadas")
-    ok(sum(1 for x in audit() if x.startswith("CAT-01")) == 2 and len(J("window.__ENS_STUDIO__.state.compensatorias")) == 4, "Detecta las 2 celdas 'm' e importa las 4 compensatorias")
+    ok(sum(1 for x in audit() if x.startswith("CAT-01")) == 0 and J("window.__ENS_STUDIO__.calc.niveles.D") == "ALTO" and len(J("window.__ENS_STUDIO__.state.compensatorias")) == 4, "m cuenta como MEDIO, la disponibilidad sigue en ALTO e importa las 4 compensatorias")
 
     print("Ajustes")
     page.click('.side-foot [data-view="ajustes"]')

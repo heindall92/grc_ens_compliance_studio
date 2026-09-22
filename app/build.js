@@ -111,7 +111,7 @@ const casos = [];
 const techserv = { ...seed, version: 2, caseId: 'techserv', acciones: {} };
 casos.push({ id: 'techserv', icono: 'server', sector: 'Proveedor TIC de la Administración', titulo: 'TechServ Administración',
   resumen: 'El caso de clase: empresa privada de 85 personas que presta servicios TIC a tres consejerías. Categoría ALTA, SoA muy trabajada y análisis MAGERIT formal. Aun así, la SoA y el análisis de riesgos se contradicen, y un pentest deja al descubierto medidas declaradas como implantadas.',
-  retos: ['SoA y análisis de riesgos se contradicen', '11 NC por evidencia técnica', "Celdas 'm' en la categorización"], state: techserv });
+  retos: ['SoA y análisis de riesgos se contradicen', '11 NC por evidencia técnica', 'Medidas exigidas sin riesgo vinculado'], state: techserv });
 for (const c of CASES) casos.push({ id: c.id, icono: c.icono, sector: c.sector, titulo: c.titulo, resumen: c.resumen, retos: c.retos, state: buildCase(c) });
 casos.forEach((cs, i) => {
   const c1 = E.calcular(cs.state, ctx0); const a1 = E.auditar(cs.state, ctx0, c1, { hoy: '2026-09-22' });

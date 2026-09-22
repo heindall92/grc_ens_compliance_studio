@@ -64,13 +64,17 @@ function render() {
   $('#view').innerHTML = (state && isDemo() && PROJECT_VIEWS.includes(ui.view) ? demoBanner() : '') + (V[ui.view] || vInicio)();
   document.body.classList.toggle('drawer-open', ui.drawer);
   renderPalette();
+  localize();
   if (active) { const el = document.getElementById(active); if (el) { el.focus({ preventScroll: true }); if (sel) { try { el.setSelectionRange(sel[0], sel[1]); } catch (e) { /* n/a */ } } } }
 }
 function renderSide() {
   const p = activeMeta();
   const may = auditCount('NC mayor');
   const abiertas = plan.filter((a) => a.estado !== 'Hecha' && !a.verificada).length;
-  const item = (id, label, ic, badge = '') => `<button type="button" class="nav-item" data-act="nav" data-view="${id}"${ui.view === id ? ' aria-current="page"' : ''}${!state && PROJECT_VIEWS.includes(id) ? ' disabled' : ''}>${icon(ic)}<span>${label}</span>${badge}</button>`;
+  const item = (id, label, ic, badge = '') => {
+    const locked = !state && PROJECT_VIEWS.includes(id);
+    return `<button type="button" class="nav-item${locked ? ' locked' : ''}" data-act="nav" data-view="${id}"${ui.view === id ? ' aria-current="page"' : ''}${locked ? ' data-locked="1" title="Abre o crea un proyecto. El rol no bloquea esta sección."' : ''}>${icon(ic)}<span>${label}</span>${badge}</button>`;
+  };
   const proj = state ? `<button type="button" class="proj-switch" data-act="menu" data-menu="proyectos" aria-haspopup="true" aria-expanded="${ui.menu === 'proyectos'}">
       <span class="proj-ic ${p?.kind === 'demo' ? 'demo' : ''}">${icon(p?.kind === 'demo' ? caseIcon(p.caseId) : 'building', 16)}</span>
       <span class="proj-txt"><b>${esc(state.proyecto?.nombre || 'Proyecto')}</b><small>${p?.kind === 'demo' ? 'Caso de ejemplo' : esc(state.proyecto?.sistema || 'Mi proyecto')}</small></span>${icon('chevronDown', 16, 'muted')}</button>`
@@ -83,6 +87,7 @@ function renderSide() {
     <nav class="nav" aria-label="Secciones">
       ${item('inicio', 'Inicio', 'home')}
       <div class="nav-group">Proyecto</div>
+      ${state ? '' : `<div class="nav-note" role="status"><b>Menú en espera</b>Panel, categorización y el resto se activan al crear o abrir un proyecto. El nombre y el rol no los bloquean.</div>`}
       ${item('panel', 'Panel', 'dashboard')}
       ${item('categorizacion', 'Categorización', 'layers')}
       ${item('riesgos', 'Análisis de riesgos', 'activity')}
@@ -120,6 +125,7 @@ function renderTop() {
     <button type="button" class="icon-btn only-mobile" data-act="drawer" aria-label="Abrir menú">${icon('menu', 20)}</button>
     <div class="crumbs">${inProj ? `<span class="crumb-proj">${esc(state.proyecto?.nombre || '')}</span>${icon('chevronRight', 14, 'muted')}` : ''}<span class="crumb-cur">${TITLES[ui.view] || ''}</span>${inProj ? catPill(calc.categoria) : ''}</div>
     <button type="button" class="search-btn" data-act="palette" aria-label="Buscar y ejecutar comandos">${icon('search', 16)}<span>Buscar medida, riesgo o acción…</span><kbd>Ctrl K</kbd></button>
+    <div class="lang-switch" role="group" aria-label="Idioma"><button type="button" data-act="set" data-k="idioma" data-v="es" aria-pressed="${ws.settings.idioma !== 'en'}" title="Español">ES</button><button type="button" data-act="set" data-k="idioma" data-v="en" aria-pressed="${ws.settings.idioma === 'en'}" title="English">EN</button></div>
     <button type="button" class="icon-btn" data-act="cycle-theme" aria-label="Cambiar tema" title="Tema: ${ws.settings.tema}">${icon(temaIc, 18)}</button>
     <button type="button" class="icon-btn" data-act="nav" data-view="ayuda" aria-label="Ayuda">${icon('help', 18)}</button>
     <button type="button" class="avatar-btn" data-act="nav" data-view="perfil" aria-label="Perfil">${avatar(32)}</button>`;
@@ -147,7 +153,8 @@ function paletteItems() {
     for (const f of calc.filas) items.push({ grupo: 'Medidas', label: `${f.codigo} · ${f.nombre}`, ic: 'fileCheck', act: () => gotoSoa(f.codigo), hint: f.aplicaNorma ? f.nivel : 'no exigida' });
     for (const r of calc.riesgos) items.push({ grupo: 'Riesgos', label: `${r.amenaza.id} · ${r.amenaza.nombre} — ${r.activo.nombre || ''}`, ic: 'activity', act: () => { ui.riesgosTab = 'registro'; go('riesgos'); }, hint: r.resMax || '' });
   }
-  const res = q ? items.filter((it) => it.label.toLowerCase().includes(q) || it.grupo.toLowerCase().includes(q)) : items.filter((it) => it.grupo !== 'Medidas' && it.grupo !== 'Riesgos');
+  const blob = (it) => (it.label + ' ' + it.grupo + ' ' + tr(it.label) + ' ' + tr(it.grupo)).toLowerCase();
+  const res = q ? items.filter((it) => blob(it).includes(q)) : items.filter((it) => it.grupo !== 'Medidas' && it.grupo !== 'Riesgos');
   return res.slice(0, 40);
 }
 function renderPalette() {
@@ -166,6 +173,7 @@ function renderPalette() {
     host.innerHTML = `<div class="overlay" data-act="pal-close"></div><div class="palette" role="dialog" aria-label="Buscar"><div class="pal-in">${icon('search', 18)}<input id="pal-q" type="text" placeholder="Busca una medida (op.acc.6), un riesgo, una sección o una acción…" value="${esc(ui.paletteQ)}" autocomplete="off"><kbd>Esc</kbd></div><div class="pal-list" id="pal-list"></div></div>`;
   }
   $('#pal-list').innerHTML = html || '<div class="pal-empty">Sin resultados.</div>';
+  localize();
   const on = $('#pal-' + ui.paletteIdx); if (on) on.scrollIntoView({ block: 'nearest' });
   if (!wasOpen) $('#pal-q').focus();
 }
@@ -176,4 +184,4 @@ function gotoSoa(code) {
 
 /* ---------- Avisos ---------- */
 let toastT = null;
-function toast(msg) { const t = $('#toast'); t.innerHTML = `${icon('check', 16)}<span>${esc(msg)}</span>`; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2600); }
+function toast(msg) { const t = $('#toast'); t.innerHTML = `${icon('check', 16)}<span>${esc(tr(msg))}</span>`; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2600); }

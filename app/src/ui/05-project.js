@@ -16,7 +16,7 @@ function evolucion() {
   h.forEach((s, i) => {
     const x = P.l + i * bw + bw * 0.22, w = bw * 0.56;
     const y1 = y(s.ncMayor), y2 = y(s.ncMayor + s.ncMenor);
-    const lab = new Date(s.fecha + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+    const lab = new Date(s.fecha + 'T00:00:00').toLocaleDateString(locale(), { day: 'numeric', month: 'short' });
     g += `<g class="bar-g" data-tip="${esc(lab)} · ${plural(s.ncMayor, 'NC mayor', 'NC mayores')} · ${plural(s.ncMenor, 'NC menor', 'NC menores')} · implantación ${pct(s.grado, 0)}">
       <rect x="${x - bw * 0.2}" y="${P.t}" width="${bw * 0.96}" height="${H - P.t - P.b}" class="hit"/>
       <path d="M${x},${y(0)} V${y1 + 2} a2,2 0 0 1 2,-2 H${x + w - 2} a2,2 0 0 1 2,2 V${y(0)} Z" class="s-mayor"/>

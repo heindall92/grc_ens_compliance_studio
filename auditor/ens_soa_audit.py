@@ -92,12 +92,21 @@ def blank(v) -> bool:
     return v is None or str(v).strip() in ("", "—", "-")
 
 
+ALIAS = {
+    "B": "BAJO", "BAJ": "BAJO", "BAJA": "BAJO", "BASICA": "BAJO", "BÁSICA": "BAJO",
+    "M": "MEDIO", "MED": "MEDIO", "MEDIA": "MEDIO",
+    "ALT": "ALTO", "ALTA": "ALTO",
+}
+
+
 def ens_level(v):
-    """None = vacío · 'BAJO'|'MEDIO'|'ALTO' = válido · False = valor no válido."""
+    """None = vacío · 'BAJO'|'MEDIO'|'ALTO' = válido (también B/M/ALT) · False = valor no válido."""
     if blank(v):
         return None
-    s = str(v).strip().upper()
-    return s if s in LV else False
+    s = str(v).strip().upper().rstrip(".")
+    if s in LV:
+        return s
+    return ALIAS.get(s, False)
 
 
 def max_level(a, b):

@@ -18,11 +18,13 @@ const ctx = { anexo: D.anexo, mapping: D.mapping, amenazasCatalogo: D.catalogos.
 const seed = () => JSON.parse(JSON.stringify(D.seed));
 const ids = (fs) => fs.map((f) => f.id);
 
-test('categorización TechServ: ALTA con T=MEDIO y dos celdas inválidas', () => {
-  const c = E.calcular(seed(), ctx);
+test('categorización TechServ: ALTA con T=MEDIO; m de S-01 y S-04 es MEDIO y no mueve el máximo', () => {
+  const st = seed();
+  const c = E.calcular(st, ctx);
   assert.deepEqual(c.niveles, { D: 'ALTO', I: 'ALTO', C: 'ALTO', A: 'ALTO', T: 'MEDIO' });
   assert.equal(c.categoria, 'ALTA');
-  assert.deepEqual(c.invalidos.map((i) => `${i.activo}.${i.dim}=${i.valor}`), ['S-01.D=m', 'S-04.D=m']);
+  assert.deepEqual(c.invalidos, []);
+  for (const id of ['S-01', 'S-04']) assert.equal(E.ensLevel(st.categorizacion.find((a) => a.id === id).D), 'MEDIO');
 });
 
 test('paridad con el Excel: nivel exigido y exigencia de las 73 medidas', () => {
@@ -76,11 +78,22 @@ test('paridad con MAGERIT Lab v1.0: riesgo inherente y residual del caso TechSer
   }
 });
 
-test('auditor sobre el caso tal cual: detecta las celdas "m", la incoherencia SoA↔AR y la evidencia técnica', () => {
+test('auditor sobre el caso tal cual: m es MEDIO, la categoría no se mueve, y siguen la incoherencia SoA↔AR y la evidencia técnica', () => {
   const st = seed();
-  const f = E.auditar(st, ctx, E.calcular(st, ctx), { hoy: '2026-09-22' });
-  const cat = f.filter((x) => x.id === 'CAT-01');
-  assert.equal(cat.length, 2);
+  assert.equal(E.ensLevel('m'), 'MEDIO');
+  assert.equal(E.ensLevel('ALT'), 'ALTO');
+  assert.equal(E.ensLevel('xyz'), undefined);
+  const c = E.calcular(st, ctx);
+  assert.equal(c.invalidos.length, 0);
+  assert.deepEqual(c.niveles, { D: 'ALTO', I: 'ALTO', C: 'ALTO', A: 'ALTO', T: 'MEDIO' });
+  assert.equal(c.categoria, 'ALTA');
+  const f = E.auditar(st, ctx, c, { hoy: '2026-09-22' });
+  assert.ok(!f.some((x) => x.id === 'CAT-01'));
+  st.categorizacion.find((a) => a.id === 'I-03').D = 'xyz';
+  const c2 = E.calcular(st, ctx);
+  assert.equal(c2.niveles.D, 'ALTO');
+  const cat = E.auditar(st, ctx, c2, { hoy: '2026-09-22' }).filter((x) => x.id === 'CAT-01');
+  assert.equal(cat.length, 1);
   assert.match(cat[0].detalle, /No altera el resultado/);
   assert.deepEqual(f.filter((x) => x.id === 'AR-01').map((x) => x.ambito).sort(), ['mp.com.2', 'mp.per.3', 'mp.per.4', 'op.acc.3']);
   assert.ok(f.some((x) => x.id === 'PT-01' && x.ambito === 'op.acc.6'));
@@ -141,7 +154,7 @@ test('hallazgo sobre amenaza existente eleva su probabilidad; sobre amenaza nuev
 /* ---------- v2: casos de ejemplo, ajustes, pendientes y plan de acción ---------- */
 test('los 5 casos de ejemplo cuentan historias distintas (reglas esperadas por caso)', () => {
   const esperado = {
-    techserv: ['AR-01', 'PT-01', 'CAT-01'], ayuntamiento: ['SOA-01', 'REF-01', 'SOA-04', 'SOA-05', 'SOA-06'],
+    techserv: ['AR-01', 'PT-01', 'AR-04'], ayuntamiento: ['SOA-01', 'REF-01', 'SOA-04', 'SOA-05', 'SOA-06'],
     universidad: ['MC-02', 'SOA-06', 'SOA-07'], hospital: ['MC-01', 'REF-01', 'PT-01'], saas: ['DOC-01', 'DOC-02', 'SOA-02', 'SOA-05']
   };
   const cats = { techserv: 'ALTA', ayuntamiento: 'MEDIA', universidad: 'MEDIA', hospital: 'ALTA', saas: 'BÁSICA' };
