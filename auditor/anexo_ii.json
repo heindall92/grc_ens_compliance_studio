@@ -1,0 +1,516 @@
+{
+ "_fuente": "RD 311/2022, Anexo II (niveles y refuerzos por medida). Extraído de la hoja \"Texto Anexo II\" del caso docente TechServ.",
+ "medidas": {
+  "org.1": {
+   "nombre": "Política de seguridad",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "org.2": {
+   "nombre": "Normativa de seguridad",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "org.3": {
+   "nombre": "Procedimientos de seguridad",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "org.4": {
+   "nombre": "Proceso de autorización",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.pl.1": {
+   "nombre": "Análisis de riesgos",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R2"
+  },
+  "op.pl.2": {
+   "nombre": "Arquitectura de Seguridad",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1 + R2 + R3"
+  },
+  "op.pl.3": {
+   "nombre": "Adquisición de nuevos componentes",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.pl.4": {
+   "nombre": "Dimensionamiento/gestión de la capacidad",
+   "dims": "D",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "op.pl.5": {
+   "nombre": "Componentes certificados",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.acc.1": {
+   "nombre": "Identificación",
+   "dims": "AT",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "op.acc.2": {
+   "nombre": "Requisitos de acceso",
+   "dims": "ICAT",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "+ R1"
+  },
+  "op.acc.3": {
+   "nombre": "Segregación de funciones y tareas",
+   "dims": "ICAT",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "+ R1"
+  },
+  "op.acc.4": {
+   "nombre": "Proceso de gestión de derechos de acceso",
+   "dims": "ICAT",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.acc.5": {
+   "nombre": "Mecanismo de autenticación (usuarios externos)",
+   "dims": "ICAT",
+   "bajo": "+ [R1 o R2 o R3 o R4]",
+   "medio": "+ [R2 o R3 o R4] + R5",
+   "alto": "+ [R2 o R3 o R4] + R5"
+  },
+  "op.acc.6": {
+   "nombre": "Mecanismo de autenticación (usuarios de la organización)",
+   "dims": "ICAT",
+   "bajo": "+ [R1 o R2 o R3 o R4] + R8 + R9",
+   "medio": "+ [R1 o R2 o R3 o R4] + R5 + R8 + R9",
+   "alto": "+ [R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9"
+  },
+  "op.exp.1": {
+   "nombre": "Inventario de activos",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.exp.2": {
+   "nombre": "Configuración de seguridad",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.exp.3": {
+   "nombre": "Gestión de la configuración de seguridad",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1 + R2 + R3"
+  },
+  "op.exp.4": {
+   "nombre": "Mantenimiento y actualizaciones de seguridad",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1 + R2"
+  },
+  "op.exp.5": {
+   "nombre": "Gestión de cambios",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "+ R1"
+  },
+  "op.exp.6": {
+   "nombre": "Protección frente a código dañino",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1 + R2",
+   "alto": "+ R1 + R2 + R3 + R4"
+  },
+  "op.exp.7": {
+   "nombre": "Gestión de incidentes",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1 + R2",
+   "alto": "+ R1 + R2 + R3"
+  },
+  "op.exp.8": {
+   "nombre": "Registro de la actividad",
+   "dims": "T",
+   "bajo": "aplica",
+   "medio": "+ R1 + R2 + R3 + R4",
+   "alto": "+ R1 + R2 + R3 + R4 + R5"
+  },
+  "op.exp.9": {
+   "nombre": "Registro de la gestión de incidentes",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.exp.10": {
+   "nombre": "Protección de claves criptográficas",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "op.ext.1": {
+   "nombre": "Contratación y acuerdos de nivel de servicio",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.ext.2": {
+   "nombre": "Gestión diaria",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.ext.3": {
+   "nombre": "Protección de la cadena de suministro",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "n.a.",
+   "alto": "aplica"
+  },
+  "op.ext.4": {
+   "nombre": "Interconexión de sistemas",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "+ R1"
+  },
+  "op.nub.1": {
+   "nombre": "Protección de servicios en la nube",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1 + R2"
+  },
+  "op.cont.1": {
+   "nombre": "Análisis de impacto",
+   "dims": "D",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "op.cont.2": {
+   "nombre": "Plan de continuidad",
+   "dims": "D",
+   "bajo": "n.a.",
+   "medio": "n.a.",
+   "alto": "aplica"
+  },
+  "op.cont.3": {
+   "nombre": "Pruebas periódicas",
+   "dims": "D",
+   "bajo": "n.a.",
+   "medio": "n.a.",
+   "alto": "aplica"
+  },
+  "op.cont.4": {
+   "nombre": "Medios alternativos",
+   "dims": "D",
+   "bajo": "n.a.",
+   "medio": "n.a.",
+   "alto": "aplica"
+  },
+  "op.mon.1": {
+   "nombre": "Detección de intrusión",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1 + R2"
+  },
+  "op.mon.2": {
+   "nombre": "Sistema de métricas",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1 + R2",
+   "alto": "+ R1 + R2"
+  },
+  "op.mon.3": {
+   "nombre": "Vigilancia",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1 + R2",
+   "alto": "+ R1 + R2 + R3 + R4 + R5 + R6"
+  },
+  "mp.if.1": {
+   "nombre": "Áreas separadas y con control de acceso",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.if.2": {
+   "nombre": "Identificación de las personas",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.if.3": {
+   "nombre": "Acondicionamiento de los locales",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.if.4": {
+   "nombre": "Energía eléctrica",
+   "dims": "D",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "mp.if.5": {
+   "nombre": "Protección frente a incendios",
+   "dims": "D",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.if.6": {
+   "nombre": "Protección frente a inundaciones",
+   "dims": "D",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.if.7": {
+   "nombre": "Registro de entrada y salida de equipamiento",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.per.1": {
+   "nombre": "Caracterización del puesto de trabajo",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.per.2": {
+   "nombre": "Deberes y obligaciones",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "mp.per.3": {
+   "nombre": "Concienciación",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.per.4": {
+   "nombre": "Formación",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.eq.1": {
+   "nombre": "Puesto de trabajo despejado",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "mp.eq.2": {
+   "nombre": "Bloqueo de puesto de trabajo",
+   "dims": "A",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "+ R1"
+  },
+  "mp.eq.3": {
+   "nombre": "Protección de dispositivos portátiles",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "+ R1 + R2"
+  },
+  "mp.eq.4": {
+   "nombre": "Otros dispositivos conectados a la red",
+   "dims": "C",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "mp.com.1": {
+   "nombre": "Perímetro seguro",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.com.2": {
+   "nombre": "Protección de la confidencialidad",
+   "dims": "C",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1 + R2 + R3"
+  },
+  "mp.com.3": {
+   "nombre": "Protección de la integridad y de la autenticidad",
+   "dims": "IA",
+   "bajo": "aplica",
+   "medio": "+ R1 + R2",
+   "alto": "+ R1 + R2 + R3 + R4"
+  },
+  "mp.com.4": {
+   "nombre": "Separación de flujos de información en la red",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "+ [R1 o R2 o R3]",
+   "alto": "+ [R2 o R3] + R4"
+  },
+  "mp.si.1": {
+   "nombre": "Marcado de soportes",
+   "dims": "C",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.si.2": {
+   "nombre": "Criptografía",
+   "dims": "IC",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "+ R1 + R2"
+  },
+  "mp.si.3": {
+   "nombre": "Custodia",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.si.4": {
+   "nombre": "Transporte",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.si.5": {
+   "nombre": "Borrado y destrucción",
+   "dims": "C",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "mp.sw.1": {
+   "nombre": "Desarrollo de aplicaciones",
+   "dims": "Categoría",
+   "bajo": "n.a.",
+   "medio": "+ R1 + R2 + R3 + R4",
+   "alto": "+ R1 + R2 + R3 + R4"
+  },
+  "mp.sw.2": {
+   "nombre": "Aceptación y puesta en servicio",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1"
+  },
+  "mp.info.1": {
+   "nombre": "Datos personales",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.info.2": {
+   "nombre": "Calificación de la información",
+   "dims": "C",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.info.3": {
+   "nombre": "Firma electrónica",
+   "dims": "IA",
+   "bajo": "aplica",
+   "medio": "+ R1 + R2 + R3",
+   "alto": "+ R1 + R2 + R3 + R4"
+  },
+  "mp.info.4": {
+   "nombre": "Sellos de tiempo",
+   "dims": "T",
+   "bajo": "n.a.",
+   "medio": "n.a.",
+   "alto": "aplica"
+  },
+  "mp.info.5": {
+   "nombre": "Limpieza de documentos",
+   "dims": "C",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.info.6": {
+   "nombre": "Copias de seguridad",
+   "dims": "D",
+   "bajo": "aplica",
+   "medio": "+ R1",
+   "alto": "+ R1 + R2"
+  },
+  "mp.s.1": {
+   "nombre": "Protección del correo electrónico",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "aplica"
+  },
+  "mp.s.2": {
+   "nombre": "Protección de servicios y aplicaciones web",
+   "dims": "Categoría",
+   "bajo": "+ [R1 o R2]",
+   "medio": "+ [R1 o R2]",
+   "alto": "+ R2 + R3"
+  },
+  "mp.s.3": {
+   "nombre": "Protección de la navegación web",
+   "dims": "Categoría",
+   "bajo": "aplica",
+   "medio": "aplica",
+   "alto": "+ R1"
+  },
+  "mp.s.4": {
+   "nombre": "Protección frente a denegación de servicio",
+   "dims": "D",
+   "bajo": "n.a.",
+   "medio": "aplica",
+   "alto": "+ R1"
+  }
+ }
+}

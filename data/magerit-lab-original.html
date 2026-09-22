@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAGERIT Lab · Análisis de Riesgos Didáctico (v1.0)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
+  :root{
+    --ink:#0a1929; --paper:#fbfaf6; --rule:#e8e2d4;
+    --navy:#0d3b66; --gold:#c9a227; --rust:#a83232;
+    --green:#1c6b3a; --orange:#c25a1f; --slate:#475569;
+    --mb:#a3d9a5; --b:#c8e6a0; --m:#fce29a; --a:#f5a96b; --ma:#e26a6a;
+  }
+  *{box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);margin:0}
+  h1,h2,h3,.serif{font-family:'Fraunces',serif;letter-spacing:-0.01em}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .navy{background:var(--navy);color:#fff}
+  .gold{color:var(--gold)}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace}
+  .tab-btn{padding:10px 16px;border:none;background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:#475569;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap}
+  .tab-btn:hover{color:var(--navy);background:#f5f3ec}
+  .tab-btn.active{color:var(--navy);border-bottom-color:var(--gold);font-weight:600;background:#fff}
+  .card{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:20px}
+  .input,.select,.textarea{width:100%;padding:8px 12px;border:1px solid var(--rule);border-radius:4px;font-size:13px;font-family:inherit;background:#fff}
+  .input:focus,.select:focus,.textarea:focus{outline:2px solid var(--gold);border-color:transparent}
+  .btn{padding:8px 16px;border-radius:4px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--rule);background:#fff;transition:all 0.15s}
+  .btn:hover{background:#f5f3ec}
+  .btn-primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .btn-primary:hover{background:#082749}
+  .btn-danger{background:#fff;color:var(--rust);border-color:#f5cfcf}
+  .btn-danger:hover{background:#fef2f2}
+  .btn-ghost{background:transparent;border:none;color:var(--slate);padding:4px 8px}
+  .btn-ghost:hover{color:var(--rust);background:#fef2f2;border-radius:4px}
+  .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:var(--slate);font-weight:600;margin-bottom:4px;display:block}
+  .risk-MB{background:var(--mb);color:#1e4620}
+  .risk-B{background:var(--b);color:#3e4d1e}
+  .risk-M{background:var(--m);color:#664d03}
+  .risk-A{background:var(--a);color:#7a3a0e;color:#fff}
+  .risk-MA{background:var(--ma);color:#fff}
+  .risk-cell{padding:4px 10px;border-radius:3px;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px;display:inline-block;min-width:28px;text-align:center}
+  table.data{width:100%;border-collapse:collapse;font-size:12px}
+  table.data th{background:#f5f3ec;padding:8px 10px;text-align:left;font-weight:600;color:var(--navy);font-size:11px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--rule)}
+  table.data td{padding:10px;border-bottom:1px solid var(--rule);vertical-align:middle}
+  table.data tr:hover td{background:#fafaf5}
+  .dim-input{width:48px;text-align:center;padding:4px;border:1px solid var(--rule);border-radius:3px;font-family:'JetBrains Mono',monospace;font-weight:600}
+  .alert{padding:12px 16px;border-radius:4px;font-size:13px;border-left:3px solid;margin:12px 0}
+  .alert-info{background:#eaf3fb;border-color:var(--navy);color:#0d3b66}
+  .alert-warn{background:#fef5e7;border-color:var(--orange);color:#8a3f10}
+  .alert-success{background:#e8f5e9;border-color:var(--green);color:#1c4d22}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  details summary{cursor:pointer;font-weight:600;color:var(--navy);padding:8px 0}
+  details summary:hover{color:var(--gold)}
+  .matrix-cell{padding:10px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;border:2px solid #fff;cursor:default}
+  hr.fine{border:none;border-top:1px solid var(--rule);margin:20px 0}
+  .breadcrumb-step{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#fff;border:1px solid var(--rule);border-radius:4px;font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace}
+  .breadcrumb-step.done{background:#e8f5e9;color:var(--green);border-color:#c8e6c9}
+  .breadcrumb-step.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .stat-box{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:16px}
+  .stat-box .num{font-family:'Fraunces',serif;font-size:32px;font-weight:700;color:var(--navy);line-height:1}
+  .stat-box .lbl{margin-top:8px;margin-bottom:0}
+  .hint{font-size:11px;color:var(--slate);margin-top:4px;font-style:italic}
+  .badge-tipo{font-family:'JetBrains Mono',monospace;font-size:10px;background:#0d3b66;color:#fff;padding:2px 6px;border-radius:3px;font-weight:600}
+  @media print {
+    .no-print{display:none !important}
+    body{background:white}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="navy" style="padding:24px 32px">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap">
+    <div>
+      <div class="mono" style="font-size:11px;letter-spacing:2px;color:#c9a227;text-transform:uppercase">MAGERIT 3.0 · Laboratorio docente</div>
+      <h1 style="font-size:28px;margin:6px 0 4px;font-weight:700">MAGERIT Lab</h1>
+      <div style="font-size:13px;color:rgba(255,255,255,0.7);font-style:italic">Análisis de riesgos paso a paso · Alternativa didáctica a PILAR</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button class="btn" onclick="exportJSON()" title="Descarga todo el análisis en JSON">⬇ Exportar JSON</button>
+      <label class="btn" style="cursor:pointer">⬆ Importar JSON<input type="file" accept=".json" style="display:none" onchange="importJSON(event)"></label>
+      <button class="btn" onclick="loadTechServ()" title="Caso de ejemplo">📦 Caso TechServ</button>
+      <button class="btn btn-danger" onclick="resetAll()" title="Borrar todo y empezar de cero">↺ Reiniciar</button>
+    </div>
+  </div>
+</header>
+
+<!-- BARRA NAVEGACIÓN POR ETAPAS -->
+<div class="no-print" style="background:#fff;border-bottom:1px solid var(--rule);padding:12px 32px">
+  <div style="max-width:1400px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span class="mono" style="font-size:10px;color:var(--slate);text-transform:uppercase;letter-spacing:1px;margin-right:8px">Flujo MAR</span>
+    <span class="breadcrumb-step" id="step-criterios">1. Criterios</span>
+    <span style="color:var(--slate)">→</span>
+    <span class="breadcrumb-step" id="step-activos">2. Activos</span>
+    <span style="color:var(--slate)">→</span>
+    <span class="breadcrumb-step" id="step-amenazas">3. Amenazas</span>
+    <span style="color:var(--slate)">→</span>
+    <span class="breadcrumb-step" id="step-inherente">4. R. inherente</span>
+    <span style="color:var(--slate)">→</span>
+    <span class="breadcrumb-step" id="step-salvaguardas">5. Salvaguardas</span>
+    <span style="color:var(--slate)">→</span>
+    <span class="breadcrumb-step" id="step-residual">6. R. residual</span>
+    <span style="color:var(--slate)">→</span>
+    <span class="breadcrumb-step" id="step-tratamiento">7. Tratamiento</span>
+  </div>
+</div>
+
+<!-- PESTAÑAS -->
+<nav class="no-print" style="background:#fbfaf6;border-bottom:1px solid var(--rule);padding:0 32px;overflow-x:auto">
+  <div style="max-width:1400px;margin:0 auto;display:flex;gap:0">
+    <button class="tab-btn active" data-tab="inicio">📖 Inicio</button>
+    <button class="tab-btn" data-tab="criterios">🎯 Criterios de impacto</button>
+    <button class="tab-btn" data-tab="activos">📦 Activos</button>
+    <button class="tab-btn" data-tab="amenazas">⚠️ Amenazas</button>
+    <button class="tab-btn" data-tab="inherente">📊 Riesgo inherente</button>
+    <button class="tab-btn" data-tab="salvaguardas">🛡️ Salvaguardas</button>
+    <button class="tab-btn" data-tab="residual">📉 Riesgo residual</button>
+    <button class="tab-btn" data-tab="tratamiento">📋 Plan de tratamiento</button>
+    <button class="tab-btn" data-tab="informe">📑 Informe</button>
+  </div>
+</nav>
+
+<!-- CONTENIDO -->
+<main style="max-width:1400px;margin:0 auto;padding:24px 32px 80px">
+  <div id="view-inicio"></div>
+  <div id="view-criterios" style="display:none"></div>
+  <div id="view-activos" style="display:none"></div>
+  <div id="view-amenazas" style="display:none"></div>
+  <div id="view-inherente" style="display:none"></div>
+  <div id="view-salvaguardas" style="display:none"></div>
+  <div id="view-residual" style="display:none"></div>
+  <div id="view-tratamiento" style="display:none"></div>
+  <div id="view-informe" style="display:none"></div>
+</main>
+
+<footer class="no-print" style="background:#0a1929;color:rgba(255,255,255,0.6);padding:24px 32px;font-size:12px;text-align:center">
+  MAGERIT Lab · Aplicación didáctica basada 100% en MAGERIT v3.0 (Ministerio de Hacienda y Administraciones Públicas)<br>
+  No sustituye a PILAR del CCN para uso real. Diseñada para enseñanza universitaria de GRC.
+</footer>
+
+<!-- DATA + LOGIC -->
+<script>
+/* ===================== STATE ===================== */
+const STORAGE_KEY = 'magerit-lab-v1';
+let state = {};
+let storageAvailable = true;
+try { localStorage.setItem('__test__','1'); localStorage.removeItem('__test__'); }
+catch(e){ storageAvailable = false; }
+
+function defaultState(){
+  return {
+    proyecto: { nombre: 'Análisis sin título', organizacion: '', responsable: '', fecha: new Date().toISOString().slice(0,10) },
+    criterios: defaultCriterios(),
+    activos: [],
+    amenazas: [],   // {id, activoId, codigo, nombre, origen, prob, deg:{D,I,C,A,T}}
+    salvaguardas: [], // {id, codigo, nombre, tipo, madurez, reduceProb, reduceImp, amenazasIds:[]}
+    tratamiento: {}, // {amenazaId: {opcion, responsable, plazo, notas}}
+    apetito: 'M' // riesgo aceptable por defecto
+  };
+}
+
+function defaultCriterios(){
+  // Basado en Libro II - Catálogo de Elementos, capítulo 4
+  return {
+    escala: 5, // 5 (MB-MA) o 10 (detallada MAGERIT)
+    economico: {
+      label: 'Pérdida económica directa (€)',
+      activo: true,
+      niveles: { MB:'< 1.000 €', B:'1.000 – 10.000 €', M:'10.000 – 100.000 €', A:'100.000 – 1.000.000 €', MA:'> 1.000.000 €' }
+    },
+    rto: {
+      label: 'Tiempo máximo de interrupción (RTO)',
+      activo: true,
+      niveles: { MB:'> 5 días', B:'1-5 días', M:'4h – 1 día', A:'< 4 horas', MA:'tiempo real' }
+    },
+    legal: {
+      label: 'Obligaciones legales y regulatorias',
+      activo: true,
+      niveles: { MB:'sin afectación', B:'incumplimiento leve', M:'incumplimiento de una ley/reglamento', A:'incumplimiento grave', MA:'incumplimiento excepcionalmente grave' }
+    },
+    reputacional: {
+      label: 'Pérdida de confianza / reputación',
+      activo: true,
+      niveles: { MB:'sin daño reputacional', B:'pérdida interna menor', M:'publicidad negativa sectorial', A:'publicidad negativa generalizada grave', MA:'daño excepcionalmente grave a la imagen' }
+    },
+    operativo: {
+      label: 'Interrupción de operaciones',
+      activo: true,
+      niveles: { MB:'sin impacto operativo', B:'una parte de la organización', M:'más de una parte', A:'toda la organización', MA:'cierre potencial' }
+    },
+    personal: {
+      label: 'Datos personales / privacidad (RGPD)',
+      activo: false,
+      niveles: { MB:'sin datos personales', B:'molestias a individuos', M:'afectación a un individuo', A:'afectación a grupo de individuos', MA:'afectación grave a grupo' }
+    }
+  };
+}
+
+/* ===================== CATÁLOGOS MAGERIT ===================== */
+// Tipos de activos (Libro II §2)
+const TIPOS_ACTIVO = [
+  { code:'[essential.info]', label:'Información esencial', desc:'Datos que dan razón de ser a la organización' },
+  { code:'[essential.service]', label:'Servicio esencial', desc:'Función que satisface necesidad de usuarios' },
+  { code:'[D]', label:'Datos / Información', desc:'Ficheros, BD, copias, configuración, logs' },
+  { code:'[K]', label:'Claves criptográficas', desc:'Claves de cifra, firma, certificados X.509' },
+  { code:'[S]', label:'Servicios', desc:'Web, email, FTP, directorio, gestión identidades' },
+  { code:'[SW]', label:'Aplicaciones (software)', desc:'Desarrollos propios, ofimática, antivirus, SO' },
+  { code:'[HW]', label:'Equipamiento informático (hardware)', desc:'Servidores, puestos, móviles, impresoras' },
+  { code:'[COM]', label:'Redes de comunicaciones', desc:'Red local, WAN, Internet, telefonía, VPN' },
+  { code:'[Media]', label:'Soportes de información', desc:'Discos, cintas, USB, papel' },
+  { code:'[AUX]', label:'Equipamiento auxiliar', desc:'SAI, climatización, cableado, mobiliario' },
+  { code:'[L]', label:'Instalaciones', desc:'Edificios, salas técnicas, oficinas' },
+  { code:'[P]', label:'Personal', desc:'Usuarios, operadores, administradores, desarrolladores' }
+];
+
+// Dimensiones de seguridad (Libro I §3.1.1)
+const DIMENSIONES = [
+  { code:'D', label:'Disponibilidad', desc:'¿Qué perjuicio causaría no poder usarlo?', color:'#0d3b66' },
+  { code:'I', label:'Integridad', desc:'¿Qué perjuicio causaría que estuviera dañado o corrupto?', color:'#1c6b3a' },
+  { code:'C', label:'Confidencialidad', desc:'¿Qué daño causaría que lo conociera quien no debe?', color:'#a83232' },
+  { code:'A', label:'Autenticidad', desc:'¿Qué perjuicio causaría no saber quién hace cada cosa?', color:'#c25a1f' },
+  { code:'T', label:'Trazabilidad', desc:'¿Qué daño causaría no poder rastrear el uso?', color:'#7b4ea8' }
+];
+
+// Catálogo de amenazas MAGERIT (Libro II §5) - resumido
+const CATALOGO_AMENAZAS = [
+  // NATURALES
+  { code:'[N.1]', nombre:'Fuego', origen:'N', tipos:['HW','Media','AUX','L'], dims:['D'] },
+  { code:'[N.2]', nombre:'Daños por agua', origen:'N', tipos:['HW','Media','AUX','L'], dims:['D'] },
+  { code:'[N.*]', nombre:'Desastres naturales', origen:'N', tipos:['HW','Media','AUX','L'], dims:['D'] },
+  // INDUSTRIALES
+  { code:'[I.1]', nombre:'Fuego (industrial)', origen:'I', tipos:['HW','Media','AUX','L'], dims:['D'] },
+  { code:'[I.2]', nombre:'Daños por agua (industrial)', origen:'I', tipos:['HW','Media','AUX','L'], dims:['D'] },
+  { code:'[I.*]', nombre:'Desastres industriales', origen:'I', tipos:['HW','Media','AUX','L'], dims:['D'] },
+  { code:'[I.3]', nombre:'Contaminación mecánica', origen:'I', tipos:['HW','Media','AUX'], dims:['D'] },
+  { code:'[I.4]', nombre:'Contaminación electromagnética', origen:'I', tipos:['HW','Media','AUX'], dims:['D'] },
+  { code:'[I.5]', nombre:'Avería de origen físico o lógico', origen:'I', tipos:['HW','SW','Media','AUX','COM'], dims:['D'] },
+  { code:'[I.6]', nombre:'Corte del suministro eléctrico', origen:'I', tipos:['HW','Media','AUX'], dims:['D'] },
+  { code:'[I.7]', nombre:'Condiciones inadecuadas de T/H', origen:'I', tipos:['HW','Media','AUX'], dims:['D'] },
+  { code:'[I.8]', nombre:'Fallo de servicios de comunicaciones', origen:'I', tipos:['COM','S'], dims:['D'] },
+  { code:'[I.9]', nombre:'Interrupción de servicios y suministros', origen:'I', tipos:['AUX','L'], dims:['D'] },
+  { code:'[I.10]', nombre:'Degradación de soportes', origen:'I', tipos:['Media'], dims:['D'] },
+  { code:'[I.11]', nombre:'Emanaciones electromagnéticas', origen:'I', tipos:['HW','COM','Media'], dims:['C'] },
+  // ERRORES (no intencionados)
+  { code:'[E.1]', nombre:'Errores de los usuarios', origen:'E', tipos:['D','S','SW'], dims:['I','C','D'] },
+  { code:'[E.2]', nombre:'Errores del administrador', origen:'E', tipos:['D','S','SW','HW','COM'], dims:['I','C','D'] },
+  { code:'[E.3]', nombre:'Errores de monitorización (log)', origen:'E', tipos:['D'], dims:['T'] },
+  { code:'[E.4]', nombre:'Errores de configuración', origen:'E', tipos:['D','SW','HW','COM'], dims:['I'] },
+  { code:'[E.7]', nombre:'Deficiencias en la organización', origen:'E', tipos:['P'], dims:['D','I','C'] },
+  { code:'[E.8]', nombre:'Difusión de software dañino', origen:'E', tipos:['SW','HW'], dims:['I','C','D'] },
+  { code:'[E.9]', nombre:'Errores de re-encaminamiento', origen:'E', tipos:['S','COM'], dims:['C'] },
+  { code:'[E.10]', nombre:'Errores de secuencia', origen:'E', tipos:['S','COM'], dims:['I'] },
+  { code:'[E.14]', nombre:'Escapes de información', origen:'E', tipos:['D','S','SW','HW','COM','Media','P'], dims:['C'] },
+  { code:'[E.15]', nombre:'Alteración accidental de la información', origen:'E', tipos:['D','Media'], dims:['I'] },
+  { code:'[E.18]', nombre:'Destrucción de información', origen:'E', tipos:['D','Media'], dims:['D'] },
+  { code:'[E.19]', nombre:'Fugas de información', origen:'E', tipos:['D','S','SW','HW','COM','Media','P'], dims:['C'] },
+  { code:'[E.20]', nombre:'Vulnerabilidades de los programas', origen:'E', tipos:['SW'], dims:['I','C','D'] },
+  { code:'[E.21]', nombre:'Errores de mantenimiento de software', origen:'E', tipos:['SW'], dims:['I','D'] },
+  { code:'[E.23]', nombre:'Errores de mantenimiento de hardware', origen:'E', tipos:['HW','Media','AUX'], dims:['D'] },
+  { code:'[E.24]', nombre:'Caída por agotamiento de recursos', origen:'E', tipos:['S','HW','COM'], dims:['D'] },
+  { code:'[E.25]', nombre:'Pérdida de equipos', origen:'E', tipos:['HW','Media'], dims:['D','C'] },
+  { code:'[E.28]', nombre:'Indisponibilidad del personal', origen:'E', tipos:['P'], dims:['D'] },
+  // ATAQUES DELIBERADOS
+  { code:'[A.4]', nombre:'Manipulación de la configuración', origen:'A', tipos:['D','SW','HW','COM'], dims:['I','C','T'] },
+  { code:'[A.5]', nombre:'Suplantación de la identidad', origen:'A', tipos:['S','D','SW'], dims:['A','C','I'] },
+  { code:'[A.6]', nombre:'Abuso de privilegios de acceso', origen:'A', tipos:['D','S','SW','HW','COM'], dims:['C','I','D'] },
+  { code:'[A.7]', nombre:'Uso no previsto', origen:'A', tipos:['S','SW','HW','COM','Media','AUX','L'], dims:['D','C','I'] },
+  { code:'[A.8]', nombre:'Difusión de software dañino (malware)', origen:'A', tipos:['SW','HW'], dims:['I','C','D'] },
+  { code:'[A.11]', nombre:'Acceso no autorizado', origen:'A', tipos:['D','S','SW','HW','COM','Media','L'], dims:['C','I'] },
+  { code:'[A.12]', nombre:'Análisis de tráfico', origen:'A', tipos:['COM'], dims:['C'] },
+  { code:'[A.13]', nombre:'Repudio', origen:'A', tipos:['S','D'], dims:['T','A'] },
+  { code:'[A.14]', nombre:'Interceptación de información (escucha)', origen:'A', tipos:['COM'], dims:['C'] },
+  { code:'[A.15]', nombre:'Modificación deliberada de la información', origen:'A', tipos:['D','Media'], dims:['I'] },
+  { code:'[A.18]', nombre:'Destrucción de información', origen:'A', tipos:['D','Media'], dims:['D'] },
+  { code:'[A.19]', nombre:'Revelación de información', origen:'A', tipos:['D','S','SW','HW','COM','Media','P'], dims:['C'] },
+  { code:'[A.22]', nombre:'Manipulación de programas/equipos', origen:'A', tipos:['SW','HW'], dims:['I','C','D'] },
+  { code:'[A.24]', nombre:'Denegación de servicio (DoS)', origen:'A', tipos:['S','SW','HW','COM'], dims:['D'] },
+  { code:'[A.25]', nombre:'Robo', origen:'A', tipos:['HW','Media'], dims:['D','C'] },
+  { code:'[A.26]', nombre:'Ataque destructivo', origen:'A', tipos:['HW','Media','AUX','L'], dims:['D'] },
+  { code:'[A.27]', nombre:'Ocupación enemiga', origen:'A', tipos:['L'], dims:['D','C'] },
+  { code:'[A.28]', nombre:'Indisponibilidad del personal', origen:'A', tipos:['P'], dims:['D'] },
+  { code:'[A.29]', nombre:'Extorsión', origen:'A', tipos:['P'], dims:['C','I','D'] },
+  { code:'[A.30]', nombre:'Ingeniería social', origen:'A', tipos:['P'], dims:['C','I','D'] }
+];
+
+// Catálogo de salvaguardas MAGERIT (Libro II §6)
+const CATALOGO_SALVAGUARDAS = [
+  // Horizontales
+  { code:'H.IA', nombre:'Identificación y autenticación', area:'Horizontal', tipos:['PR'] },
+  { code:'H.AC', nombre:'Control de acceso lógico', area:'Horizontal', tipos:['PR'] },
+  { code:'H.ST', nombre:'Segregación de tareas', area:'Horizontal', tipos:['PR'] },
+  { code:'H.IR', nombre:'Gestión de incidencias', area:'Horizontal', tipos:['CR','RC'] },
+  { code:'H.tools.AV', nombre:'Herramienta antimalware', area:'Horizontal', tipos:['PR','DC'] },
+  { code:'H.tools.IDS', nombre:'IDS/IPS detección/prevención intrusión', area:'Horizontal', tipos:['DC','PR'] },
+  { code:'H.tools.VA', nombre:'Análisis de vulnerabilidades', area:'Horizontal', tipos:['MN'] },
+  { code:'H.tools.DLP', nombre:'DLP – Monitorización de contenidos', area:'Horizontal', tipos:['PR','DC'] },
+  { code:'H.tools.LA', nombre:'Análisis de logs (SIEM)', area:'Horizontal', tipos:['DC','MN'] },
+  { code:'H.VM', nombre:'Gestión de vulnerabilidades', area:'Horizontal', tipos:['PR','MN'] },
+  { code:'H.AU', nombre:'Registro y auditoría', area:'Horizontal', tipos:['MN','DC'] },
+  // Datos
+  { code:'D.A', nombre:'Copias de seguridad (backup)', area:'Datos', tipos:['RC'] },
+  { code:'D.I', nombre:'Aseguramiento de la integridad', area:'Datos', tipos:['PR'] },
+  { code:'D.C', nombre:'Cifrado de la información', area:'Datos', tipos:['EL','PR'] },
+  { code:'D.DS', nombre:'Uso de firmas electrónicas', area:'Datos', tipos:['PR'] },
+  // Claves
+  { code:'K.IC', nombre:'Gestión de claves de cifra', area:'Claves', tipos:['PR'] },
+  { code:'K.509', nombre:'Gestión de certificados X.509', area:'Claves', tipos:['PR'] },
+  // Servicios
+  { code:'S.A', nombre:'Aseguramiento de la disponibilidad del servicio', area:'Servicios', tipos:['IM','RC'] },
+  { code:'S.www', nombre:'Protección de servicios web (WAF)', area:'Servicios', tipos:['PR','DC'] },
+  { code:'S.email', nombre:'Protección del correo electrónico', area:'Servicios', tipos:['PR','DC'] },
+  // Software
+  { code:'SW.A', nombre:'Backup de aplicaciones', area:'Software', tipos:['RC'] },
+  { code:'SW.SC', nombre:'Perfiles de seguridad (bastionado)', area:'Software', tipos:['PR'] },
+  { code:'SW.CM', nombre:'Gestión de cambios y actualizaciones', area:'Software', tipos:['PR'] },
+  // Hardware
+  { code:'HW.A', nombre:'Aseguramiento disponibilidad HW (redundancia)', area:'Hardware', tipos:['IM','RC'] },
+  { code:'HW.SC', nombre:'Bastionado de equipos', area:'Hardware', tipos:['PR'] },
+  // Comunicaciones
+  { code:'COM.aut', nombre:'Autenticación del canal', area:'Comunicaciones', tipos:['PR'] },
+  { code:'COM.I', nombre:'Integridad de los datos intercambiados', area:'Comunicaciones', tipos:['PR'] },
+  { code:'COM.C', nombre:'Cifrado de las comunicaciones', area:'Comunicaciones', tipos:['EL'] },
+  { code:'COM.DS', nombre:'Segregación de redes (VLAN/segmentación)', area:'Comunicaciones', tipos:['PR','IM'] },
+  // Puntos de interconexión
+  { code:'IP.SPP', nombre:'Sistema de protección perimetral (firewall)', area:'Interconexión', tipos:['PR'] },
+  // Soportes
+  { code:'MP.IC', nombre:'Cifrado de soportes', area:'Soportes', tipos:['EL'] },
+  { code:'MP.end', nombre:'Destrucción segura de soportes', area:'Soportes', tipos:['EL'] },
+  // Auxiliares
+  { code:'AUX.power', nombre:'Suministro eléctrico (SAI/generador)', area:'Auxiliares', tipos:['IM'] },
+  { code:'AUX.AC', nombre:'Climatización', area:'Auxiliares', tipos:['IM'] },
+  // Instalaciones
+  { code:'L.AC', nombre:'Control de accesos físicos', area:'Instalaciones', tipos:['PR'] },
+  { code:'L.A', nombre:'Aseguramiento disponibilidad de instalaciones', area:'Instalaciones', tipos:['IM','RC'] },
+  // Personal
+  { code:'PS.AT', nombre:'Formación y concienciación', area:'Personal', tipos:['AW','PR'] },
+  // Organizativas
+  { code:'G.RM', nombre:'Gestión de riesgos (proceso)', area:'Organización', tipos:['AD'] },
+  { code:'G.plan', nombre:'Planificación de la seguridad', area:'Organización', tipos:['AD'] },
+  { code:'G.exam', nombre:'Inspecciones de seguridad', area:'Organización', tipos:['MN'] },
+  // Continuidad
+  { code:'BC.BIA', nombre:'Análisis de impacto en el negocio (BIA)', area:'Continuidad', tipos:['AD'] },
+  { code:'BC.DRP', nombre:'Plan de Recuperación de Desastres (DRP)', area:'Continuidad', tipos:['RC'] }
+];
+
+const TIPOS_SALVAGUARDA = {
+  PR: 'Preventiva',
+  DR: 'Disuasoria',
+  EL: 'Eliminatoria',
+  IM: 'Minimización del impacto',
+  CR: 'Correctiva',
+  RC: 'Recuperación',
+  MN: 'Monitorización',
+  DC: 'Detección',
+  AW: 'Concienciación',
+  AD: 'Administrativa'
+};
+
+const NIVELES_MADUREZ = {
+  L0: { label:'Inexistente', eficacia: 0.00 },
+  L1: { label:'Inicial / ad hoc', eficacia: 0.10 },
+  L2: { label:'Reproducible pero intuitivo', eficacia: 0.30 },
+  L3: { label:'Proceso definido', eficacia: 0.50 },
+  L4: { label:'Gestionado y medible', eficacia: 0.70 },
+  L5: { label:'Optimizado', eficacia: 1.00 }
+};
+
+const NIVELES = ['MB','B','M','A','MA'];
+const NIVEL_NUM = { MB:1, B:2, M:3, A:4, MA:5 };
+const NIVEL_LABEL = { MB:'Muy bajo', B:'Bajo', M:'Medio', A:'Alto', MA:'Muy alto' };
+const FRECUENCIA_ANUAL = { MB:'siglos (1/100)', B:'cada varios años (1/10)', M:'una vez/año (1)', A:'mensualmente (10)', MA:'a diario (100)' };
+
+// Matriz 5x5 (filas=impacto, cols=probabilidad). Basada en MAGERIT zonas
+const MATRIZ_RIESGO = [
+  ['MB','MB','B','B','M'],
+  ['MB','B','B','M','A'],
+  ['B','B','M','A','A'],
+  ['B','M','A','A','MA'],
+  ['M','A','A','MA','MA']
+];
+
+/* ===================== UTIL ===================== */
+const $ = (s,p=document)=>p.querySelector(s);
+const $$ = (s,p=document)=>Array.from(p.querySelectorAll(s));
+const uid = (p)=>p+'-'+Math.random().toString(36).slice(2,8);
+const esc = (s)=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function save(){
+  if(!storageAvailable) return;
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+function load(){
+  if(!storageAvailable){ state = defaultState(); return; }
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    state = raw ? JSON.parse(raw) : defaultState();
+    // Migración: garantizar campos
+    if(!state.proyecto) state.proyecto = defaultState().proyecto;
+    if(!state.criterios) state.criterios = defaultCriterios();
+    if(!state.activos) state.activos = [];
+    if(!state.amenazas) state.amenazas = [];
+    if(!state.salvaguardas) state.salvaguardas = [];
+    if(!state.tratamiento) state.tratamiento = {};
+    if(!state.apetito) state.apetito = 'M';
+  } catch(e){ state = defaultState(); }
+}
+
+function resetAll(){
+  if(!confirm('¿Borrar todo el análisis y empezar de cero?')) return;
+  state = defaultState();
+  save();
+  renderAll();
+}
+
+function exportJSON(){
+  const blob = new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (state.proyecto.nombre||'magerit-analisis').replace(/[^a-z0-9]/gi,'_').toLowerCase() + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJSON(ev){
+  const f = ev.target.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      state = Object.assign(defaultState(), data);
+      save();
+      renderAll();
+      alert('Análisis importado correctamente.');
+    } catch(err){ alert('Error al importar: '+err.message); }
+  };
+  r.readAsText(f);
+  ev.target.value = '';
+}
+
+/* ===================== CÁLCULO DE RIESGO ===================== */
+function calcImpactoInherente(activo, amenaza, dim){
+  // Impacto = valor_activo[dim] * (degradación[dim]/100). Escala 0-10.
+  const v = (activo.valoracion && activo.valoracion[dim]) || 0;
+  const d = (amenaza.deg && amenaza.deg[dim]) || 0;
+  return Math.round(v * d / 100);
+}
+function nivelDesdeImpacto(impacto){
+  // Conversión 0-10 → MB/B/M/A/MA (escala simplificada MAGERIT)
+  if(impacto <= 0) return null;
+  if(impacto <= 2) return 'B';
+  if(impacto <= 5) return 'M';
+  if(impacto <= 8) return 'A';
+  return 'MA';
+}
+function nivelDesdeValor(v){
+  if(v <= 0) return 'MB';
+  if(v <= 2) return 'B';
+  if(v <= 5) return 'M';
+  if(v <= 8) return 'A';
+  return 'MA';
+}
+function riesgoInherente(activo, amenaza){
+  // Retorna riesgo por dimensión {D, I, C, A, T} en MB/B/M/A/MA
+  const out = {};
+  for(const dim of DIMENSIONES){
+    const impacto = calcImpactoInherente(activo, amenaza, dim.code);
+    const nivImpacto = nivelDesdeImpacto(impacto);
+    if(!nivImpacto){ out[dim.code] = null; continue; }
+    const probIdx = NIVEL_NUM[amenaza.prob] - 1;
+    const impIdx = NIVEL_NUM[nivImpacto] - 1;
+    out[dim.code] = MATRIZ_RIESGO[impIdx][probIdx];
+  }
+  return out;
+}
+function riesgoMaxNivel(riesgoObj){
+  // Retorna el nivel máximo de un conjunto {D, I, C, A, T}
+  let max = null;
+  for(const k of Object.keys(riesgoObj)){
+    if(!riesgoObj[k]) continue;
+    if(!max || NIVEL_NUM[riesgoObj[k]] > NIVEL_NUM[max]) max = riesgoObj[k];
+  }
+  return max;
+}
+
+function salvaguardasParaAmenaza(amenazaId){
+  return state.salvaguardas.filter(s => (s.amenazasIds||[]).includes(amenazaId));
+}
+function eficaciaCombinada(salvaguardas, campo /* 'reduceProb' o 'reduceImp' */){
+  // Combina eficacias usando producto inverso: 1 - Π(1 - eficacia_i)
+  // Eficacia_i = (reduceXX/100) * eficacia_madurez
+  let factor = 1;
+  for(const s of salvaguardas){
+    const eMad = (NIVELES_MADUREZ[s.madurez]||{eficacia:0}).eficacia;
+    const ef = (Number(s[campo])||0)/100 * eMad;
+    factor *= (1 - ef);
+  }
+  return 1 - factor;
+}
+function riesgoResidual(activo, amenaza){
+  const salvs = salvaguardasParaAmenaza(amenaza.id);
+  const redProb = eficaciaCombinada(salvs, 'reduceProb');
+  const redImp = eficaciaCombinada(salvs, 'reduceImp');
+  // Probabilidad residual: reduce el nivel de probabilidad
+  const probNum = NIVEL_NUM[amenaza.prob];
+  // Aplicamos la reducción proporcional sobre la escala (1-5)
+  const probResidualNum = Math.max(1, probNum * (1 - redProb));
+  const probResidualNivel = NIVELES[Math.max(0, Math.round(probResidualNum)-1)];
+  
+  const out = {};
+  for(const dim of DIMENSIONES){
+    const impactoInh = calcImpactoInherente(activo, amenaza, dim.code);
+    const impactoRes = impactoInh * (1 - redImp);
+    const nivImpacto = nivelDesdeImpacto(Math.round(impactoRes));
+    if(!nivImpacto){ out[dim.code] = null; continue; }
+    const probIdx = NIVEL_NUM[probResidualNivel] - 1;
+    const impIdx = NIVEL_NUM[nivImpacto] - 1;
+    out[dim.code] = MATRIZ_RIESGO[impIdx][probIdx];
+  }
+  return { riesgo: out, probResidual: probResidualNivel, redProb, redImp };
+}
+
+/* ===================== RENDER ===================== */
+function renderAll(){
+  renderInicio();
+  renderCriterios();
+  renderActivos();
+  renderAmenazas();
+  renderInherente();
+  renderSalvaguardas();
+  renderResidual();
+  renderTratamiento();
+  renderInforme();
+  updateBreadcrumb();
+}
+
+function updateBreadcrumb(){
+  const set = (id, done, active=false) => {
+    const el = document.getElementById(id);
+    el.classList.toggle('done', done);
+    el.classList.toggle('active', active);
+  };
+  set('step-criterios', true);
+  set('step-activos', state.activos.length > 0);
+  set('step-amenazas', state.amenazas.length > 0);
+  set('step-inherente', state.amenazas.length > 0);
+  set('step-salvaguardas', state.salvaguardas.length > 0);
+  set('step-residual', state.salvaguardas.length > 0);
+  set('step-tratamiento', Object.keys(state.tratamiento).length > 0);
+}
+
+/* ===================== VISTA: INICIO ===================== */
+function renderInicio(){
+  const v = $('#view-inicio');
+  v.innerHTML = `
+    <div class="grid-3" style="margin-bottom:20px;align-items:start">
+      <div class="stat-box">
+        <span class="lbl">Activos identificados</span>
+        <div class="num">${state.activos.length}</div>
+      </div>
+      <div class="stat-box">
+        <span class="lbl">Amenazas valoradas</span>
+        <div class="num">${state.amenazas.length}</div>
+      </div>
+      <div class="stat-box">
+        <span class="lbl">Salvaguardas en plan</span>
+        <div class="num">${state.salvaguardas.length}</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h2 style="font-size:22px;margin-bottom:8px">El método MAR de MAGERIT en 4 tareas</h2>
+      <p style="font-size:13px;color:var(--slate);margin-bottom:16px">
+        Esta aplicación implementa el <strong>Método de Análisis de Riesgos (MAR)</strong> de MAGERIT v3.0 publicado por el Ministerio de Hacienda y Administraciones Públicas (octubre 2012). El flujo recorre las cuatro tareas formales de la metodología tal como aparecen en el <em>Libro I &middot; Método</em>, §3.2.
+      </p>
+      <div class="grid-4">
+        <div style="border-left:3px solid var(--navy);padding:0 16px">
+          <div class="mono" style="font-size:11px;color:var(--navy);font-weight:700">MAR.1</div>
+          <div style="font-weight:600;margin:6px 0">Caracterización de los activos</div>
+          <div style="font-size:12px;color:var(--slate)">Identificar, relacionar y valorar los activos en las cinco dimensiones (D, I, C, A, T) según criterios homogéneos.</div>
+        </div>
+        <div style="border-left:3px solid var(--orange);padding:0 16px">
+          <div class="mono" style="font-size:11px;color:var(--orange);font-weight:700">MAR.2</div>
+          <div style="font-weight:600;margin:6px 0">Caracterización de las amenazas</div>
+          <div style="font-size:12px;color:var(--slate)">Asociar amenazas relevantes y estimar su <strong>probabilidad</strong> de ocurrencia y la <strong>degradación</strong> que causarían.</div>
+        </div>
+        <div style="border-left:3px solid var(--green);padding:0 16px">
+          <div class="mono" style="font-size:11px;color:var(--green);font-weight:700">MAR.3</div>
+          <div style="font-weight:600;margin:6px 0">Caracterización de las salvaguardas</div>
+          <div style="font-size:12px;color:var(--slate)">Identificar salvaguardas (preventivas, detectivas, correctivas...) y valorar su eficacia y madurez (L0–L5).</div>
+        </div>
+        <div style="border-left:3px solid var(--rust);padding:0 16px">
+          <div class="mono" style="font-size:11px;color:var(--rust);font-weight:700">MAR.4</div>
+          <div style="font-weight:600;margin:6px 0">Estimación del estado de riesgo</div>
+          <div style="font-size:12px;color:var(--slate)">Calcular el impacto y el riesgo, tanto el <strong>potencial</strong> (inherente, sin salvaguardas) como el <strong>residual</strong> (tras aplicarlas).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card" style="grid-column:span 2">
+        <h3 style="font-size:18px;margin-bottom:8px">¿Cómo trabajar en esta aplicación?</h3>
+        <ol style="font-size:13px;line-height:1.7;padding-left:20px;color:#1f2937">
+          <li><strong>Define los criterios de impacto.</strong> El profesor o el grupo deciden qué significa "Alto" o "Muy alto" en términos económicos, de RTO, reputacionales, legales y operativos. <em>(Pestaña Criterios)</em></li>
+          <li><strong>Crea los activos.</strong> Información, servicios, software, hardware, comunicaciones, personal, instalaciones. Cada uno se valora en las cinco dimensiones (escala 0–10 oficial de MAGERIT). <em>(Pestaña Activos)</em></li>
+          <li><strong>Asocia amenazas.</strong> Usa el catálogo MAGERIT precargado (57 amenazas oficiales). Para cada una, indica la probabilidad y la degradación que causaría por dimensión. <em>(Pestaña Amenazas)</em></li>
+          <li><strong>Consulta el riesgo inherente.</strong> Se calcula automáticamente como función del valor del activo × degradación × probabilidad. <em>(Pestaña Riesgo inherente)</em></li>
+          <li><strong>Añade salvaguardas.</strong> Catálogo MAGERIT completo (Libro II §6). Cada salvaguarda se asocia a amenazas concretas y se le asigna una madurez L0–L5. <em>(Pestaña Salvaguardas)</em></li>
+          <li><strong>Observa el riesgo residual.</strong> La aplicación recalcula el riesgo aplicando la reducción combinada de las salvaguardas. <em>(Pestaña Riesgo residual)</em></li>
+          <li><strong>Decide el tratamiento.</strong> Mitigar, transferir, evitar o aceptar cada riesgo, fijando responsable y plazo. <em>(Pestaña Plan de tratamiento)</em></li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3 style="font-size:16px;margin-bottom:8px">Persistencia y portabilidad</h3>
+        <p style="font-size:12px;color:var(--slate);line-height:1.6">
+          La aplicación guarda automáticamente en <code>localStorage</code> del navegador. Para mover el trabajo entre equipos o compartirlo, usa <strong>Exportar JSON</strong> (descarga un fichero) e <strong>Importar JSON</strong>.
+        </p>
+        <p style="font-size:12px;color:var(--slate);line-height:1.6;margin-top:8px">
+          El fichero JSON resultante es <strong>legible por cualquier LLM</strong>: puedes subirlo a Claude o cualquier IA y pedirle que añada activos, modifique valoraciones o redacte el informe final.
+        </p>
+        <hr class="fine">
+        <h3 style="font-size:16px;margin-bottom:8px">Sobre PILAR</h3>
+        <p style="font-size:12px;color:var(--slate);line-height:1.6">
+          Esta herramienta es una <strong>alternativa didáctica simplificada</strong> a PILAR (CCN-CERT). PILAR aporta sistema experto, biblioteca estándar, análisis cuantitativo avanzado, dependencias entre activos y mapeo automático a ENS/ISO 27002. Para trabajo real en organizaciones, usa PILAR. Para enseñar el método, esta app es más visible.
+        </p>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:20px">
+      <strong>Sugerencia para clase:</strong> empezad por cargar el caso de ejemplo <em>TechServ</em> con el botón superior, recorred las pestañas en orden y observad cómo cambia el riesgo residual al modificar la madurez de las salvaguardas. Después borrad todo y construid un análisis nuevo desde cero con un caso inventado por los propios alumnos.
+    </div>
+  `;
+}
+
+/* ===================== VISTA: ACTIVOS ===================== */
+function renderActivos(){
+  const v = $('#view-activos');
+  
+  const renderActivoCard = (a) => {
+    const tipoObj = TIPOS_ACTIVO.find(t => t.code === a.tipo) || TIPOS_ACTIVO[0];
+    return `
+    <div class="card" style="margin-bottom:12px" id="activo-${a.id}">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:12px">
+        <div style="flex:1">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap">
+            <span class="badge-tipo">${esc(a.tipo)}</span>
+            <span class="mono" style="font-size:11px;color:var(--slate)">${esc(a.id)}</span>
+          </div>
+          <input class="input" style="font-size:16px;font-weight:600;border:none;padding:0;margin-bottom:4px;background:transparent" 
+            value="${esc(a.nombre)}" placeholder="Nombre del activo"
+            onchange="updateActivo('${a.id}','nombre',this.value)">
+          <input class="input" style="font-size:12px;border:none;padding:0;background:transparent;color:var(--slate);font-style:italic" 
+            value="${esc(a.descripcion||'')}" placeholder="Descripción breve"
+            onchange="updateActivo('${a.id}','descripcion',this.value)">
+        </div>
+        <div style="display:flex;gap:6px;flex-direction:column;align-items:end">
+          <select class="select" style="font-size:11px;width:auto" 
+            onchange="updateActivo('${a.id}','tipo',this.value)">
+            ${TIPOS_ACTIVO.map(t => `<option value="${t.code}" ${a.tipo===t.code?'selected':''}>${t.code} ${t.label}</option>`).join('')}
+          </select>
+          <button class="btn btn-ghost" onclick="deleteActivo('${a.id}')" title="Eliminar activo">🗑 Eliminar</button>
+        </div>
+      </div>
+      <div class="hint" style="margin-bottom:12px">${esc(tipoObj.desc)}</div>
+      <div style="background:#fafaf5;padding:12px;border-radius:4px">
+        <div class="lbl" style="margin-bottom:8px">Valoración en las 5 dimensiones (escala 0–10 · MAGERIT Libro I §3.1.1)</div>
+        <div class="grid-5">
+          ${DIMENSIONES.map(dim => {
+            const val = (a.valoracion && a.valoracion[dim.code]) || 0;
+            const niv = nivelDesdeValor(val);
+            return `
+            <div style="border-left:3px solid ${dim.color};padding-left:10px">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+                <span class="badge-tipo" style="background:${dim.color}">${dim.code}</span>
+                <span style="font-weight:600;font-size:12px">${dim.label}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <input class="dim-input" type="number" min="0" max="10" value="${val}" 
+                  onchange="updateActivoVal('${a.id}','${dim.code}',this.value)">
+                <span class="risk-cell risk-${niv}">${niv}</span>
+              </div>
+              <div class="hint" style="font-size:10px;margin-top:2px">${esc(dim.desc)}</div>
+            </div>
+          `;}).join('')}
+        </div>
+      </div>
+    </div>
+  `;};
+
+  v.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:20px;gap:16px;flex-wrap:wrap">
+      <div>
+        <h2 style="font-size:24px;margin-bottom:6px">Inventario y valoración de activos</h2>
+        <p style="font-size:13px;color:var(--slate);max-width:900px">
+          Tarea <strong>MAR.1</strong>. Identifica los activos del sistema y valora cuánto vale cada uno en las cinco dimensiones de seguridad. La escala oficial de MAGERIT es de 0 a 10: <code>0</code> despreciable, <code>1–2</code> bajo, <code>3–5</code> medio, <code>6–8</code> alto, <code>9</code> muy alto, <code>10</code> extremo.
+        </p>
+      </div>
+      <button class="btn btn-primary" onclick="addActivo()">+ Nuevo activo</button>
+    </div>
+
+    ${state.activos.length === 0 ? `
+      <div class="alert alert-info">
+        <strong>No hay activos aún.</strong> Empieza creando uno o carga el caso TechServ desde la cabecera.
+      </div>
+    ` : ''}
+
+    ${state.activos.map(renderActivoCard).join('')}
+
+    <details style="margin-top:24px">
+      <summary>Guía: tipos de activos según el catálogo MAGERIT (Libro II §2)</summary>
+      <div style="margin-top:12px">
+        <table class="data">
+          <thead><tr><th>Código</th><th>Categoría</th><th>Ejemplos</th></tr></thead>
+          <tbody>
+            ${TIPOS_ACTIVO.map(t => `<tr><td><span class="badge-tipo">${t.code}</span></td><td>${esc(t.label)}</td><td style="color:var(--slate)">${esc(t.desc)}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details style="margin-top:12px">
+      <summary>Guía: las cinco dimensiones de seguridad</summary>
+      <div style="margin-top:12px;font-size:13px;line-height:1.7">
+        ${DIMENSIONES.map(d => `
+          <div style="border-left:3px solid ${d.color};padding:8px 12px;margin-bottom:8px">
+            <strong>[${d.code}] ${d.label}.</strong> ${esc(d.desc)}
+          </div>
+        `).join('')}
+        <p style="color:var(--slate);font-style:italic">La confidencialidad e integridad son típicas de los datos. La disponibilidad lo es de los servicios. Autenticidad y trazabilidad son frecuentes en sistemas de administración electrónica y comercio electrónico.</p>
+      </div>
+    </details>
+  `;
+}
+
+function addActivo(){
+  const id = uid('ACT');
+  state.activos.push({
+    id, nombre: 'Nuevo activo', tipo: '[D]', descripcion: '',
+    valoracion: { D:0, I:0, C:0, A:0, T:0 }
+  });
+  save(); renderAll();
+  setTimeout(() => {
+    const el = document.getElementById('activo-'+id);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  }, 100);
+}
+function deleteActivo(id){
+  if(!confirm('¿Eliminar este activo? Se borrarán también sus amenazas asociadas.')) return;
+  state.activos = state.activos.filter(a => a.id !== id);
+  state.amenazas = state.amenazas.filter(am => am.activoId !== id);
+  save(); renderAll();
+}
+function updateActivo(id, field, value){
+  const a = state.activos.find(x => x.id === id);
+  if(!a) return;
+  a[field] = value;
+  save();
+  renderAll();
+}
+function updateActivoVal(id, dim, value){
+  const a = state.activos.find(x => x.id === id);
+  if(!a) return;
+  if(!a.valoracion) a.valoracion = { D:0,I:0,C:0,A:0,T:0 };
+  a.valoracion[dim] = Math.max(0, Math.min(10, Number(value)||0));
+  save();
+  renderActivos(); // sin renderAll para no perder foco
+}
+
+function renderCriterios(){
+  const v = $('#view-criterios');
+  const c = state.criterios;
+  
+  const renderCriterio = (key, obj) => `
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;gap:12px">
+        <div style="flex:1">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" ${obj.activo?'checked':''} onchange="state.criterios.${key}.activo=this.checked;save();renderCriterios()" style="width:18px;height:18px">
+            <input class="input" style="font-weight:600;font-size:14px;border:none;background:transparent;padding:0" 
+              value="${esc(obj.label)}" 
+              onchange="state.criterios.${key}.label=this.value;save()">
+          </label>
+          <div class="hint">Código MAGERIT relacionado: ${key === 'economico' ? '[cei]' : key === 'rto' ? '[rto]' : key === 'legal' ? '[lpo]' : key === 'reputacional' ? '[lg]' : key === 'operativo' ? '[olm]/[adm]' : '[pi]'}</div>
+        </div>
+      </div>
+      <div class="grid-5">
+        ${NIVELES.map(n => `
+          <div>
+            <label class="lbl">
+              <span class="risk-cell risk-${n}" style="margin-right:4px">${n}</span>
+              ${NIVEL_LABEL[n]}
+            </label>
+            <input class="input" value="${esc(obj.niveles[n])}" 
+              onchange="state.criterios.${key}.niveles.${n}=this.value;save()">
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  
+  v.innerHTML = `
+    <div style="margin-bottom:20px">
+      <h2 style="font-size:24px;margin-bottom:6px">Criterios de impacto</h2>
+      <p style="font-size:13px;color:var(--slate);max-width:900px">
+        Los criterios definen qué se considera "Muy bajo", "Bajo", "Medio", "Alto" y "Muy alto" en cada dimensión de pérdida. Son el contrato común que permite que toda la valoración del análisis sea homogénea y comparable. <strong>Edita los rangos según las características reales de la organización analizada.</strong> Basado en MAGERIT v3, Libro II §4.
+      </p>
+    </div>
+
+    <div class="alert alert-info">
+      <strong>¿Por qué importa este paso?</strong> Si dos personas no comparten qué entienden por "Alto", el análisis no es comparable ni defendible ante un auditor. MAGERIT lo llama <em>homogeneidad y relatividad</em>: todos los valores deben poder compararse en la misma escala.
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <div class="grid-3">
+        <div>
+          <label class="lbl">Nombre del proyecto/sistema</label>
+          <input class="input" value="${esc(state.proyecto.nombre)}" onchange="state.proyecto.nombre=this.value;save()">
+        </div>
+        <div>
+          <label class="lbl">Organización</label>
+          <input class="input" value="${esc(state.proyecto.organizacion)}" onchange="state.proyecto.organizacion=this.value;save()">
+        </div>
+        <div>
+          <label class="lbl">Responsable del análisis</label>
+          <input class="input" value="${esc(state.proyecto.responsable)}" onchange="state.proyecto.responsable=this.value;save()">
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <label class="lbl">Apetito de riesgo (nivel máximo aceptable sin tratamiento)</label>
+        <select class="select" style="max-width:300px" onchange="state.apetito=this.value;save()">
+          ${NIVELES.map(n => `<option value="${n}" ${state.apetito===n?'selected':''}>${n} – ${NIVEL_LABEL[n]}</option>`).join('')}
+        </select>
+        <div class="hint">Riesgos por encima del apetito requieren tratamiento obligatorio (mitigar/transferir/evitar).</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:18px;margin:24px 0 12px">Criterios cualitativos por nivel</h3>
+    ${renderCriterio('economico', c.economico)}
+    ${renderCriterio('rto', c.rto)}
+    ${renderCriterio('legal', c.legal)}
+    ${renderCriterio('reputacional', c.reputacional)}
+    ${renderCriterio('operativo', c.operativo)}
+    ${renderCriterio('personal', c.personal)}
+
+    <div class="alert alert-warn">
+      <strong>Lectura recomendada:</strong> MAGERIT Libro II §4 "Criterios de valoración" detalla escalas oficiales <code>[pi]</code> información personal, <code>[lpo]</code> obligaciones legales, <code>[si]</code> seguridad, <code>[cei]</code> intereses comerciales/económicos, <code>[da]</code> interrupción del servicio, <code>[po]</code> orden público, <code>[olm]</code> operaciones, <code>[adm]</code> administración, <code>[lg]</code> reputación y <code>[rto]</code> tiempo de recuperación. Los rangos editables aquí parten de esos criterios oficiales pero los adaptan a la realidad de cada organización.
+    </div>
+  `;
+}
+
+
+/* ===================== VISTA: AMENAZAS ===================== */
+function renderAmenazas(){
+  const v = $('#view-amenazas');
+  
+  if(!state._activoFiltro && state.activos.length > 0) state._activoFiltro = state.activos[0].id;
+  const activoActual = state.activos.find(a => a.id === state._activoFiltro);
+  
+  if(state.activos.length === 0){
+    v.innerHTML = `
+      <h2 style="font-size:24px;margin-bottom:6px">Identificación de amenazas</h2>
+      <div class="alert alert-warn"><strong>Primero debes crear activos.</strong> Ve a la pestaña Activos y añade al menos uno.</div>
+    `;
+    return;
+  }
+  
+  const amenazasActivo = state.amenazas.filter(a => a.activoId === state._activoFiltro);
+  const tipoActivo = (activoActual.tipo || '[D]').replace(/[\[\]]/g,'').split('.')[0];
+  const yaAsociadas = new Set(amenazasActivo.map(a => a.codigo));
+  
+  const colorOrigen = {N:'#1e88e5', I:'#fb8c00', E:'#43a047', A:'#e53935'};
+  const labelOrigen = {N:'Natural', I:'Industrial', E:'Error humano', A:'Ataque deliberado'};
+  
+  v.innerHTML = `
+    <div style="margin-bottom:20px">
+      <h2 style="font-size:24px;margin-bottom:6px">Identificación y valoración de amenazas</h2>
+      <p style="font-size:13px;color:var(--slate);max-width:900px">
+        Tarea <strong>MAR.2</strong>. Por cada activo, identifica las amenazas relevantes del catálogo MAGERIT (Libro II §5). Para cada amenaza, estima la <strong>probabilidad</strong> de ocurrencia y la <strong>degradación</strong> que causaría en cada dimensión (porcentaje del valor del activo perdido).
+      </p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <label class="lbl" style="margin:0">Activo en análisis:</label>
+        <select class="select" style="width:auto;max-width:500px" onchange="state._activoFiltro=this.value;renderAmenazas()">
+          ${state.activos.map(a => `<option value="${a.id}" ${state._activoFiltro===a.id?'selected':''}>${esc(a.tipo)} ${esc(a.nombre)}</option>`).join('')}
+        </select>
+        <span class="mono" style="font-size:11px;color:var(--slate);margin-left:auto">
+          ${amenazasActivo.length} amenazas asociadas
+        </span>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;margin:16px 0 12px">Amenazas valoradas para "${esc(activoActual.nombre)}"</h3>
+    ${amenazasActivo.length === 0 ? `
+      <div class="alert alert-info">Sin amenazas asociadas. Añade desde el catálogo de abajo.</div>
+    ` : `
+    <div class="card" style="padding:0;overflow-x:auto;margin-bottom:24px">
+      <table class="data">
+        <thead>
+          <tr>
+            <th style="width:90px">Código</th>
+            <th>Amenaza</th>
+            <th style="width:120px">Origen</th>
+            <th style="width:130px">Probabilidad</th>
+            <th colspan="5" style="text-align:center">Degradación por dimensión (%)</th>
+            <th style="width:40px"></th>
+          </tr>
+          <tr>
+            <th></th><th></th><th></th><th></th>
+            ${DIMENSIONES.map(d => `<th style="text-align:center;width:64px"><span class="badge-tipo" style="background:${d.color}">${d.code}</span></th>`).join('')}
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${amenazasActivo.map(am => `
+            <tr>
+              <td><span class="badge-tipo">${esc(am.codigo)}</span></td>
+              <td><strong>${esc(am.nombre)}</strong></td>
+              <td><span class="pill" style="background:${colorOrigen[am.origen]};color:#fff">${labelOrigen[am.origen]}</span></td>
+              <td>
+                <select class="select" style="font-size:11px" onchange="updateAmenaza('${am.id}','prob',this.value)">
+                  ${NIVELES.map(n => `<option value="${n}" ${am.prob===n?'selected':''}>${n} – ${NIVEL_LABEL[n]}</option>`).join('')}
+                </select>
+                <div class="hint" style="font-size:9px;margin-top:2px">${FRECUENCIA_ANUAL[am.prob]}</div>
+              </td>
+              ${DIMENSIONES.map(d => `
+                <td style="text-align:center">
+                  <input class="dim-input" type="number" min="0" max="100" step="5" 
+                    value="${(am.deg && am.deg[d.code])||0}" 
+                    onchange="updateAmenazaDeg('${am.id}','${d.code}',this.value)"
+                    title="% de degradación en ${d.label}">
+                </td>
+              `).join('')}
+              <td><button class="btn-ghost" onclick="deleteAmenaza('${am.id}')" title="Quitar">×</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+    `}
+
+    <h3 style="font-size:16px;margin:24px 0 8px">Catálogo MAGERIT – Amenazas aplicables a este tipo de activo</h3>
+    <p style="font-size:12px;color:var(--slate);margin-bottom:12px">
+      Click sobre cualquiera para asociarla. Después podrás ajustar probabilidad y degradación. También puedes <button class="btn btn-ghost" style="font-size:12px;text-decoration:underline" onclick="addAmenazaCustom()">añadir una amenaza personalizada</button>.
+    </p>
+    <div class="card" style="padding:0">
+      <table class="data">
+        <thead><tr><th style="width:90px">Código</th><th>Amenaza</th><th style="width:120px">Origen</th><th>Dimensiones</th><th style="width:80px"></th></tr></thead>
+        <tbody>
+          ${CATALOGO_AMENAZAS.map(am => {
+            const aplica = am.tipos.includes(tipoActivo) || am.tipos.includes(tipoActivo.toUpperCase());
+            const yaAsoc = yaAsociadas.has(am.codigo);
+            return `
+            <tr style="${aplica?'':'opacity:0.4'}">
+              <td><span class="badge-tipo">${esc(am.codigo)}</span></td>
+              <td>${esc(am.nombre)}</td>
+              <td><span class="pill" style="background:${colorOrigen[am.origen]};color:#fff">${labelOrigen[am.origen]}</span></td>
+              <td style="color:var(--slate);font-size:11px">${am.dims.join(', ')}</td>
+              <td>
+                ${yaAsoc 
+                  ? '<span class="pill" style="background:#e8f5e9;color:#1c4d22">✓ asociada</span>' 
+                  : `<button class="btn" style="font-size:11px;padding:4px 10px" onclick="asociarAmenaza('${am.codigo}')">+ Asociar</button>`}
+              </td>
+            </tr>
+          `;}).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <details style="margin-top:24px">
+      <summary>Escalas oficiales MAGERIT (Libro I §3.1.2)</summary>
+      <div class="grid-3" style="margin-top:12px;font-size:12px">
+        <div>
+          <strong>Probabilidad (escala cualitativa)</strong>
+          <table class="data" style="margin-top:8px">
+            <thead><tr><th>Nivel</th><th>Descripción</th><th>Frecuencia</th></tr></thead>
+            <tbody>
+              <tr><td>MA</td><td>Muy alta · casi seguro</td><td>100/año</td></tr>
+              <tr><td>A</td><td>Alta · muy alto</td><td>10/año</td></tr>
+              <tr><td>M</td><td>Media · posible</td><td>1/año</td></tr>
+              <tr><td>B</td><td>Baja · poco probable</td><td>1 cada 10 años</td></tr>
+              <tr><td>MB</td><td>Muy baja · muy raro</td><td>1 cada 100 años</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <strong>Degradación</strong>
+          <p style="margin-top:8px;color:var(--slate);line-height:1.6">
+            La degradación mide qué fracción del valor del activo se pierde si la amenaza se materializa. Se expresa en <strong>porcentaje (0–100%)</strong>. Una amenaza puede afectar distinto a cada dimensión: el robo de un portátil degrada disponibilidad y confidencialidad pero no la trazabilidad de otros sistemas.
+          </p>
+        </div>
+        <div>
+          <strong>Cuatro orígenes (MAGERIT)</strong>
+          <ul style="margin-top:8px;padding-left:18px;line-height:1.7">
+            <li><strong>[N]</strong> Desastres naturales</li>
+            <li><strong>[I]</strong> De origen industrial</li>
+            <li><strong>[E]</strong> Errores no intencionados</li>
+            <li><strong>[A]</strong> Ataques deliberados</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  `;
+}
+
+function asociarAmenaza(codigo){
+  const am = CATALOGO_AMENAZAS.find(x => x.codigo === codigo);
+  if(!am || !state._activoFiltro) return;
+  const deg = {};
+  for(const d of DIMENSIONES){ deg[d.code] = am.dims.includes(d.code) ? 50 : 0; }
+  state.amenazas.push({
+    id: uid('AME'),
+    activoId: state._activoFiltro,
+    codigo: am.codigo,
+    nombre: am.nombre,
+    origen: am.origen,
+    prob: 'M',
+    deg
+  });
+  save(); renderAll();
+}
+
+function addAmenazaCustom(){
+  const nombre = prompt('Nombre de la amenaza personalizada:');
+  if(!nombre) return;
+  state.amenazas.push({
+    id: uid('AME'),
+    activoId: state._activoFiltro,
+    codigo: '[CUSTOM]',
+    nombre: nombre,
+    origen: 'A',
+    prob: 'M',
+    deg: { D:50, I:50, C:50, A:0, T:0 }
+  });
+  save(); renderAll();
+}
+
+function deleteAmenaza(id){
+  if(!confirm('¿Quitar esta amenaza? También se desasociará de las salvaguardas.')) return;
+  state.amenazas = state.amenazas.filter(a => a.id !== id);
+  state.salvaguardas.forEach(s => {
+    s.amenazasIds = (s.amenazasIds||[]).filter(x => x !== id);
+  });
+  delete state.tratamiento[id];
+  save(); renderAll();
+}
+
+function updateAmenaza(id, field, value){
+  const a = state.amenazas.find(x => x.id === id);
+  if(!a) return;
+  a[field] = value;
+  save(); renderAll();
+}
+
+function updateAmenazaDeg(id, dim, value){
+  const a = state.amenazas.find(x => x.id === id);
+  if(!a) return;
+  if(!a.deg) a.deg = {D:0,I:0,C:0,A:0,T:0};
+  a.deg[dim] = Math.max(0, Math.min(100, Number(value)||0));
+  save();
+  renderAmenazas();
+}
+
+/* ===================== VISTA: RIESGO INHERENTE ===================== */
+function renderInherente(){
+  const v = $('#view-inherente');
+  
+  if(state.amenazas.length === 0){
+    v.innerHTML = `
+      <h2 style="font-size:24px;margin-bottom:6px">Riesgo inherente (potencial)</h2>
+      <div class="alert alert-warn">Necesitas al menos una amenaza valorada para calcular el riesgo. Ve a la pestaña Amenazas.</div>
+    `;
+    return;
+  }
+  
+  // Calcular riesgo para cada (activo, amenaza)
+  const filas = [];
+  for(const am of state.amenazas){
+    const act = state.activos.find(a => a.id === am.activoId);
+    if(!act) continue;
+    const r = riesgoInherente(act, am);
+    const rMax = riesgoMaxNivel(r);
+    filas.push({ act, am, r, rMax });
+  }
+  filas.sort((a,b) => (NIVEL_NUM[b.rMax]||0) - (NIVEL_NUM[a.rMax]||0));
+  
+  // Stats
+  const stats = { MB:0, B:0, M:0, A:0, MA:0 };
+  filas.forEach(f => { if(f.rMax) stats[f.rMax]++; });
+  
+  // Matriz agregada
+  const matrixCount = {};
+  for(const f of filas){
+    for(const dim of DIMENSIONES){
+      const rDim = f.r[dim.code];
+      if(!rDim) continue;
+      const impacto = calcImpactoInherente(f.act, f.am, dim.code);
+      const nivImp = nivelDesdeImpacto(impacto);
+      if(!nivImp) continue;
+      const key = nivImp + '|' + f.am.prob;
+      matrixCount[key] = (matrixCount[key]||0) + 1;
+    }
+  }
+  
+  v.innerHTML = `
+    <div style="margin-bottom:20px">
+      <h2 style="font-size:24px;margin-bottom:6px">Riesgo inherente (potencial)</h2>
+      <p style="font-size:13px;color:var(--slate);max-width:900px">
+        Este es el riesgo que tendría el sistema <strong>si no existiera ninguna salvaguarda</strong>. MAGERIT lo llama "riesgo potencial" (Libro I §3.1.4). Se calcula como función del valor del activo, la degradación que causaría la amenaza y la probabilidad de que se materialice.
+      </p>
+      <div class="alert alert-info" style="margin-top:12px">
+        <strong>Fórmula:</strong> <code>impacto<sub>dim</sub> = valor_activo<sub>dim</sub> × (degradación<sub>dim</sub> / 100)</code> &nbsp; · &nbsp; <code>riesgo = matriz(impacto, probabilidad)</code>
+      </div>
+    </div>
+
+    <div class="grid-5" style="margin-bottom:20px">
+      ${NIVELES.map(n => `
+        <div class="stat-box" style="border-top:4px solid var(--${n.toLowerCase()})">
+          <div class="num"><span class="risk-cell risk-${n}" style="padding:8px 16px;font-size:18px">${n}</span></div>
+          <div class="lbl" style="margin-top:12px">${NIVEL_LABEL[n]}</div>
+          <div style="font-size:24px;font-weight:700;color:var(--navy);margin-top:6px">${stats[n]}</div>
+          <div class="hint">amenazas en este nivel</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="grid-3" style="margin-bottom:20px;align-items:start">
+      <div style="grid-column:span 2">
+        <h3 style="font-size:16px;margin-bottom:12px">Mapa de riesgo inherente · todas las amenazas</h3>
+        <div class="card" style="padding:0;overflow-x:auto">
+          <table class="data">
+            <thead>
+              <tr>
+                <th>Activo</th>
+                <th>Amenaza</th>
+                <th style="text-align:center" title="Probabilidad">Prob.</th>
+                ${DIMENSIONES.map(d => `<th style="text-align:center"><span class="badge-tipo" style="background:${d.color}">${d.code}</span></th>`).join('')}
+                <th style="text-align:center">Máx.</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filas.map(f => `
+                <tr>
+                  <td>
+                    <div style="font-weight:600">${esc(f.act.nombre)}</div>
+                    <div class="mono" style="font-size:10px;color:var(--slate)">${esc(f.act.tipo)}</div>
+                  </td>
+                  <td>
+                    <span class="badge-tipo">${esc(f.am.codigo)}</span>
+                    ${esc(f.am.nombre)}
+                  </td>
+                  <td style="text-align:center"><span class="risk-cell risk-${f.am.prob}">${f.am.prob}</span></td>
+                  ${DIMENSIONES.map(d => `<td style="text-align:center">${f.r[d.code]?`<span class="risk-cell risk-${f.r[d.code]}">${f.r[d.code]}</span>`:'<span style="color:#ccc">—</span>'}</td>`).join('')}
+                  <td style="text-align:center"><span class="risk-cell risk-${f.rMax}" style="font-size:13px;padding:6px 12px">${f.rMax}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div>
+        <h3 style="font-size:16px;margin-bottom:12px">Matriz Impacto × Probabilidad</h3>
+        <div class="card">
+          <table style="width:100%;border-collapse:separate;border-spacing:2px">
+            <thead>
+              <tr>
+                <td></td>
+                <td colspan="5" style="text-align:center;padding-bottom:6px"><strong style="font-size:11px;color:var(--slate)">PROBABILIDAD →</strong></td>
+              </tr>
+              <tr>
+                <td></td>
+                ${NIVELES.map(n => `<td style="text-align:center;padding:4px;font-size:11px;font-weight:600">${n}</td>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${[4,3,2,1,0].map(impI => `
+                <tr>
+                  <td style="padding:4px;font-size:11px;font-weight:600;text-align:right">${NIVELES[impI]}</td>
+                  ${[0,1,2,3,4].map(probI => {
+                    const niv = MATRIZ_RIESGO[impI][probI];
+                    const key = NIVELES[impI] + '|' + NIVELES[probI];
+                    const c = matrixCount[key] || 0;
+                    return `<td class="matrix-cell risk-${niv}" style="position:relative">${niv}${c?`<div style="font-size:9px;opacity:0.7;margin-top:2px">${c}×</div>`:''}</td>`;
+                  }).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div style="display:flex;align-items:center;gap:4px;margin-top:8px;font-size:10px;color:var(--slate)">
+            <span>← IMPACTO</span>
+          </div>
+          <div class="hint" style="margin-top:8px">El número en cada celda indica cuántas combinaciones (activo×amenaza×dimensión) caen ahí.</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ===================== VISTA: SALVAGUARDAS ===================== */
+function renderSalvaguardas(){
+  const v = $('#view-salvaguardas');
+  
+  if(state.amenazas.length === 0){
+    v.innerHTML = `
+      <h2 style="font-size:24px;margin-bottom:6px">Salvaguardas</h2>
+      <div class="alert alert-warn">Crea primero amenazas para poder asociar salvaguardas a ellas.</div>
+    `;
+    return;
+  }
+  
+  // Agrupar catálogo por área
+  const porArea = {};
+  CATALOGO_SALVAGUARDAS.forEach(s => { if(!porArea[s.area]) porArea[s.area]=[]; porArea[s.area].push(s); });
+  
+  const renderSalvaCard = (s) => {
+    const numAmenazas = (s.amenazasIds||[]).length;
+    const eMad = ((NIVELES_MADUREZ[s.madurez]||{eficacia:0}).eficacia*100).toFixed(0);
+    return `
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:12px">
+        <div style="flex:1">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap">
+            <span class="badge-tipo">${esc(s.codigo)}</span>
+            <span class="pill" style="background:#eef2f7;color:var(--navy)">${esc(s.area||'Personalizada')}</span>
+            ${(s.tipos||[]).map(t => `<span class="pill" style="background:#fff3cd;color:#664d03" title="${TIPOS_SALVAGUARDA[t]||t}">${t}</span>`).join('')}
+          </div>
+          <input class="input" style="font-size:15px;font-weight:600;border:none;padding:0;background:transparent" 
+            value="${esc(s.nombre)}" 
+            onchange="updateSalvaguarda('${s.id}','nombre',this.value)">
+        </div>
+        <button class="btn-ghost" onclick="deleteSalvaguarda('${s.id}')">🗑</button>
+      </div>
+      
+      <div class="grid-4" style="margin-bottom:12px">
+        <div>
+          <label class="lbl">Madurez (L0–L5)</label>
+          <select class="select" onchange="updateSalvaguarda('${s.id}','madurez',this.value);renderSalvaguardas()">
+            ${Object.keys(NIVELES_MADUREZ).map(k => `<option value="${k}" ${s.madurez===k?'selected':''}>${k} – ${NIVELES_MADUREZ[k].label}</option>`).join('')}
+          </select>
+          <div class="hint">Eficacia base: ${eMad}%</div>
+        </div>
+        <div>
+          <label class="lbl">Reducción de probabilidad (%)</label>
+          <input class="input" type="number" min="0" max="100" step="5" value="${s.reduceProb||0}"
+            onchange="updateSalvaguarda('${s.id}','reduceProb',Number(this.value))">
+          <div class="hint">Si la salvaguarda fuera 100% madura</div>
+        </div>
+        <div>
+          <label class="lbl">Reducción de impacto (%)</label>
+          <input class="input" type="number" min="0" max="100" step="5" value="${s.reduceImp||0}"
+            onchange="updateSalvaguarda('${s.id}','reduceImp',Number(this.value))">
+          <div class="hint">Si la salvaguarda fuera 100% madura</div>
+        </div>
+        <div>
+          <label class="lbl">Efectivo real combinado</label>
+          <div style="padding:8px;background:#fafaf5;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px">
+            P: <strong>−${((s.reduceProb||0)*(NIVELES_MADUREZ[s.madurez]||{eficacia:0}).eficacia).toFixed(1)}%</strong><br>
+            I: <strong>−${((s.reduceImp||0)*(NIVELES_MADUREZ[s.madurez]||{eficacia:0}).eficacia).toFixed(1)}%</strong>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <label class="lbl">Amenazas que mitiga (${numAmenazas} seleccionadas)</label>
+        <div style="max-height:200px;overflow-y:auto;border:1px solid var(--rule);border-radius:4px;padding:8px;background:#fafaf5">
+          ${state.amenazas.map(am => {
+            const act = state.activos.find(a => a.id===am.activoId);
+            const checked = (s.amenazasIds||[]).includes(am.id);
+            return `
+            <label style="display:flex;align-items:center;gap:8px;padding:4px 6px;font-size:12px;cursor:pointer;border-radius:3px" 
+              onmouseover="this.style.background='#fff'" onmouseout="this.style.background=''">
+              <input type="checkbox" ${checked?'checked':''} onchange="toggleSalvAmenaza('${s.id}','${am.id}',this.checked)">
+              <span class="badge-tipo">${esc(am.codigo)}</span>
+              ${esc(am.nombre)}
+              <span style="color:var(--slate);margin-left:auto;font-size:11px">${esc(act?act.nombre:'')}</span>
+            </label>
+          `;}).join('')}
+        </div>
+      </div>
+    </div>
+  `;};
+  
+  v.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:20px;gap:16px;flex-wrap:wrap">
+      <div>
+        <h2 style="font-size:24px;margin-bottom:6px">Salvaguardas</h2>
+        <p style="font-size:13px;color:var(--slate);max-width:900px">
+          Tarea <strong>MAR.3</strong>. Las salvaguardas son procedimientos o mecanismos que reducen el riesgo, ya sea bajando la <strong>probabilidad</strong> (preventivas) o limitando la <strong>degradación/impacto</strong> (correctivas, recuperativas). Su efecto real depende de la <strong>madurez</strong> con que se gestionan (L0–L5).
+        </p>
+      </div>
+    </div>
+
+    <div class="alert alert-info">
+      <strong>Modelo de eficacia (MAGERIT Libro I §3.1.5):</strong> La eficacia real de una salvaguarda combina dos factores. Una salvaguarda perfectamente desplegada pero con baja madurez (procesos ad-hoc, sin revisión) tendrá poca eficacia real. La eficacia total se calcula como <code>eficacia_real = reducción_declarada × factor_madurez</code>. Cuando varias salvaguardas concurren sobre la misma amenaza, se combinan con producto inverso: <code>1 − Π(1 − e<sub>i</sub>)</code>.
+    </div>
+
+    <h3 style="font-size:18px;margin:20px 0 12px">Salvaguardas aplicadas (${state.salvaguardas.length})</h3>
+    ${state.salvaguardas.length === 0 ? '<div class="alert alert-info">Sin salvaguardas. Selecciona del catálogo de abajo.</div>' : ''}
+    ${state.salvaguardas.map(renderSalvaCard).join('')}
+
+    <h3 style="font-size:18px;margin:32px 0 12px">Catálogo MAGERIT de salvaguardas (Libro II §6)</h3>
+    <p style="font-size:12px;color:var(--slate);margin-bottom:12px">
+      Click para añadir. También puedes <button class="btn btn-ghost" style="font-size:12px;text-decoration:underline" onclick="addSalvCustom()">crear una salvaguarda personalizada</button>.
+    </p>
+    
+    ${Object.keys(porArea).map(area => `
+      <details style="margin-bottom:8px" open>
+        <summary>${area} <span class="mono" style="font-size:11px;color:var(--slate);font-weight:400">(${porArea[area].length})</span></summary>
+        <table class="data" style="margin-top:8px">
+          <thead><tr><th style="width:120px">Código</th><th>Salvaguarda</th><th>Tipos</th><th style="width:80px"></th></tr></thead>
+          <tbody>
+            ${porArea[area].map(s => {
+              const yaAdded = state.salvaguardas.some(x => x.codigo === s.code);
+              return `
+              <tr>
+                <td><span class="badge-tipo">${s.code}</span></td>
+                <td>${esc(s.nombre)}</td>
+                <td>${s.tipos.map(t => `<span class="pill" style="background:#fff3cd;color:#664d03;margin-right:4px" title="${TIPOS_SALVAGUARDA[t]||t}">${t}</span>`).join('')}</td>
+                <td>${yaAdded ? '<span class="pill" style="background:#e8f5e9;color:#1c4d22">✓</span>' : `<button class="btn" style="font-size:11px;padding:4px 10px" onclick="addSalvaguarda('${s.code}')">+ Añadir</button>`}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </details>
+    `).join('')}
+
+    <details style="margin-top:24px">
+      <summary>Tipos de salvaguarda según efecto (MAGERIT Libro I §3.1.5)</summary>
+      <div style="margin-top:12px;font-size:12px">
+        <table class="data">
+          <thead><tr><th>Código</th><th>Tipo</th><th>Efecto</th></tr></thead>
+          <tbody>
+            <tr><td><strong>PR</strong></td><td>Preventiva</td><td>Reduce las oportunidades de que un incidente ocurra</td></tr>
+            <tr><td><strong>DR</strong></td><td>Disuasoria</td><td>Hace que los atacantes desistan</td></tr>
+            <tr><td><strong>EL</strong></td><td>Eliminatoria</td><td>Impide que el incidente tenga lugar</td></tr>
+            <tr><td><strong>IM</strong></td><td>Minimización del impacto</td><td>Acota las consecuencias del incidente</td></tr>
+            <tr><td><strong>CR</strong></td><td>Correctiva</td><td>Repara el daño ya causado</td></tr>
+            <tr><td><strong>RC</strong></td><td>Recuperación</td><td>Devuelve el sistema a su estado anterior</td></tr>
+            <tr><td><strong>MN</strong></td><td>Monitorización</td><td>Vigilancia continua del sistema</td></tr>
+            <tr><td><strong>DC</strong></td><td>Detección</td><td>Detecta incidentes en curso o ya ocurridos</td></tr>
+            <tr><td><strong>AW</strong></td><td>Concienciación</td><td>Formación e información a usuarios</td></tr>
+            <tr><td><strong>AD</strong></td><td>Administrativa</td><td>Procesos de gestión y gobierno</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px"><strong>Niveles de madurez:</strong> L0 inexistente (0%) · L1 inicial (10%) · L2 reproducible (30%) · L3 definido (50%) · L4 gestionado (70%) · L5 optimizado (100%)</div>
+      </div>
+    </details>
+  `;
+}
+
+function addSalvaguarda(codigo){
+  const c = CATALOGO_SALVAGUARDAS.find(x => x.code === codigo);
+  if(!c) return;
+  state.salvaguardas.push({
+    id: uid('SAL'),
+    codigo: c.code,
+    nombre: c.nombre,
+    area: c.area,
+    tipos: c.tipos,
+    madurez: 'L2',
+    reduceProb: c.tipos.some(t => ['PR','DR','EL'].includes(t)) ? 50 : 10,
+    reduceImp: c.tipos.some(t => ['IM','CR','RC'].includes(t)) ? 50 : 10,
+    amenazasIds: []
+  });
+  save(); renderAll();
+}
+
+function addSalvCustom(){
+  const nombre = prompt('Nombre de la salvaguarda personalizada:');
+  if(!nombre) return;
+  state.salvaguardas.push({
+    id: uid('SAL'),
+    codigo: '[CUSTOM]',
+    nombre: nombre,
+    area: 'Personalizada',
+    tipos: ['PR'],
+    madurez: 'L2',
+    reduceProb: 30, reduceImp: 30,
+    amenazasIds: []
+  });
+  save(); renderAll();
+}
+
+function deleteSalvaguarda(id){
+  if(!confirm('¿Eliminar esta salvaguarda?')) return;
+  state.salvaguardas = state.salvaguardas.filter(s => s.id !== id);
+  save(); renderAll();
+}
+
+function updateSalvaguarda(id, field, value){
+  const s = state.salvaguardas.find(x => x.id === id);
+  if(!s) return;
+  s[field] = value;
+  save();
+}
+
+function toggleSalvAmenaza(salvId, amenazaId, checked){
+  const s = state.salvaguardas.find(x => x.id === salvId);
+  if(!s) return;
+  if(!s.amenazasIds) s.amenazasIds = [];
+  if(checked) s.amenazasIds.push(amenazaId);
+  else s.amenazasIds = s.amenazasIds.filter(x => x !== amenazaId);
+  save();
+}
+
+/* ===================== VISTA: RIESGO RESIDUAL ===================== */
+function renderResidual(){
+  const v = $('#view-residual');
+  
+  if(state.amenazas.length === 0){
+    v.innerHTML = `<h2 style="font-size:24px;margin-bottom:6px">Riesgo residual</h2>
+      <div class="alert alert-warn">Necesitas amenazas y salvaguardas para calcular el riesgo residual.</div>`;
+    return;
+  }
+  
+  // Calcular para cada amenaza
+  const filas = [];
+  for(const am of state.amenazas){
+    const act = state.activos.find(a => a.id === am.activoId);
+    if(!act) continue;
+    const inh = riesgoInherente(act, am);
+    const inhMax = riesgoMaxNivel(inh);
+    const res = riesgoResidual(act, am);
+    const resMax = riesgoMaxNivel(res.riesgo);
+    const salvs = salvaguardasParaAmenaza(am.id);
+    filas.push({ act, am, inh, inhMax, res:res.riesgo, resMax, probRes: res.probResidual, redProb: res.redProb, redImp: res.redImp, salvs });
+  }
+  filas.sort((a,b) => (NIVEL_NUM[b.resMax]||0) - (NIVEL_NUM[a.resMax]||0));
+  
+  const statsInh = { MB:0,B:0,M:0,A:0,MA:0 };
+  const statsRes = { MB:0,B:0,M:0,A:0,MA:0 };
+  filas.forEach(f => { if(f.inhMax) statsInh[f.inhMax]++; if(f.resMax) statsRes[f.resMax]++; });
+  
+  const apetito = state.apetito || 'M';
+  const apetitoNum = NIVEL_NUM[apetito];
+  const fueraApetito = filas.filter(f => f.resMax && NIVEL_NUM[f.resMax] > apetitoNum);
+  
+  v.innerHTML = `
+    <div style="margin-bottom:20px">
+      <h2 style="font-size:24px;margin-bottom:6px">Riesgo residual (tras salvaguardas)</h2>
+      <p style="font-size:13px;color:var(--slate);max-width:900px">
+        Es el riesgo que queda <strong>después</strong> de aplicar las salvaguardas, ponderadas por su nivel de madurez. MAGERIT lo denomina riesgo residual (Libro I §3.1.7). Es el indicador que la Dirección debe revisar y aceptar formalmente.
+      </p>
+    </div>
+
+    ${fueraApetito.length > 0 ? `
+    <div class="alert alert-warn">
+      <strong>⚠️ ${fueraApetito.length} riesgo${fueraApetito.length>1?'s':''} por encima del apetito (${apetito} · ${NIVEL_LABEL[apetito]}).</strong>
+      Estos riesgos requieren tratamiento obligatorio. Ve a la pestaña Plan de Tratamiento.
+    </div>` : `
+    <div class="alert alert-success">
+      <strong>✓ Todos los riesgos residuales están dentro del apetito declarado (${apetito} · ${NIVEL_LABEL[apetito]}).</strong>
+      Aún así, los riesgos al nivel del apetito conviene formalizarlos como aceptados.
+    </div>`}
+
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="card">
+        <h4 style="font-size:14px;margin-bottom:12px;color:var(--rust)">Antes (Inherente)</h4>
+        <div class="grid-5" style="gap:6px">
+          ${NIVELES.map(n => `
+            <div style="text-align:center">
+              <span class="risk-cell risk-${n}" style="display:block;padding:6px;font-size:11px">${n}</span>
+              <div style="font-size:18px;font-weight:700;margin-top:4px">${statsInh[n]}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="card" style="background:linear-gradient(135deg,#fff,#f5f3ec);text-align:center;padding:30px 20px">
+        <div style="font-family:'Fraunces',serif;font-size:48px;color:var(--gold);line-height:1">→</div>
+        <div style="font-size:13px;color:var(--slate);margin-top:8px">Aplicación de salvaguardas<br><strong>${state.salvaguardas.length} controles activos</strong></div>
+      </div>
+      <div class="card">
+        <h4 style="font-size:14px;margin-bottom:12px;color:var(--green)">Después (Residual)</h4>
+        <div class="grid-5" style="gap:6px">
+          ${NIVELES.map(n => `
+            <div style="text-align:center">
+              <span class="risk-cell risk-${n}" style="display:block;padding:6px;font-size:11px">${n}</span>
+              <div style="font-size:18px;font-weight:700;margin-top:4px">${statsRes[n]}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;margin-bottom:12px">Comparativa por amenaza</h3>
+    <div class="card" style="padding:0;overflow-x:auto">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Activo</th>
+            <th>Amenaza</th>
+            <th style="text-align:center">R. inherente</th>
+            <th style="text-align:center">Salvaguardas</th>
+            <th style="text-align:center" title="Reducción combinada">↓P / ↓I</th>
+            <th style="text-align:center">Prob. residual</th>
+            <th style="text-align:center">R. residual</th>
+            <th style="text-align:center">Δ</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filas.map(f => {
+            const delta = (NIVEL_NUM[f.inhMax]||0) - (NIVEL_NUM[f.resMax]||0);
+            const sobrApetito = f.resMax && NIVEL_NUM[f.resMax] > apetitoNum;
+            return `
+            <tr style="${sobrApetito?'background:#fef5e7':''}">
+              <td><div style="font-weight:600">${esc(f.act.nombre)}</div></td>
+              <td>
+                <span class="badge-tipo">${esc(f.am.codigo)}</span>
+                ${esc(f.am.nombre)}
+              </td>
+              <td style="text-align:center"><span class="risk-cell risk-${f.inhMax}">${f.inhMax||'—'}</span></td>
+              <td style="text-align:center">
+                ${f.salvs.length > 0 
+                  ? f.salvs.map(s => `<span class="pill mono" style="background:#eef2f7;color:var(--navy);margin:2px" title="${esc(s.nombre)} – ${s.madurez}">${esc(s.codigo)}/${s.madurez}</span>`).join('')
+                  : '<span style="color:var(--rust);font-size:11px">sin salvaguardas</span>'
+                }
+              </td>
+              <td style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px">
+                −${(f.redProb*100).toFixed(0)}% / −${(f.redImp*100).toFixed(0)}%
+              </td>
+              <td style="text-align:center"><span class="risk-cell risk-${f.probRes}">${f.probRes}</span></td>
+              <td style="text-align:center"><span class="risk-cell risk-${f.resMax}" style="padding:6px 12px">${f.resMax||'—'}</span></td>
+              <td style="text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;color:${delta>0?'var(--green)':delta<0?'var(--rust)':'var(--slate)'}">
+                ${delta>0?'−'+delta:delta===0?'=':'+'+Math.abs(delta)}
+              </td>
+            </tr>
+          `}).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:20px">
+      <strong>Lectura:</strong> el riesgo residual debe contrastarse con el <strong>apetito de riesgo</strong> declarado en la pestaña Criterios. Los riesgos por encima requieren un plan formal de tratamiento. Los iguales o inferiores pueden aceptarse, pero la decisión debe documentarse.
+    </div>
+  `;
+}
+
+/* ===================== VISTA: TRATAMIENTO ===================== */
+function renderTratamiento(){
+  const v = $('#view-tratamiento');
+  
+  if(state.amenazas.length === 0){
+    v.innerHTML = `<h2 style="font-size:24px;margin-bottom:6px">Plan de tratamiento del riesgo</h2>
+      <div class="alert alert-warn">Necesitas amenazas valoradas para construir el plan.</div>`;
+    return;
+  }
+  
+  const apetito = state.apetito || 'M';
+  const apetitoNum = NIVEL_NUM[apetito];
+  
+  const filas = [];
+  for(const am of state.amenazas){
+    const act = state.activos.find(a => a.id === am.activoId);
+    if(!act) continue;
+    const res = riesgoResidual(act, am);
+    const resMax = riesgoMaxNivel(res.riesgo);
+    filas.push({ act, am, resMax, sobrApetito: resMax && NIVEL_NUM[resMax] > apetitoNum });
+  }
+  filas.sort((a,b) => (NIVEL_NUM[b.resMax]||0) - (NIVEL_NUM[a.resMax]||0));
+  
+  v.innerHTML = `
+    <div style="margin-bottom:20px">
+      <h2 style="font-size:24px;margin-bottom:6px">Plan de tratamiento del riesgo</h2>
+      <p style="font-size:13px;color:var(--slate);max-width:900px">
+        Para cada riesgo residual debes decidir una <strong>opción de tratamiento</strong>. MAGERIT (Libro I §4.1) define cuatro opciones: <strong>mitigar</strong> (más salvaguardas), <strong>transferir</strong> (compartir el riesgo, p.ej. seguros), <strong>evitar</strong> (eliminar la actividad) o <strong>aceptar</strong> (asumirlo formalmente).
+      </p>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:20px">
+      <div class="card" style="border-top:3px solid #1c6b3a">
+        <h4 style="font-size:14px;color:#1c6b3a">🛡️ Mitigar</h4>
+        <p style="font-size:12px;color:var(--slate);margin-top:6px">Añadir más controles o mejorar los existentes hasta llevar el riesgo a nivel aceptable.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #0d3b66">
+        <h4 style="font-size:14px;color:#0d3b66">🔄 Transferir</h4>
+        <p style="font-size:12px;color:var(--slate);margin-top:6px">Compartir el riesgo con un tercero: pólizas de seguro, contratos con SLA, externalización.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #a83232">
+        <h4 style="font-size:14px;color:#a83232">🚫 Evitar</h4>
+        <p style="font-size:12px;color:var(--slate);margin-top:6px">Eliminar la actividad o activo que genera el riesgo. Es la opción más drástica.</p>
+      </div>
+      <div class="card" style="border-top:3px solid #c25a1f">
+        <h4 style="font-size:14px;color:#c25a1f">✓ Aceptar</h4>
+        <p style="font-size:12px;color:var(--slate);margin-top:6px">Asumir el riesgo de forma documentada por la Dirección. Solo para riesgos dentro del apetito.</p>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow-x:auto">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Riesgo</th>
+            <th style="text-align:center">R. residual</th>
+            <th style="width:150px">Decisión</th>
+            <th>Responsable</th>
+            <th style="width:140px">Plazo</th>
+            <th>Acciones/Notas</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filas.map(f => {
+            const t = state.tratamiento[f.am.id] || {};
+            return `
+            <tr style="${f.sobrApetito?'background:#fef5e7':''}">
+              <td>
+                <div style="font-weight:600">${esc(f.act.nombre)}</div>
+                <div style="font-size:11px;color:var(--slate)">
+                  <span class="badge-tipo">${esc(f.am.codigo)}</span>
+                  ${esc(f.am.nombre)}
+                </div>
+              </td>
+              <td style="text-align:center"><span class="risk-cell risk-${f.resMax}" style="padding:6px 12px">${f.resMax||'—'}</span></td>
+              <td>
+                <select class="select" style="font-size:11px" onchange="updateTratamiento('${f.am.id}','opcion',this.value)">
+                  <option value="">— Decidir —</option>
+                  <option value="mitigar" ${t.opcion==='mitigar'?'selected':''}>🛡️ Mitigar</option>
+                  <option value="transferir" ${t.opcion==='transferir'?'selected':''}>🔄 Transferir</option>
+                  <option value="evitar" ${t.opcion==='evitar'?'selected':''}>🚫 Evitar</option>
+                  <option value="aceptar" ${t.opcion==='aceptar'?'selected':''}>✓ Aceptar</option>
+                </select>
+              </td>
+              <td>
+                <input class="input" style="font-size:11px" placeholder="Nombre" value="${esc(t.responsable||'')}"
+                  onchange="updateTratamiento('${f.am.id}','responsable',this.value)">
+              </td>
+              <td>
+                <input class="input" style="font-size:11px" type="date" value="${esc(t.plazo||'')}"
+                  onchange="updateTratamiento('${f.am.id}','plazo',this.value)">
+              </td>
+              <td>
+                <input class="input" style="font-size:11px" placeholder="Acciones concretas..." value="${esc(t.notas||'')}"
+                  onchange="updateTratamiento('${f.am.id}','notas',this.value)">
+              </td>
+            </tr>
+          `;}).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function updateTratamiento(amenazaId, field, value){
+  if(!state.tratamiento[amenazaId]) state.tratamiento[amenazaId] = {};
+  state.tratamiento[amenazaId][field] = value;
+  save();
+}
+
+/* ===================== VISTA: INFORME ===================== */
+function renderInforme(){
+  const v = $('#view-informe');
+  
+  const filas = [];
+  for(const am of state.amenazas){
+    const act = state.activos.find(a => a.id === am.activoId);
+    if(!act) continue;
+    const inh = riesgoInherente(act, am);
+    const inhMax = riesgoMaxNivel(inh);
+    const res = riesgoResidual(act, am);
+    const resMax = riesgoMaxNivel(res.riesgo);
+    const t = state.tratamiento[am.id] || {};
+    filas.push({ act, am, inhMax, resMax, t });
+  }
+  
+  const apetito = state.apetito || 'M';
+  
+  v.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:20px;gap:16px;flex-wrap:wrap">
+      <div>
+        <h2 style="font-size:24px;margin-bottom:6px">Informe consolidado</h2>
+        <p style="font-size:13px;color:var(--slate)">Resumen ejecutivo del análisis MAGERIT. Imprimible y exportable.</p>
+      </div>
+      <button class="btn btn-primary no-print" onclick="window.print()">🖨️ Imprimir / PDF</button>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3 style="font-size:18px;margin-bottom:12px;color:var(--navy)">${esc(state.proyecto.nombre)}</h3>
+      <div class="grid-3" style="font-size:12px">
+        <div><span class="lbl">Organización</span>${esc(state.proyecto.organizacion||'—')}</div>
+        <div><span class="lbl">Responsable</span>${esc(state.proyecto.responsable||'—')}</div>
+        <div><span class="lbl">Fecha</span>${esc(state.proyecto.fecha)}</div>
+        <div><span class="lbl">Activos analizados</span>${state.activos.length}</div>
+        <div><span class="lbl">Amenazas evaluadas</span>${state.amenazas.length}</div>
+        <div><span class="lbl">Salvaguardas en plan</span>${state.salvaguardas.length}</div>
+        <div><span class="lbl">Apetito de riesgo declarado</span><span class="risk-cell risk-${apetito}">${apetito}</span> · ${NIVEL_LABEL[apetito]}</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:18px;margin:24px 0 12px">1. Modelo de valor (activos)</h3>
+    <div class="card" style="padding:0;overflow-x:auto">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>ID</th><th>Activo</th><th>Tipo</th>
+            ${DIMENSIONES.map(d => `<th style="text-align:center"><span class="badge-tipo" style="background:${d.color}">${d.code}</span></th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${state.activos.map(a => `
+            <tr>
+              <td class="mono" style="font-size:10px">${esc(a.id)}</td>
+              <td><strong>${esc(a.nombre)}</strong><div style="font-size:11px;color:var(--slate)">${esc(a.descripcion||'')}</div></td>
+              <td><span class="badge-tipo">${esc(a.tipo)}</span></td>
+              ${DIMENSIONES.map(d => {
+                const v = (a.valoracion&&a.valoracion[d.code])||0;
+                const niv = nivelDesdeValor(v);
+                return `<td style="text-align:center"><span class="risk-cell risk-${niv}">${v}</span></td>`;
+              }).join('')}
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size:18px;margin:24px 0 12px">2. Mapa de riesgos (inherente vs residual)</h3>
+    <div class="card" style="padding:0;overflow-x:auto">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Activo</th>
+            <th>Amenaza</th>
+            <th style="text-align:center">R. inherente</th>
+            <th style="text-align:center">R. residual</th>
+            <th>Tratamiento</th>
+            <th>Responsable</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filas.sort((a,b) => (NIVEL_NUM[b.resMax]||0) - (NIVEL_NUM[a.resMax]||0)).map(f => `
+            <tr>
+              <td>${esc(f.act.nombre)}</td>
+              <td><span class="badge-tipo">${esc(f.am.codigo)}</span> ${esc(f.am.nombre)}</td>
+              <td style="text-align:center"><span class="risk-cell risk-${f.inhMax}">${f.inhMax||'—'}</span></td>
+              <td style="text-align:center"><span class="risk-cell risk-${f.resMax}">${f.resMax||'—'}</span></td>
+              <td>${f.t.opcion ? `<strong>${esc(f.t.opcion)}</strong>` : '<span style="color:var(--rust)">sin decisión</span>'}${f.t.notas ? '<div style="font-size:11px;color:var(--slate)">'+esc(f.t.notas)+'</div>':''}</td>
+              <td style="font-size:11px">${esc(f.t.responsable||'—')}${f.t.plazo?' · '+esc(f.t.plazo):''}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size:18px;margin:24px 0 12px">3. Declaración de aplicabilidad (salvaguardas)</h3>
+    <div class="card" style="padding:0;overflow-x:auto">
+      <table class="data">
+        <thead><tr><th>Código</th><th>Salvaguarda</th><th>Madurez</th><th>Tipo</th><th style="text-align:center"># amenazas</th></tr></thead>
+        <tbody>
+          ${state.salvaguardas.map(s => `
+            <tr>
+              <td><span class="badge-tipo">${esc(s.codigo)}</span></td>
+              <td>${esc(s.nombre)}</td>
+              <td>${s.madurez} <span style="color:var(--slate);font-size:11px">${(NIVELES_MADUREZ[s.madurez]||{label:''}).label}</span></td>
+              <td>${(s.tipos||[]).map(t => `<span class="pill" style="background:#fff3cd;color:#664d03">${t}</span>`).join(' ')}</td>
+              <td style="text-align:center">${(s.amenazasIds||[]).length}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-info" style="margin-top:24px">
+      <strong>Documentos resultantes según MAGERIT (Libro I §3.3):</strong>
+      <ol style="margin-top:8px;padding-left:20px;line-height:1.7">
+        <li>Modelo de valor (sección 1 de este informe)</li>
+        <li>Mapa de riesgos (sección 2)</li>
+        <li>Declaración de aplicabilidad de salvaguardas (sección 3)</li>
+        <li>Evaluación de salvaguardas (madurez por control)</li>
+        <li>Estado del riesgo (inherente y residual)</li>
+        <li>Informe de insuficiencias (riesgos sobre el apetito)</li>
+        <li>Plan de seguridad (tratamiento)</li>
+      </ol>
+    </div>
+  `;
+}
+
+/* ===================== CASO TECHSERV (ejemplo precargado) ===================== */
+function loadTechServ(){
+  if(state.activos.length > 0 && !confirm('Esto reemplazará el análisis actual con el caso TechServ. ¿Continuar?')) return;
+  
+  state = defaultState();
+  state.proyecto = {
+    nombre: 'TechServ Administración – Sede electrónica',
+    organizacion: 'TechServ Administración, S.L.',
+    responsable: 'Equipo GRC · Clase de ISO 27001 + ENS',
+    fecha: new Date().toISOString().slice(0,10)
+  };
+  state.apetito = 'M';
+  
+  // Activos
+  const a1 = {
+    id: 'ACT-001', nombre: 'Base de datos de expedientes ciudadanos',
+    tipo: '[D]', descripcion: 'BBDD que contiene los expedientes administrativos de las tres Consejerías',
+    valoracion: { D:8, I:9, C:9, A:8, T:8 }
+  };
+  const a2 = {
+    id: 'ACT-002', nombre: 'Servicio web Sede Electrónica',
+    tipo: '[essential.service]', descripcion: 'Portal donde los ciudadanos presentan trámites con cl@ve/certificado',
+    valoracion: { D:9, I:8, C:7, A:9, T:9 }
+  };
+  const a3 = {
+    id: 'ACT-003', nombre: 'Servidores aplicación (cluster)',
+    tipo: '[HW]', descripcion: 'Cluster de servidores que aloja la sede electrónica y el backoffice',
+    valoracion: { D:8, I:6, C:6, A:5, T:5 }
+  };
+  const a4 = {
+    id: 'ACT-004', nombre: 'Personal técnico (administradores)',
+    tipo: '[P]', descripcion: '3 administradores con privilegios sobre sistemas críticos',
+    valoracion: { D:7, I:6, C:7, A:6, T:5 }
+  };
+  state.activos = [a1, a2, a3, a4];
+  
+  // Amenazas
+  const amenazasData = [
+    // BBDD expedientes
+    { activoId:'ACT-001', codigo:'[A.11]', nombre:'Acceso no autorizado', origen:'A', prob:'M', deg:{D:0,I:50,C:100,A:0,T:30} },
+    { activoId:'ACT-001', codigo:'[A.15]', nombre:'Modificación deliberada de la información', origen:'A', prob:'B', deg:{D:0,I:100,C:0,A:0,T:0} },
+    { activoId:'ACT-001', codigo:'[A.18]', nombre:'Destrucción de información', origen:'A', prob:'B', deg:{D:100,I:50,C:0,A:0,T:0} },
+    { activoId:'ACT-001', codigo:'[E.15]', nombre:'Alteración accidental de la información', origen:'E', prob:'M', deg:{D:0,I:60,C:0,A:0,T:0} },
+    { activoId:'ACT-001', codigo:'[E.19]', nombre:'Fugas de información', origen:'E', prob:'M', deg:{D:0,I:0,C:80,A:0,T:0} },
+    // Servicio Sede
+    { activoId:'ACT-002', codigo:'[A.24]', nombre:'Denegación de servicio (DoS)', origen:'A', prob:'A', deg:{D:100,I:0,C:0,A:0,T:0} },
+    { activoId:'ACT-002', codigo:'[A.5]', nombre:'Suplantación de la identidad', origen:'A', prob:'M', deg:{D:0,I:60,C:80,A:100,T:50} },
+    { activoId:'ACT-002', codigo:'[E.24]', nombre:'Caída por agotamiento de recursos', origen:'E', prob:'M', deg:{D:80,I:0,C:0,A:0,T:0} },
+    // HW Servidores
+    { activoId:'ACT-003', codigo:'[I.5]', nombre:'Avería de origen físico o lógico', origen:'I', prob:'M', deg:{D:70,I:0,C:0,A:0,T:0} },
+    { activoId:'ACT-003', codigo:'[I.6]', nombre:'Corte del suministro eléctrico', origen:'I', prob:'B', deg:{D:100,I:0,C:0,A:0,T:0} },
+    { activoId:'ACT-003', codigo:'[A.8]', nombre:'Difusión de software dañino (malware)', origen:'A', prob:'M', deg:{D:60,I:50,C:50,A:0,T:0} },
+    // Personal
+    { activoId:'ACT-004', codigo:'[A.30]', nombre:'Ingeniería social', origen:'A', prob:'A', deg:{D:0,I:50,C:80,A:30,T:30} },
+    { activoId:'ACT-004', codigo:'[E.7]', nombre:'Deficiencias en la organización', origen:'E', prob:'M', deg:{D:30,I:30,C:30,A:0,T:0} },
+    { activoId:'ACT-004', codigo:'[E.28]', nombre:'Indisponibilidad del personal', origen:'E', prob:'B', deg:{D:50,I:0,C:0,A:0,T:0} }
+  ];
+  state.amenazas = amenazasData.map((a,i) => ({...a, id:'AME-'+String(i+1).padStart(3,'0')}));
+  
+  // Salvaguardas
+  const salvData = [
+    // Para BBDD
+    { codigo:'H.AC', nombre:'Control de acceso lógico', area:'Horizontal', tipos:['PR'], madurez:'L3', reduceProb:70, reduceImp:20, amenazasCodigos:['[A.11]','[A.6]'] },
+    { codigo:'H.IA', nombre:'Identificación y autenticación', area:'Horizontal', tipos:['PR'], madurez:'L3', reduceProb:60, reduceImp:10, amenazasCodigos:['[A.5]','[A.11]'] },
+    { codigo:'D.A', nombre:'Copias de seguridad (backup)', area:'Datos', tipos:['RC'], madurez:'L4', reduceProb:0, reduceImp:80, amenazasCodigos:['[A.18]','[E.15]','[I.5]','[A.8]'] },
+    { codigo:'D.C', nombre:'Cifrado de la información', area:'Datos', tipos:['EL','PR'], madurez:'L2', reduceProb:50, reduceImp:60, amenazasCodigos:['[A.11]','[E.19]'] },
+    { codigo:'H.tools.LA', nombre:'Análisis de logs (SIEM)', area:'Horizontal', tipos:['DC','MN'], madurez:'L3', reduceProb:30, reduceImp:30, amenazasCodigos:['[A.11]','[A.15]'] },
+    // Para servicio web
+    { codigo:'S.www', nombre:'Protección de servicios web (WAF)', area:'Servicios', tipos:['PR','DC'], madurez:'L3', reduceProb:60, reduceImp:40, amenazasCodigos:['[A.24]','[A.5]'] },
+    { codigo:'IP.SPP', nombre:'Sistema de protección perimetral (firewall)', area:'Interconexión', tipos:['PR'], madurez:'L4', reduceProb:50, reduceImp:30, amenazasCodigos:['[A.24]','[A.11]','[A.8]'] },
+    // Para HW
+    { codigo:'HW.A', nombre:'Aseguramiento disponibilidad HW (redundancia)', area:'Hardware', tipos:['IM','RC'], madurez:'L3', reduceProb:30, reduceImp:70, amenazasCodigos:['[I.5]','[A.24]'] },
+    { codigo:'AUX.power', nombre:'Suministro eléctrico (SAI/generador)', area:'Auxiliares', tipos:['IM'], madurez:'L4', reduceProb:0, reduceImp:90, amenazasCodigos:['[I.6]'] },
+    { codigo:'H.tools.AV', nombre:'Herramienta antimalware', area:'Horizontal', tipos:['PR','DC'], madurez:'L4', reduceProb:70, reduceImp:40, amenazasCodigos:['[A.8]'] },
+    // Para personal
+    { codigo:'PS.AT', nombre:'Formación y concienciación', area:'Personal', tipos:['AW','PR'], madurez:'L2', reduceProb:50, reduceImp:30, amenazasCodigos:['[A.30]','[E.7]','[E.15]'] },
+    { codigo:'H.ST', nombre:'Segregación de tareas', area:'Horizontal', tipos:['PR'], madurez:'L2', reduceProb:40, reduceImp:30, amenazasCodigos:['[E.7]','[A.6]','[A.15]'] }
+  ];
+  state.salvaguardas = salvData.map((s,i) => {
+    const amIds = state.amenazas.filter(am => s.amenazasCodigos.includes(am.codigo)).map(am => am.id);
+    const {amenazasCodigos, ...rest} = s;
+    return { ...rest, id:'SAL-'+String(i+1).padStart(3,'0'), amenazasIds: amIds };
+  });
+  
+  // Tratamiento sugerido
+  state.tratamiento = {};
+  state.amenazas.forEach(am => {
+    const act = state.activos.find(a => a.id===am.activoId);
+    const res = riesgoResidual(act, am);
+    const resMax = riesgoMaxNivel(res.riesgo);
+    if(resMax && NIVEL_NUM[resMax] > NIVEL_NUM[state.apetito]){
+      state.tratamiento[am.id] = { opcion:'mitigar', responsable:'Responsable de Seguridad', plazo:'', notas:'Reforzar salvaguardas hasta alcanzar el apetito.' };
+    } else {
+      state.tratamiento[am.id] = { opcion:'aceptar', responsable:'Dirección', plazo:'', notas:'Riesgo dentro del apetito declarado.' };
+    }
+  });
+  
+  save();
+  renderAll();
+  showTab('inicio');
+  alert('Caso TechServ cargado. Recorre las pestañas en orden para ver el análisis completo.');
+}
+
+/* ===================== TABS ===================== */
+function showTab(tab){
+  $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  ['inicio','criterios','activos','amenazas','inherente','salvaguardas','residual','tratamiento','informe']
+    .forEach(t => { document.getElementById('view-'+t).style.display = (t===tab)?'block':'none'; });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.addEventListener('DOMContentLoaded', () => {
+  $$('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+});
+
+/* ===================== INIT ===================== */
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+name: tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install openpyxl pytest playwright && python -m playwright install --with-deps chromium
+      - run: ./run_tests.sh
+      - name: Auditar la SoA de ejemplo (falla si hay NC mayores nuevas)
+        run: python3 auditor/ens_soa_audit.py data/SoA_TechServ_original.xlsx --fail-on mayor

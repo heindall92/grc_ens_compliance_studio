@@ -1,0 +1,49 @@
+{
+ "fichero": "SoA_TechServ_original.xlsx",
+ "fecha": "2026-09-22",
+ "categoria": "ALTA",
+ "niveles": {
+  "D": "ALTO",
+  "I": "ALTO",
+  "C": "ALTO",
+  "A": "ALTO",
+  "T": "MEDIO"
+ },
+ "medidas": 73,
+ "aplicables": 72,
+ "grado": 0.9888888888888887,
+ "hallazgos": [
+  {
+   "id": "CAT-01",
+   "sev": "NC menor",
+   "ambito": "S-01 · D",
+   "titulo": "Valor de categorización no válido",
+   "detalle": "El activo esencial S-01 (Sede tributaria electrónica (autoliquidaciones, pagos, notificaciones)) tiene 'm' en la dimensión Disponibilidad. Solo se admiten BAJO, MEDIO o ALTO; la celda se ignora en el cálculo. No altera el resultado: Disponibilidad ya es ALTO por I-04.",
+   "recomendacion": "Corregir la valoración con criterio del Responsable de la Información (CCN-STIC 803) y volver a aprobar la categorización en el CSI.",
+   "ref": "RD 311/2022, Anexo I"
+  },
+  {
+   "id": "CAT-01",
+   "sev": "NC menor",
+   "ambito": "S-04 · D",
+   "titulo": "Valor de categorización no válido",
+   "detalle": "El activo esencial S-04 (Servicios transversales (Directorio, correo corporativo, VPN, PKI interna, monitorización)) tiene 'm' en la dimensión Disponibilidad. Solo se admiten BAJO, MEDIO o ALTO; la celda se ignora en el cálculo. No altera el resultado: Disponibilidad ya es ALTO por I-04.",
+   "recomendacion": "Corregir la valoración con criterio del Responsable de la Información (CCN-STIC 803) y volver a aprobar la categorización en el CSI.",
+   "ref": "RD 311/2022, Anexo I"
+  },
+  {
+   "id": "STR-01",
+   "sev": "Observación",
+   "ambito": "Cabecera col. O",
+   "titulo": "Cabecera de columna alterada",
+   "detalle": "La cabecera 'Medidas ORGANIZATIVAS implantadasPortal de firma de normativas (registro de aceptación); b' contiene texto ajeno a la plantilla (esperado: 'Medidas ORGANIZATIVAS implantadas').",
+   "recomendacion": "Restaurar la cabecera; un texto pegado en la cabecera suele indicar una edición accidental.",
+   "ref": "Control documental"
+  }
+ ],
+ "resumen": {
+  "NC mayor": 0,
+  "NC menor": 2,
+  "Observación": 1
+ }
+}

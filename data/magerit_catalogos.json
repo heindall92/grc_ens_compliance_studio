@@ -1,0 +1,1274 @@
+{
+ "TIPOS_ACTIVO": [
+  {
+   "code": "[essential.info]",
+   "label": "Información esencial",
+   "desc": "Datos que dan razón de ser a la organización"
+  },
+  {
+   "code": "[essential.service]",
+   "label": "Servicio esencial",
+   "desc": "Función que satisface necesidad de usuarios"
+  },
+  {
+   "code": "[D]",
+   "label": "Datos / Información",
+   "desc": "Ficheros, BD, copias, configuración, logs"
+  },
+  {
+   "code": "[K]",
+   "label": "Claves criptográficas",
+   "desc": "Claves de cifra, firma, certificados X.509"
+  },
+  {
+   "code": "[S]",
+   "label": "Servicios",
+   "desc": "Web, email, FTP, directorio, gestión identidades"
+  },
+  {
+   "code": "[SW]",
+   "label": "Aplicaciones (software)",
+   "desc": "Desarrollos propios, ofimática, antivirus, SO"
+  },
+  {
+   "code": "[HW]",
+   "label": "Equipamiento informático (hardware)",
+   "desc": "Servidores, puestos, móviles, impresoras"
+  },
+  {
+   "code": "[COM]",
+   "label": "Redes de comunicaciones",
+   "desc": "Red local, WAN, Internet, telefonía, VPN"
+  },
+  {
+   "code": "[Media]",
+   "label": "Soportes de información",
+   "desc": "Discos, cintas, USB, papel"
+  },
+  {
+   "code": "[AUX]",
+   "label": "Equipamiento auxiliar",
+   "desc": "SAI, climatización, cableado, mobiliario"
+  },
+  {
+   "code": "[L]",
+   "label": "Instalaciones",
+   "desc": "Edificios, salas técnicas, oficinas"
+  },
+  {
+   "code": "[P]",
+   "label": "Personal",
+   "desc": "Usuarios, operadores, administradores, desarrolladores"
+  }
+ ],
+ "DIMENSIONES": [
+  {
+   "code": "D",
+   "label": "Disponibilidad",
+   "desc": "¿Qué perjuicio causaría no poder usarlo?",
+   "color": "#0d3b66"
+  },
+  {
+   "code": "I",
+   "label": "Integridad",
+   "desc": "¿Qué perjuicio causaría que estuviera dañado o corrupto?",
+   "color": "#1c6b3a"
+  },
+  {
+   "code": "C",
+   "label": "Confidencialidad",
+   "desc": "¿Qué daño causaría que lo conociera quien no debe?",
+   "color": "#a83232"
+  },
+  {
+   "code": "A",
+   "label": "Autenticidad",
+   "desc": "¿Qué perjuicio causaría no saber quién hace cada cosa?",
+   "color": "#c25a1f"
+  },
+  {
+   "code": "T",
+   "label": "Trazabilidad",
+   "desc": "¿Qué daño causaría no poder rastrear el uso?",
+   "color": "#7b4ea8"
+  }
+ ],
+ "CATALOGO_AMENAZAS": [
+  {
+   "code": "[N.1]",
+   "nombre": "Fuego",
+   "origen": "N",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[N.2]",
+   "nombre": "Daños por agua",
+   "origen": "N",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[N.*]",
+   "nombre": "Desastres naturales",
+   "origen": "N",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.1]",
+   "nombre": "Fuego (industrial)",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.2]",
+   "nombre": "Daños por agua (industrial)",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.*]",
+   "nombre": "Desastres industriales",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.3]",
+   "nombre": "Contaminación mecánica",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.4]",
+   "nombre": "Contaminación electromagnética",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.5]",
+   "nombre": "Avería de origen físico o lógico",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "SW",
+    "Media",
+    "AUX",
+    "COM"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.6]",
+   "nombre": "Corte del suministro eléctrico",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.7]",
+   "nombre": "Condiciones inadecuadas de T/H",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.8]",
+   "nombre": "Fallo de servicios de comunicaciones",
+   "origen": "I",
+   "tipos": [
+    "COM",
+    "S"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.9]",
+   "nombre": "Interrupción de servicios y suministros",
+   "origen": "I",
+   "tipos": [
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.10]",
+   "nombre": "Degradación de soportes",
+   "origen": "I",
+   "tipos": [
+    "Media"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[I.11]",
+   "nombre": "Emanaciones electromagnéticas",
+   "origen": "I",
+   "tipos": [
+    "HW",
+    "COM",
+    "Media"
+   ],
+   "dims": [
+    "C"
+   ]
+  },
+  {
+   "code": "[E.1]",
+   "nombre": "Errores de los usuarios",
+   "origen": "E",
+   "tipos": [
+    "D",
+    "S",
+    "SW"
+   ],
+   "dims": [
+    "I",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "code": "[E.2]",
+   "nombre": "Errores del administrador",
+   "origen": "E",
+   "tipos": [
+    "D",
+    "S",
+    "SW",
+    "HW",
+    "COM"
+   ],
+   "dims": [
+    "I",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "code": "[E.3]",
+   "nombre": "Errores de monitorización (log)",
+   "origen": "E",
+   "tipos": [
+    "D"
+   ],
+   "dims": [
+    "T"
+   ]
+  },
+  {
+   "code": "[E.4]",
+   "nombre": "Errores de configuración",
+   "origen": "E",
+   "tipos": [
+    "D",
+    "SW",
+    "HW",
+    "COM"
+   ],
+   "dims": [
+    "I"
+   ]
+  },
+  {
+   "code": "[E.7]",
+   "nombre": "Deficiencias en la organización",
+   "origen": "E",
+   "tipos": [
+    "P"
+   ],
+   "dims": [
+    "D",
+    "I",
+    "C"
+   ]
+  },
+  {
+   "code": "[E.8]",
+   "nombre": "Difusión de software dañino",
+   "origen": "E",
+   "tipos": [
+    "SW",
+    "HW"
+   ],
+   "dims": [
+    "I",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "code": "[E.9]",
+   "nombre": "Errores de re-encaminamiento",
+   "origen": "E",
+   "tipos": [
+    "S",
+    "COM"
+   ],
+   "dims": [
+    "C"
+   ]
+  },
+  {
+   "code": "[E.10]",
+   "nombre": "Errores de secuencia",
+   "origen": "E",
+   "tipos": [
+    "S",
+    "COM"
+   ],
+   "dims": [
+    "I"
+   ]
+  },
+  {
+   "code": "[E.14]",
+   "nombre": "Escapes de información",
+   "origen": "E",
+   "tipos": [
+    "D",
+    "S",
+    "SW",
+    "HW",
+    "COM",
+    "Media",
+    "P"
+   ],
+   "dims": [
+    "C"
+   ]
+  },
+  {
+   "code": "[E.15]",
+   "nombre": "Alteración accidental de la información",
+   "origen": "E",
+   "tipos": [
+    "D",
+    "Media"
+   ],
+   "dims": [
+    "I"
+   ]
+  },
+  {
+   "code": "[E.18]",
+   "nombre": "Destrucción de información",
+   "origen": "E",
+   "tipos": [
+    "D",
+    "Media"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[E.19]",
+   "nombre": "Fugas de información",
+   "origen": "E",
+   "tipos": [
+    "D",
+    "S",
+    "SW",
+    "HW",
+    "COM",
+    "Media",
+    "P"
+   ],
+   "dims": [
+    "C"
+   ]
+  },
+  {
+   "code": "[E.20]",
+   "nombre": "Vulnerabilidades de los programas",
+   "origen": "E",
+   "tipos": [
+    "SW"
+   ],
+   "dims": [
+    "I",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "code": "[E.21]",
+   "nombre": "Errores de mantenimiento de software",
+   "origen": "E",
+   "tipos": [
+    "SW"
+   ],
+   "dims": [
+    "I",
+    "D"
+   ]
+  },
+  {
+   "code": "[E.23]",
+   "nombre": "Errores de mantenimiento de hardware",
+   "origen": "E",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[E.24]",
+   "nombre": "Caída por agotamiento de recursos",
+   "origen": "E",
+   "tipos": [
+    "S",
+    "HW",
+    "COM"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[E.25]",
+   "nombre": "Pérdida de equipos",
+   "origen": "E",
+   "tipos": [
+    "HW",
+    "Media"
+   ],
+   "dims": [
+    "D",
+    "C"
+   ]
+  },
+  {
+   "code": "[E.28]",
+   "nombre": "Indisponibilidad del personal",
+   "origen": "E",
+   "tipos": [
+    "P"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[A.4]",
+   "nombre": "Manipulación de la configuración",
+   "origen": "A",
+   "tipos": [
+    "D",
+    "SW",
+    "HW",
+    "COM"
+   ],
+   "dims": [
+    "I",
+    "C",
+    "T"
+   ]
+  },
+  {
+   "code": "[A.5]",
+   "nombre": "Suplantación de la identidad",
+   "origen": "A",
+   "tipos": [
+    "S",
+    "D",
+    "SW"
+   ],
+   "dims": [
+    "A",
+    "C",
+    "I"
+   ]
+  },
+  {
+   "code": "[A.6]",
+   "nombre": "Abuso de privilegios de acceso",
+   "origen": "A",
+   "tipos": [
+    "D",
+    "S",
+    "SW",
+    "HW",
+    "COM"
+   ],
+   "dims": [
+    "C",
+    "I",
+    "D"
+   ]
+  },
+  {
+   "code": "[A.7]",
+   "nombre": "Uso no previsto",
+   "origen": "A",
+   "tipos": [
+    "S",
+    "SW",
+    "HW",
+    "COM",
+    "Media",
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D",
+    "C",
+    "I"
+   ]
+  },
+  {
+   "code": "[A.8]",
+   "nombre": "Difusión de software dañino (malware)",
+   "origen": "A",
+   "tipos": [
+    "SW",
+    "HW"
+   ],
+   "dims": [
+    "I",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "code": "[A.11]",
+   "nombre": "Acceso no autorizado",
+   "origen": "A",
+   "tipos": [
+    "D",
+    "S",
+    "SW",
+    "HW",
+    "COM",
+    "Media",
+    "L"
+   ],
+   "dims": [
+    "C",
+    "I"
+   ]
+  },
+  {
+   "code": "[A.12]",
+   "nombre": "Análisis de tráfico",
+   "origen": "A",
+   "tipos": [
+    "COM"
+   ],
+   "dims": [
+    "C"
+   ]
+  },
+  {
+   "code": "[A.13]",
+   "nombre": "Repudio",
+   "origen": "A",
+   "tipos": [
+    "S",
+    "D"
+   ],
+   "dims": [
+    "T",
+    "A"
+   ]
+  },
+  {
+   "code": "[A.14]",
+   "nombre": "Interceptación de información (escucha)",
+   "origen": "A",
+   "tipos": [
+    "COM"
+   ],
+   "dims": [
+    "C"
+   ]
+  },
+  {
+   "code": "[A.15]",
+   "nombre": "Modificación deliberada de la información",
+   "origen": "A",
+   "tipos": [
+    "D",
+    "Media"
+   ],
+   "dims": [
+    "I"
+   ]
+  },
+  {
+   "code": "[A.18]",
+   "nombre": "Destrucción de información",
+   "origen": "A",
+   "tipos": [
+    "D",
+    "Media"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[A.19]",
+   "nombre": "Revelación de información",
+   "origen": "A",
+   "tipos": [
+    "D",
+    "S",
+    "SW",
+    "HW",
+    "COM",
+    "Media",
+    "P"
+   ],
+   "dims": [
+    "C"
+   ]
+  },
+  {
+   "code": "[A.22]",
+   "nombre": "Manipulación de programas/equipos",
+   "origen": "A",
+   "tipos": [
+    "SW",
+    "HW"
+   ],
+   "dims": [
+    "I",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "code": "[A.24]",
+   "nombre": "Denegación de servicio (DoS)",
+   "origen": "A",
+   "tipos": [
+    "S",
+    "SW",
+    "HW",
+    "COM"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[A.25]",
+   "nombre": "Robo",
+   "origen": "A",
+   "tipos": [
+    "HW",
+    "Media"
+   ],
+   "dims": [
+    "D",
+    "C"
+   ]
+  },
+  {
+   "code": "[A.26]",
+   "nombre": "Ataque destructivo",
+   "origen": "A",
+   "tipos": [
+    "HW",
+    "Media",
+    "AUX",
+    "L"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[A.27]",
+   "nombre": "Ocupación enemiga",
+   "origen": "A",
+   "tipos": [
+    "L"
+   ],
+   "dims": [
+    "D",
+    "C"
+   ]
+  },
+  {
+   "code": "[A.28]",
+   "nombre": "Indisponibilidad del personal",
+   "origen": "A",
+   "tipos": [
+    "P"
+   ],
+   "dims": [
+    "D"
+   ]
+  },
+  {
+   "code": "[A.29]",
+   "nombre": "Extorsión",
+   "origen": "A",
+   "tipos": [
+    "P"
+   ],
+   "dims": [
+    "C",
+    "I",
+    "D"
+   ]
+  },
+  {
+   "code": "[A.30]",
+   "nombre": "Ingeniería social",
+   "origen": "A",
+   "tipos": [
+    "P"
+   ],
+   "dims": [
+    "C",
+    "I",
+    "D"
+   ]
+  }
+ ],
+ "CATALOGO_SALVAGUARDAS": [
+  {
+   "code": "H.IA",
+   "nombre": "Identificación y autenticación",
+   "area": "Horizontal",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "H.AC",
+   "nombre": "Control de acceso lógico",
+   "area": "Horizontal",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "H.ST",
+   "nombre": "Segregación de tareas",
+   "area": "Horizontal",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "H.IR",
+   "nombre": "Gestión de incidencias",
+   "area": "Horizontal",
+   "tipos": [
+    "CR",
+    "RC"
+   ]
+  },
+  {
+   "code": "H.tools.AV",
+   "nombre": "Herramienta antimalware",
+   "area": "Horizontal",
+   "tipos": [
+    "PR",
+    "DC"
+   ]
+  },
+  {
+   "code": "H.tools.IDS",
+   "nombre": "IDS/IPS detección/prevención intrusión",
+   "area": "Horizontal",
+   "tipos": [
+    "DC",
+    "PR"
+   ]
+  },
+  {
+   "code": "H.tools.VA",
+   "nombre": "Análisis de vulnerabilidades",
+   "area": "Horizontal",
+   "tipos": [
+    "MN"
+   ]
+  },
+  {
+   "code": "H.tools.DLP",
+   "nombre": "DLP – Monitorización de contenidos",
+   "area": "Horizontal",
+   "tipos": [
+    "PR",
+    "DC"
+   ]
+  },
+  {
+   "code": "H.tools.LA",
+   "nombre": "Análisis de logs (SIEM)",
+   "area": "Horizontal",
+   "tipos": [
+    "DC",
+    "MN"
+   ]
+  },
+  {
+   "code": "H.VM",
+   "nombre": "Gestión de vulnerabilidades",
+   "area": "Horizontal",
+   "tipos": [
+    "PR",
+    "MN"
+   ]
+  },
+  {
+   "code": "H.AU",
+   "nombre": "Registro y auditoría",
+   "area": "Horizontal",
+   "tipos": [
+    "MN",
+    "DC"
+   ]
+  },
+  {
+   "code": "D.A",
+   "nombre": "Copias de seguridad (backup)",
+   "area": "Datos",
+   "tipos": [
+    "RC"
+   ]
+  },
+  {
+   "code": "D.I",
+   "nombre": "Aseguramiento de la integridad",
+   "area": "Datos",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "D.C",
+   "nombre": "Cifrado de la información",
+   "area": "Datos",
+   "tipos": [
+    "EL",
+    "PR"
+   ]
+  },
+  {
+   "code": "D.DS",
+   "nombre": "Uso de firmas electrónicas",
+   "area": "Datos",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "K.IC",
+   "nombre": "Gestión de claves de cifra",
+   "area": "Claves",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "K.509",
+   "nombre": "Gestión de certificados X.509",
+   "area": "Claves",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "S.A",
+   "nombre": "Aseguramiento de la disponibilidad del servicio",
+   "area": "Servicios",
+   "tipos": [
+    "IM",
+    "RC"
+   ]
+  },
+  {
+   "code": "S.www",
+   "nombre": "Protección de servicios web (WAF)",
+   "area": "Servicios",
+   "tipos": [
+    "PR",
+    "DC"
+   ]
+  },
+  {
+   "code": "S.email",
+   "nombre": "Protección del correo electrónico",
+   "area": "Servicios",
+   "tipos": [
+    "PR",
+    "DC"
+   ]
+  },
+  {
+   "code": "SW.A",
+   "nombre": "Backup de aplicaciones",
+   "area": "Software",
+   "tipos": [
+    "RC"
+   ]
+  },
+  {
+   "code": "SW.SC",
+   "nombre": "Perfiles de seguridad (bastionado)",
+   "area": "Software",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "SW.CM",
+   "nombre": "Gestión de cambios y actualizaciones",
+   "area": "Software",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "HW.A",
+   "nombre": "Aseguramiento disponibilidad HW (redundancia)",
+   "area": "Hardware",
+   "tipos": [
+    "IM",
+    "RC"
+   ]
+  },
+  {
+   "code": "HW.SC",
+   "nombre": "Bastionado de equipos",
+   "area": "Hardware",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "COM.aut",
+   "nombre": "Autenticación del canal",
+   "area": "Comunicaciones",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "COM.I",
+   "nombre": "Integridad de los datos intercambiados",
+   "area": "Comunicaciones",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "COM.C",
+   "nombre": "Cifrado de las comunicaciones",
+   "area": "Comunicaciones",
+   "tipos": [
+    "EL"
+   ]
+  },
+  {
+   "code": "COM.DS",
+   "nombre": "Segregación de redes (VLAN/segmentación)",
+   "area": "Comunicaciones",
+   "tipos": [
+    "PR",
+    "IM"
+   ]
+  },
+  {
+   "code": "IP.SPP",
+   "nombre": "Sistema de protección perimetral (firewall)",
+   "area": "Interconexión",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "MP.IC",
+   "nombre": "Cifrado de soportes",
+   "area": "Soportes",
+   "tipos": [
+    "EL"
+   ]
+  },
+  {
+   "code": "MP.end",
+   "nombre": "Destrucción segura de soportes",
+   "area": "Soportes",
+   "tipos": [
+    "EL"
+   ]
+  },
+  {
+   "code": "AUX.power",
+   "nombre": "Suministro eléctrico (SAI/generador)",
+   "area": "Auxiliares",
+   "tipos": [
+    "IM"
+   ]
+  },
+  {
+   "code": "AUX.AC",
+   "nombre": "Climatización",
+   "area": "Auxiliares",
+   "tipos": [
+    "IM"
+   ]
+  },
+  {
+   "code": "L.AC",
+   "nombre": "Control de accesos físicos",
+   "area": "Instalaciones",
+   "tipos": [
+    "PR"
+   ]
+  },
+  {
+   "code": "L.A",
+   "nombre": "Aseguramiento disponibilidad de instalaciones",
+   "area": "Instalaciones",
+   "tipos": [
+    "IM",
+    "RC"
+   ]
+  },
+  {
+   "code": "PS.AT",
+   "nombre": "Formación y concienciación",
+   "area": "Personal",
+   "tipos": [
+    "AW",
+    "PR"
+   ]
+  },
+  {
+   "code": "G.RM",
+   "nombre": "Gestión de riesgos (proceso)",
+   "area": "Organización",
+   "tipos": [
+    "AD"
+   ]
+  },
+  {
+   "code": "G.plan",
+   "nombre": "Planificación de la seguridad",
+   "area": "Organización",
+   "tipos": [
+    "AD"
+   ]
+  },
+  {
+   "code": "G.exam",
+   "nombre": "Inspecciones de seguridad",
+   "area": "Organización",
+   "tipos": [
+    "MN"
+   ]
+  },
+  {
+   "code": "BC.BIA",
+   "nombre": "Análisis de impacto en el negocio (BIA)",
+   "area": "Continuidad",
+   "tipos": [
+    "AD"
+   ]
+  },
+  {
+   "code": "BC.DRP",
+   "nombre": "Plan de Recuperación de Desastres (DRP)",
+   "area": "Continuidad",
+   "tipos": [
+    "RC"
+   ]
+  }
+ ],
+ "TIPOS_SALVAGUARDA": {
+  "PR": "Preventiva",
+  "DR": "Disuasoria",
+  "EL": "Eliminatoria",
+  "IM": "Minimización del impacto",
+  "CR": "Correctiva",
+  "RC": "Recuperación",
+  "MN": "Monitorización",
+  "DC": "Detección",
+  "AW": "Concienciación",
+  "AD": "Administrativa"
+ },
+ "NIVELES_MADUREZ": {
+  "L0": {
+   "label": "Inexistente",
+   "eficacia": 0
+  },
+  "L1": {
+   "label": "Inicial / ad hoc",
+   "eficacia": 0.1
+  },
+  "L2": {
+   "label": "Reproducible pero intuitivo",
+   "eficacia": 0.3
+  },
+  "L3": {
+   "label": "Proceso definido",
+   "eficacia": 0.5
+  },
+  "L4": {
+   "label": "Gestionado y medible",
+   "eficacia": 0.7
+  },
+  "L5": {
+   "label": "Optimizado",
+   "eficacia": 1
+  }
+ },
+ "NIVELES": [
+  "MB",
+  "B",
+  "M",
+  "A",
+  "MA"
+ ],
+ "NIVEL_NUM": {
+  "MB": 1,
+  "B": 2,
+  "M": 3,
+  "A": 4,
+  "MA": 5
+ },
+ "NIVEL_LABEL": {
+  "MB": "Muy bajo",
+  "B": "Bajo",
+  "M": "Medio",
+  "A": "Alto",
+  "MA": "Muy alto"
+ },
+ "FRECUENCIA_ANUAL": {
+  "MB": "siglos (1/100)",
+  "B": "cada varios años (1/10)",
+  "M": "una vez/año (1)",
+  "A": "mensualmente (10)",
+  "MA": "a diario (100)"
+ },
+ "MATRIZ_RIESGO": [
+  [
+   "MB",
+   "MB",
+   "B",
+   "B",
+   "M"
+  ],
+  [
+   "MB",
+   "B",
+   "B",
+   "M",
+   "A"
+  ],
+  [
+   "B",
+   "B",
+   "M",
+   "A",
+   "A"
+  ],
+  [
+   "B",
+   "M",
+   "A",
+   "A",
+   "MA"
+  ],
+  [
+   "M",
+   "A",
+   "A",
+   "MA",
+   "MA"
+  ]
+ ],
+ "loadTechServSrc": "function loadTechServ(){\n  if(state.activos.length > 0 && !confirm('Esto reemplazará el análisis actual con el caso TechServ. ¿Continuar?')) return;\n  \n  state = defaultState();\n  state.proyecto = {\n    nombre: 'TechServ Administración – Sede electrónica',\n    organizacion: 'TechServ Administración, S.L.',\n    responsable: 'Equipo GRC · Clase de ISO 27001 + ENS',\n    fecha: new Date().toISOString().slice(0,10)\n  };\n  state.apetito = 'M';\n  \n  // Activos\n  const a1 = {\n    id: 'ACT-001', nombre: 'Base de datos de expedientes ciudadanos',\n    tipo: '[D]', descripcion: 'BBDD que contiene los expedientes administrativos de las tres Consejerías',\n    valoracion: { D:8, I:9, C:9, A:8, T:8 }\n  };\n  const a2 = {\n    id: 'ACT-002', nombre: 'Servicio web Sede Electrónica',\n    tipo: '[essential.service]', descripcion: 'Portal donde los ciudadanos presentan trámites con cl@ve/certificado',\n    valoracion: { D:9, I:8, C:7, A:9, T:9 }\n  };\n  const a3 = {\n    id: 'ACT-003', nombre: 'Servidores aplicación (cluster)',\n    tipo: '[HW]', descripcion: 'Cluster de servidores que aloja la sede electrónica y el backoffice',\n    valoracion: { D:8, I:6, C:6, A:5, T:5 }\n  };\n  const a4 = {\n    id: 'ACT-004', nombre: 'Personal técnico (administradores)',\n    tipo: '[P]', descripcion: '3 administradores con privilegios sobre sistemas críticos',\n    valoracion: { D:7, I:6, C:7, A:6, T:5 }\n  };\n  state.activos = [a1, a2, a3, a4];\n  \n  // Amenazas\n  const amenazasData = [\n    // BBDD expedientes\n    { activoId:'ACT-001', codigo:'[A.11]', nombre:'Acceso no autorizado', origen:'A', prob:'M', deg:{D:0,I:50,C:100,A:0,T:30} },\n    { activoId:'ACT-001', codigo:'[A.15]', nombre:'Modificación deliberada de la información', origen:'A', prob:'B', deg:{D:0,I:100,C:0,A:0,T:0} },\n    { activoId:'ACT-001', codigo:'[A.18]', nombre:'Destrucción de información', origen:'A', prob:'B', deg:{D:100,I:50,C:0,A:0,T:0} },\n    { activoId:'ACT-001', codigo:'[E.15]', nombre:'Alteración accidental de la información', origen:'E', prob:'M', deg:{D:0,I:60,C:0,A:0,T:0} },\n    { activoId:'ACT-001', codigo:'[E.19]', nombre:'Fugas de información', origen:'E', prob:'M', deg:{D:0,I:0,C:80,A:0,T:0} },\n    // Servicio Sede\n    { activoId:'ACT-002', codigo:'[A.24]', nombre:'Denegación de servicio (DoS)', origen:'A', prob:'A', deg:{D:100,I:0,C:0,A:0,T:0} },\n    { activoId:'ACT-002', codigo:'[A.5]', nombre:'Suplantación de la identidad', origen:'A', prob:'M', deg:{D:0,I:60,C:80,A:100,T:50} },\n    { activoId:'ACT-002', codigo:'[E.24]', nombre:'Caída por agotamiento de recursos', origen:'E', prob:'M', deg:{D:80,I:0,C:0,A:0,T:0} },\n    // HW Servidores\n    { activoId:'ACT-003', codigo:'[I.5]', nombre:'Avería de origen físico o lógico', origen:'I', prob:'M', deg:{D:70,I:0,C:0,A:0,T:0} },\n    { activoId:'ACT-003', codigo:'[I.6]', nombre:'Corte del suministro eléctrico', origen:'I', prob:'B', deg:{D:100,I:0,C:0,A:0,T:0} },\n    { activoId:'ACT-003', codigo:'[A.8]', nombre:'Difusión de software dañino (malware)', origen:'A', prob:'M', deg:{D:60,I:50,C:50,A:0,T:0} },\n    // Personal\n    { activoId:'ACT-004', codigo:'[A.30]', nombre:'Ingeniería social', origen:'A', prob:'A', deg:{D:0,I:50,C:80,A:30,T:30} },\n    { activoId:'ACT-004', codigo:'[E.7]', nombre:'Deficiencias en la organización', origen:'E', prob:'M', deg:{D:30,I:30,C:30,A:0,T:0} },\n    { activoId:'ACT-004', codigo:'[E.28]', nombre:'Indisponibilidad del personal', origen:'E', prob:'B', deg:{D:50,I:0,C:0,A:0,T:0} }\n  ];\n  state.amenazas = amenazasData.map((a,i) => ({...a, id:'AME-'+String(i+1).padStart(3,'0')}));\n  \n  // Salvaguardas\n  const salvData = [\n    // Para BBDD\n    { codigo:'H.AC', nombre:'Control de acceso lógico', area:'Horizontal', tipos:['PR'], madurez:'L3', reduceProb:70, reduceImp:20, amenazasCodigos:['[A.11]','[A.6]'] },\n    { codigo:'H.IA', nombre:'Identificación y autenticación', area:'Horizontal', tipos:['PR'], madurez:'L3', reduceProb:60, reduceImp:10, amenazasCodigos:['[A.5]','[A.11]'] },\n    { codigo:'D.A', nombre:'Copias de seguridad (backup)', area:'Datos', tipos:['RC'], madurez:'L4', reduceProb:0, reduceImp:80, amenazasCodigos:['[A.18]','[E.15]','[I.5]','[A.8]'] },\n    { codigo:'D.C', nombre:'Cifrado de la información', area:'Datos', tipos:['EL','PR'], madurez:'L2', reduceProb:50, reduceImp:60, amenazasCodigos:['[A.11]','[E.19]'] },\n    { codigo:'H.tools.LA', nombre:'Análisis de logs (SIEM)', area:'Horizontal', tipos:['DC','MN'], madurez:'L3', reduceProb:30, reduceImp:30, amenazasCodigos:['[A.11]','[A.15]'] },\n    // Para servicio web\n    { codigo:'S.www', nombre:'Protección de servicios web (WAF)', area:'Servicios', tipos:['PR','DC'], madurez:'L3', reduceProb:60, reduceImp:40, amenazasCodigos:['[A.24]','[A.5]'] },\n    { codigo:'IP.SPP', nombre:'Sistema de protección perimetral (firewall)', area:'Interconexión', tipos:['PR'], madurez:'L4', reduceProb:50, reduceImp:30, amenazasCodigos:['[A.24]','[A.11]','[A.8]'] },\n    // Para HW\n    { codigo:'HW.A', nombre:'Aseguramiento disponibilidad HW (redundancia)', area:'Hardware', tipos:['IM','RC'], madurez:'L3', reduceProb:30, reduceImp:70, amenazasCodigos:['[I.5]','[A.24]'] },\n    { codigo:'AUX.power', nombre:'Suministro eléctrico (SAI/generador)', area:'Auxiliares', tipos:['IM'], madurez:'L4', reduceProb:0, reduceImp:90, amenazasCodigos:['[I.6]'] },\n    { codigo:'H.tools.AV', nombre:'Herramienta antimalware', area:'Horizontal', tipos:['PR','DC'], madurez:'L4', reduceProb:70, reduceImp:40, amenazasCodigos:['[A.8]'] },\n    // Para personal\n    { codigo:'PS.AT', nombre:'Formación y concienciación', area:'Personal', tipos:['AW','PR'], madurez:'L2', reduceProb:50, reduceImp:30, amenazasCodigos:['[A.30]','[E.7]','[E.15]'] },\n    { codigo:'H.ST', nombre:'Segregación de tareas', area:'Horizontal', tipos:['PR'], madurez:'L2', reduceProb:40, reduceImp:30, amenazasCodigos:['[E.7]','[A.6]','[A.15]'] }\n  ];\n  state.salvaguardas = salvData.map((s,i) => {\n    const amIds = state.amenazas.filter(am => s.amenazasCodigos.includes(am.codigo)).map(am => am.id);\n    const {amenazasCodigos, ...rest} = s;\n    return { ...rest, id:'SAL-'+String(i+1).padStart(3,'0'), amenazasIds: amIds };\n  });\n  \n  // Tratamiento sugerido\n  state.tratamiento = {};\n  state.amenazas.forEach(am => {\n    const act = state.activos.find(a => a.id===am.activoId);\n    const res = riesgoResidual(act, am);\n    const resMax = riesgoMaxNivel(res.riesgo);\n    if(resMax && NIVEL_NUM[resMax] > NIVEL_NUM[state.apetito]){\n      state.tratamiento[am.id] = { opcion:'mitigar', responsable:'Responsable de Seguridad', plazo:'', notas:'Reforzar salvaguardas hasta alcanzar el apetito.' };\n    } else {\n      state.tratamiento[am.id] = { opcion:'aceptar', responsable:'Dirección', plazo:'', notas:'Riesgo dentro del apetito declarado.' };\n    }\n  });\n  \n  save();\n  renderAll();\n  showTab('inicio');\n  alert('Caso TechServ cargado. Recorre las pestañas en orden para ver el análisis completo.');\n}"
+}
