@@ -1,0 +1,3001 @@
+{
+ "version": 1,
+ "proyecto": {
+  "nombre": "TechServ · PSTA",
+  "organizacion": "TechServ Administración, S.L. (ficticia)",
+  "sistema": "PSTA – Plataforma de Servicios TIC para la Administración Autonómica",
+  "codigoAR": "AR-2026-01",
+  "codigoSoA": "SOA-ENS-PSTA"
+ },
+ "portada": {
+  "Organización": "TechServ Administración, S.L. – B-87.654.321 (ficticio)",
+  "Sistema de información": "PSTA – Plataforma de Servicios TIC para la Administración Autonómica",
+  "Código / versión del documento": "SOA-ENS-PSTA · v2.0",
+  "Fecha de emisión": "18/09/2026",
+  "Categoría del sistema (art. 40, Anexo I)": "ALTA  (D=ALTO · I=ALTO · C=ALTO · A=ALTO · T=MEDIO) – ver hoja 'Categorización'",
+  "Análisis de riesgos de referencia (art. 14, [op.pl.1])": "AR-2026-01 (MAGERIT v3 / PILAR), aprobado por el CSI el 30/06/2026",
+  "Elaborada por": "Laura Ortega Vidal – Responsable de Seguridad (CISO)",
+  "Revisada por": "Javier Molina Ruiz – Responsable del Sistema (CTO)",
+  "Aprobada por": "Comité de Seguridad de la Información (CSI) – reunión trimestral – acta ACTA-CSI-2026-03",
+  "Responsables de la Información / del Servicio": "Consejería de Hacienda / Consejería de Educación / Consejería de Bienestar Social (Responsables de la Información y del Servicio, art. 11 RD 311/2022)",
+  "Delegada de Protección de Datos": "Marta Ruiz Salgado – Delegada de Protección de Datos",
+  "Firma (art. 28.2 RD 311/2022)": "Firmado electrónicamente por la Responsable de Seguridad con certificado cualificado – 18/09/2026",
+  "Próxima revisión": "Anual (09/2027) o antes si cambia el sistema, el análisis de riesgos, la categoría o la normativa",
+  "Infraestructura": "CPD principal – Alcobendas (Madrid)\nCPD de respaldo – Tres Cantos (Madrid), distancia 14 km\nIaaS/PaaS en proveedor con certificación ENS categoría ALTA (NubeAdmin Cloud, S.A.) para el portal público y copias externas\nSOC 24x7 subcontratado a SecOps Iberia, S.L. (certificado ENS ALTA, ISO 27001) integrado con el CCN-CERT vía LUCIA/REYES",
+  "Ámbito y perfil": "Ámbito de aplicación (art. 2.3), aplicación total/parcial, perfil de cumplimiento específico (art. 30), criterios de selección (art. 28) y regla de aplicación por dimensión.",
+  "Categorización": "Valoración de los activos esenciales en las cinco dimensiones (Anexo I) y determinación del nivel por dimensión y de la categoría del sistema.",
+  "SoA ENS": "Las 73 medidas del Anexo II: dimensiones, exigencia BAJO/MEDIO/ALTO, nivel exigido a TechServ, refuerzos, aplicabilidad y justificación, medidas organizativas y técnicas, evidencias, responsable, estado y equivalencia ISO/IEC 27001:2022 (CCN-STIC 825).",
+  "Refuerzos": "Detalle de cada requisito de refuerzo Rn: nivel en que se exige, si es exigible a TechServ, alternativa elegida e implementación.",
+  "Medidas compensatorias": "Registro de medidas compensatorias (art. 28.3) con ámbito, limitación, riesgo, medida, validación y mantenimiento.",
+  "Resumen": "Indicadores calculados con fórmulas: medidas aplicables, no aplicables, compensadas, estado de implantación y grado de cumplimiento por marco.",
+  "Texto Anexo II": "Texto normativo de cada medida y de sus refuerzos (RD 311/2022) para consulta.",
+  "Leyenda": "Códigos de colores, valores permitidos y celdas editables.",
+  "Versión / fecha": "Descripción",
+  "v1.0 – 15/02/2025": "Primera emisión tras la categorización inicial (categoría MEDIA, T=MEDIO, C=MEDIO).",
+  "v1.1 – 10/10/2025": "Actualización tras auditoría de certificación: refuerzos op.acc.6 R6/R7 y op.exp.8 R3.",
+  "v2.0 – 18/09/2026": "Re-categorización a ALTA por incorporación de S-03 (datos de salud) y valoración D=ALTO de S-01; nuevo análisis de riesgos AR-2026-01; medidas compensatorias MC-01..04; mapeo ISO 27001:2022."
+ },
+ "categorizacion": [
+  {
+   "tipo": "Servicio",
+   "id": "S-01",
+   "nombre": "Sede tributaria electrónica (autoliquidaciones, pagos, notificaciones)",
+   "responsable": "Consejería de Hacienda",
+   "D": "m",
+   "I": "ALTO",
+   "C": "ALTO",
+   "A": "ALTO",
+   "T": "MEDIO",
+   "justificacion": "D: la interrupción en campaña impide el cumplimiento de obligaciones tributarias de >2M contribuyentes (perjuicio muy grave, Anexo I). I/A: la alteración o suplantación de una autoliquidación tiene efectos jurídicos directos. C: datos tributarios (art. 95 LGT). T: se exige reconstruir quién hizo qué, pero un fallo aislado del registro tiene consecuencias graves, no muy graves."
+  },
+  {
+   "tipo": "Servicio",
+   "id": "S-02",
+   "nombre": "Plataforma de gestión académica y becas",
+   "responsable": "Consejería de Educación",
+   "D": "MEDIO",
+   "I": "ALTO",
+   "C": "ALTO",
+   "A": "MEDIO",
+   "T": "MEDIO",
+   "justificacion": "D: tolera 24-48 h de parada fuera de matriculación. I: la manipulación de expedientes/calificaciones tiene efectos legales. C: datos de menores y situación socioeconómica de familias. A/T: consecuencias graves pero recuperables."
+  },
+  {
+   "tipo": "Servicio",
+   "id": "S-03",
+   "nombre": "Gestión de expedientes de dependencia y prestaciones sociales",
+   "responsable": "Consejería de Bienestar Social",
+   "D": "MEDIO",
+   "I": "ALTO",
+   "C": "ALTO",
+   "A": "MEDIO",
+   "T": "MEDIO",
+   "justificacion": "C: datos de salud y situación de vulnerabilidad (categorías especiales, art. 9 RGPD) → ALTO. I: la alteración de un grado de dependencia altera prestaciones económicas. D: proceso administrativo con tolerancia de 48 h."
+  },
+  {
+   "tipo": "Servicio",
+   "id": "S-04",
+   "nombre": "Servicios transversales (Directorio, correo corporativo, VPN, PKI interna, monitorización)",
+   "responsable": "TechServ (Responsable del Sistema)",
+   "D": "m",
+   "I": "ALTO",
+   "C": "ALTO",
+   "A": "ALTO",
+   "T": "MEDIO",
+   "justificacion": "Hereda el máximo de los servicios que soporta (dependencia funcional, Anexo I apdo. 4)."
+  },
+  {
+   "tipo": "Información",
+   "id": "I-01",
+   "nombre": "Datos tributarios y de recaudación",
+   "responsable": "Consejería de Hacienda",
+   "D": "MEDIO",
+   "I": "ALTO",
+   "C": "ALTO",
+   "A": "ALTO",
+   "T": "MEDIO",
+   "justificacion": "Información con reserva legal (art. 95 LGT). Su divulgación causa perjuicio muy grave a los derechos de los contribuyentes."
+  },
+  {
+   "tipo": "Información",
+   "id": "I-02",
+   "nombre": "Datos de salud / dependencia (categoría especial)",
+   "responsable": "Consejería de Bienestar Social",
+   "D": "MEDIO",
+   "I": "ALTO",
+   "C": "ALTO",
+   "A": "MEDIO",
+   "T": "MEDIO",
+   "justificacion": "Categoría especial de datos (art. 9 RGPD); DPIA realizada (REG-RGPD-07)."
+  },
+  {
+   "tipo": "Información",
+   "id": "I-03",
+   "nombre": "Datos académicos y socioeconómicos de menores",
+   "responsable": "Consejería de Educación",
+   "D": "BAJO",
+   "I": "ALTO",
+   "C": "ALTO",
+   "A": "MEDIO",
+   "T": "MEDIO",
+   "justificacion": "Datos de menores: divulgación con perjuicio muy grave para los afectados."
+  },
+  {
+   "tipo": "Información",
+   "id": "I-04",
+   "nombre": "Credenciales, claves criptográficas y configuración de seguridad",
+   "responsable": "TechServ",
+   "D": "ALTO",
+   "I": "ALTO",
+   "C": "ALTO",
+   "A": "ALTO",
+   "T": "MEDIO",
+   "justificacion": "Su compromiso afecta a todos los servicios (activo de soporte crítico)."
+  }
+ ],
+ "soa": {
+  "org.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (2 esenciales).",
+   "org": "Normativas de seguridad NOR-01 Uso aceptable de recursos TIC, NOR-02 Puesto de trabajo y teletrabajo, NOR-03 Dispositivos móviles, NOR-04 Clasificación y manejo de la información, NOR-05 Contraseñas y autenticación; régimen disciplinario vinculado al convenio y contratos. Aceptación firmada por todo el personal y terceros.",
+   "tec": "Portal de firma de normativas (registro de aceptación); banner de aviso en el inicio de sesión.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "NOR-01..05; REG-ACEPT-NOR (aceptaciones); PRO-RRHH-02",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "org.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 7 requisitos de verificación (2 esenciales).",
+   "org": "Catálogo de procedimientos operativos PRO-xx (altas/bajas de usuarios, copias, cambios, incidentes, parches, gestión de soportes, acceso físico, notificación a CCN-CERT, etc.) con propietario, revisión anual y validación por el Resp. de Seguridad.",
+   "tec": "Repositorio documental con flujo de aprobación y control de versiones; enlaces desde la herramienta ITSM.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Índice documental IDX-01 (48 procedimientos); PRO-GEST-01 Gestión documental",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "org.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 10 requisitos de verificación (4 esenciales).",
+   "org": "Procedimiento de autorización PRO-AUT-01: entrada en producción de instalaciones, equipos, aplicaciones, interconexiones, medios de comunicación, soportes y sistemas de terceros; matriz de autorización (Resp. Sistema autoriza, Resp. Seguridad informa favorablemente).",
+   "tec": "Flujo de autorización en ITSM (ServiceDesk) con evidencias adjuntas; CMDB bloquea activos no autorizados (estado 'pendiente de autorización').",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-AUT-01; REG-AUT-2026 (registro de autorizaciones); tickets ITSM",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.pl.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (1 esenciales).",
+   "org": "Procedimiento de adquisición PRO-COMP-02: requisitos de seguridad en pliegos internos, preferencia por productos CPSTIC, evaluación por el Resp. de Seguridad antes de la compra; alineado con la planificación de capacidad.",
+   "tec": "Checklist de requisitos de seguridad en el módulo de compras del ERP.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-COMP-02; REG-COMP-2026 (evaluaciones)",
+   "responsable": "Compras / Resp. Seguridad",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.acc.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) ICAT; nivel exigido ALTO (máx(I=ALTO, C=ALTO, A=ALTO, T=MEDIO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 6 requisitos de verificación (0 esenciales).",
+   "org": "Segregación rigurosa (R1): desarrollo / operación / auditoría de seguridad en equipos distintos; configuración de seguridad ≠ operación; nadie audita su propia actividad; matriz SoD revisada semestralmente.",
+   "tec": "Controles SoD en IGA (reglas de incompatibilidad); entornos separados; acceso de auditoría de solo lectura a logs (SIEM).",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "MAT-SOD-01; informe semestral SoD (IGA)",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.acc.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) ICAT; nivel exigido ALTO (máx(I=ALTO, C=ALTO, A=ALTO, T=MEDIO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 6 requisitos de verificación (4 esenciales).",
+   "org": "Procedimiento PRO-IAM-03: solicitud-aprobación-provisión-revisión-revocación; aprobación del propietario del activo; revisión semestral de accesos (recertificación) y trimestral de privilegiados.",
+   "tec": "Workflow de aprobación en IGA; recertificación automática; revocación inmediata al causar baja en RRHH.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-IAM-03; campañas de recertificación 2026-S1; tickets",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.exp.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (2 esenciales).",
+   "org": "Inventario de activos INV-01 (hardware, software, información, servicios, comunicaciones, instalaciones, personal) con responsable, ubicación, categoría y dependencias; actualización con cada cambio autorizado; reconciliación trimestral.",
+   "tec": "CMDB (ITSM) alimentada por descubrimiento automático (agentes + escaneo de red) y gestión de licencias; SBOM para software propio.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "INV-01 (export CMDB 09/2026); PRO-INV-01; informe de reconciliación",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.exp.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (3 esenciales).",
+   "org": "Guías de bastionado por tecnología (CCN-STIC 5xx/6xx y CIS Benchmarks) aprobadas; mínima funcionalidad; cuentas por defecto retiradas; principio de seguridad por defecto; checklist obligatoria antes del paso a producción.",
+   "tec": "Imágenes maestras bastionadas (golden images); GPO/Ansible para configuración; escaneo de cumplimiento de configuración (SCAP) semanal; DLP en endpoints.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-HARD-01; checklists CFG-xx; informes SCAP",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.exp.5": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 10 requisitos de verificación (0 esenciales).",
+   "org": "Gestión de cambios PRO-CHG-01: CAB semanal, evaluación de impacto en seguridad, plan de marcha atrás, cambios de emergencia; prevención de fallos (R1) mediante pruebas obligatorias y análisis de riesgos del cambio.",
+   "tec": "Módulo de cambios en ITSM con aprobación electrónica; entornos dev/pre/pro; despliegues automatizados con rollback.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-CHG-01; actas CAB; RFC-2026-xxx",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.exp.9": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 5 requisitos de verificación (3 esenciales).",
+   "org": "Registro de la gestión de incidentes: apertura, cronología, decisiones, evidencias, cierre, lecciones aprendidas; alimenta el análisis de riesgos y las métricas; conservación 5 años.",
+   "tec": "Módulo de incidentes en ITSM enlazado con el SIEM; custodia de evidencias con cadena de custodia (hash, firma) según PRO-INC-02.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "REG-INC-2026 (37 incidentes); informes post-incidente; PRO-INC-02",
+   "responsable": "SOC (SecOps Iberia) / Resp. Seguridad",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.ext.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (0 esenciales).",
+   "org": "Contratación de terceros con cláusulas ENS/RGPD (modelo CON-SEC-01): roles y responsabilidades, medidas exigidas, ANS con penalizaciones, derecho de auditoría, notificación de incidentes ≤24 h, subcontratación autorizada; acuerdos de confidencialidad.",
+   "tec": "Registro de proveedores en el ERP con estado de evaluación de seguridad; portal de intercambio seguro.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Contratos SecOps Iberia, NubeAdmin, custodia de soportes; CON-SEC-01; REG-PROV-01",
+   "responsable": "Compras / Resp. Seguridad",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.ext.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (0 esenciales).",
+   "org": "Gestión diaria de servicios externos (PRO-PROV-02): responsable interno por proveedor, seguimiento mensual de ANS e indicadores, gestión de incidencias y cambios del proveedor, reuniones de servicio.",
+   "tec": "Cuadro de mando de ANS (Power BI) con datos del ITSM; canal cifrado para coordinación de incidentes.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Informes mensuales de servicio; actas de seguimiento",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.cont.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 7 requisitos de verificación (0 esenciales).",
+   "org": "Plan de Continuidad PCN-01 y Plan de Recuperación ante Desastres DRP-01: activación, roles, comunicación, procedimientos de recuperación por servicio, retorno a la normalidad; plan de emergencia y contingencia integrado; revisión anual.",
+   "tec": "Replicación síncrona de almacenamiento entre CPD (14 km), orquestación de conmutación, copias inmutables externas; runbooks automatizados.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PCN-01 v3; DRP-01; árbol de llamadas",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.cont.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 5 requisitos de verificación (0 esenciales).",
+   "org": "Programa anual de pruebas: prueba de mesa (T1), conmutación parcial de servicio (T2), conmutación completa de CPD (T4); informe y acciones correctivas; participación de las consejerías.",
+   "tec": "Entorno de pruebas de recuperación aislado; automatización de restauraciones.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "REG-CONT-03 (pruebas 2025-2026); informe de conmutación 11/2025",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.cont.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (0 esenciales).",
+   "org": "Medios alternativos garantizados: CPD de respaldo activo-pasivo, personal alternativo formado (matriz de sustitución), instalaciones alternativas de trabajo (teletrabajo seguro + oficina de respaldo), proveedores alternativos de comunicaciones, contratos de continuidad con SecOps y NubeAdmin.",
+   "tec": "Doble operador de comunicaciones con rutas físicas distintas; capacidad de reserva en cloud ENS ALTA; VPN dimensionada para el 100 % de la plantilla.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "DRP-01 anexo B (medios alternativos); contratos; MAT-SUST-01",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.if.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (2 esenciales).",
+   "org": "Zonificación de instalaciones (pública, oficinas, salas técnicas, CPD) con control de acceso por zona y autorización nominal; visitantes acompañados; revisión trimestral de accesos.",
+   "tec": "Control de acceso con tarjeta + PIN en oficinas; tarjeta + biometría en CPD y salas técnicas; esclusa en CPD; CCTV con retención 30 días.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-FIS-01; planos de zonificación; REG-ACC-FIS",
+   "responsable": "Facilities / Resp. del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.if.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (1 esenciales).",
+   "org": "Identificación de todas las personas: tarjeta visible, registro de visitas (nombre, empresa, motivo, hora, acompañante), identificación del personal de proveedores.",
+   "tec": "Sistema de gestión de visitas con registro electrónico; tornos en recepción.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "REG-VIS-2026; PRO-FIS-01",
+   "responsable": "Facilities / Resp. del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.if.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 5 requisitos de verificación (2 esenciales).",
+   "org": "Acondicionamiento de locales según buenas prácticas (TIA-942 Tier III en CPD): temperatura y humedad controladas, protección del cableado, protección frente a interferencias, no señalización de la sala.",
+   "tec": "Climatización redundante N+1; monitorización ambiental (DCIM) con alertas; cableado estructurado en bandejas cerradas y etiquetado.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Informe DCIM; certificado de instalación",
+   "responsable": "Facilities / Resp. del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.if.5": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (3 esenciales).",
+   "org": "Protección contra incendios conforme a normativa (CTE, RIPCI): plan de autoprotección, inspecciones anuales, formación de equipos de emergencia.",
+   "tec": "Detección temprana por aspiración (VESDA), extinción por gas inerte en CPD, extintores y BIE en oficinas, sectorización RF-90.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Certificado de mantenimiento PCI 2026; plan de autoprotección",
+   "responsable": "Facilities / Resp. del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.if.7": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (1 esenciales).",
+   "org": "Registro de entrada y salida de equipamiento (PRO-FIS-02): autorización previa, identificación del equipo (etiqueta/serie), portador, fecha/hora, destino.",
+   "tec": "Registro electrónico en el ITSM enlazado con la CMDB; etiquetas RFID en activos del CPD con detección en puertas.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "REG-EQ-2026; PRO-FIS-02",
+   "responsable": "Facilities / Resp. del Sistema",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.per.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (0 esenciales).",
+   "org": "Descripción de cada puesto con responsabilidades de seguridad, nivel de acceso a información y requisitos (habilitación, antecedentes cuando lo permite la ley, cláusulas); selección con verificación de referencias y titulación; puestos de confianza (administradores, SOC) con requisitos reforzados.",
+   "tec": "Perfiles de puesto en el sistema de RRHH vinculados a roles IGA.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Catálogo de puestos CAT-PUE-01; PRO-RRHH-01 selección",
+   "responsable": "Dirección de Personas (RRHH)",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.per.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (3 esenciales).",
+   "org": "Programa de concienciación anual: normativa, gestión de incidentes (cómo reportar), phishing, uso de dispositivos; sesiones de acogida; campañas trimestrales; medición de eficacia.",
+   "tec": "Plataforma de e-learning y simulaciones de phishing (tasa de clic 3,1 % en 2026-Q2); comunicaciones internas.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PLAN-CONC-2026; registros de asistencia; informes de simulación",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.per.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 6 requisitos de verificación (2 esenciales).",
+   "org": "Plan de formación específico por rol (administradores, desarrolladores, SOC, gestores): configuración segura, detección y reacción a incidentes, gestión de la información y soportes, desarrollo seguro; formación ENS (CCN) para el equipo de seguridad.",
+   "tec": "Registro de competencias en RRHH; certificaciones (CCN-CERT Ángeles, ISO 27001 LA, SANS).",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PLAN-FORM-2026; registros de formación; matriz de competencias",
+   "responsable": "Dirección de Personas (RRHH)",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.com.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (3 esenciales).",
+   "org": "Perímetro seguro: toda conexión al exterior pasa por cortafuegos; flujos autorizados y documentados; revisión trimestral de reglas; dos líneas de defensa de fabricantes distintos.",
+   "tec": "Cortafuegos NG en alta disponibilidad (CPSTIC), IPS, DMZ multicapa, proxy saliente, DNS seguro; gestión de reglas con herramienta de análisis.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "ARQ-02; REG-FW-REV (revisiones trimestrales)",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.si.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (1 esenciales).",
+   "org": "Custodia de soportes: control de acceso a armarios ignífugos y sala de soportes, responsable de custodia, registro de entrega/devolución, respeto de condiciones del fabricante.",
+   "tec": "Armarios ignífugos con cerradura electrónica y registro; sala de soportes bajo control de acceso biométrico; custodia externa con empresa certificada.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-SOP-01; REG-CUST-SOP",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.si.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 6 requisitos de verificación (1 esenciales).",
+   "org": "Transporte de soportes (PRO-SOP-02): registro de salida/entrada, responsable designado, cifrado, precinto, empresa de transporte con contrato de seguridad, verificación de recepción.",
+   "tec": "Maletines con cierre y precinto numerado; geolocalización del transporte; cinta cifrada.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "REG-TRANS-SOP; contrato de custodia externa",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.info.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 8 requisitos de verificación (3 esenciales).",
+   "org": "Cumplimiento RGPD/LOPDGDD: registro de actividades de tratamiento, contratos de encargado con las consejerías, DPIA para S-02 y S-03, DPD nombrado, procedimiento de brechas (72 h a la AEPD vía el responsable), minimización y limitación de acceso; coordinación DPD–Resp. Seguridad.",
+   "tec": "Cifrado y seudonimización de datos de categoría especial en BD; enmascaramiento en entornos no productivos; registro de accesos a datos personales (auditoría en BD).",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "RAT-2026; DPIA-S02, DPIA-S03; contratos de encargado; PRO-BRECHA-01",
+   "responsable": "DPD / Resp. Seguridad",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "mp.s.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 6 requisitos de verificación (4 esenciales).",
+   "org": "Protección del correo: normas de uso, prohibición de reenvío automático externo, cifrado para información CONFIDENCIAL/RESERVADA, concienciación anti-phishing.",
+   "tec": "Pasarela de correo con antispam/antimalware/sandbox; SPF, DKIM, DMARC (p=reject); cifrado S/MIME y TLS obligatorio con las consejerías; DLP saliente; limpieza de metadatos.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Configuración de pasarela; informe DMARC; NOR-01",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "—",
+   "observaciones": null
+  },
+  "op.acc.5": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) ICAT; nivel exigido ALTO (máx(I=ALTO, C=ALTO, A=ALTO, T=MEDIO) = ALTO). Exigencia: '+ [R2 o R3 o R4] + R5'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 14 requisitos de verificación (10 esenciales).",
+   "org": "Usuarios externos (ciudadanos y empleados públicos de las consejerías): política de autenticación NOR-05; registro previo de identidad (R5) mediante Cl@ve / certificado o presencial en oficinas de la consejería; información sobre obligaciones y último acceso.",
+   "tec": "Integración con Cl@ve (Cl@ve PIN/permanente con OTP = R2; certificado electrónico cualificado = R3; DNIe = R4) para ciudadanos; empleados de las consejerías vía federación SAML con MFA de su organismo; bloqueo tras 5 intentos; sin contraseñas por defecto.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "NOR-05; diseño de integración Cl@ve DIS-CLAVE-01; convenio de federación",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "Alternativa elegida: R2 (Cl@ve PIN/permanente) y R3/R4 (certificado/DNIe); + R5 registro. Cumple '[R2 o R3 o R4] + R5'.",
+   "observaciones": null
+  },
+  "mp.com.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ [R2 o R3] + R4'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 6 requisitos de verificación (0 esenciales).",
+   "org": "Separación de flujos: segmentación lógica avanzada (R2) por función y nivel (usuarios, administración, servidores por servicio, DMZ, gestión, backup, OT/IoT); control de puntos de interconexión (R4) entre segmentos con cortafuegos y monitorización; segmentación física (R3) para la red de gestión fuera de banda.",
+   "tec": "VLAN + VRF + microsegmentación (NSX) con políticas por carga; cortafuegos internos entre zonas; red de gestión OOB física; NAC.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "ARQ-02 (matriz de zonas y flujos); revisión semestral de políticas de microsegmentación",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "Alternativa elegida: R2 (segmentación lógica avanzada) + R4; R3 físico adicional para gestión. Cumple '[R2 o R3] + R4'.",
+   "observaciones": null
+  },
+  "op.acc.6": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) ICAT; nivel exigido ALTO (máx(I=ALTO, C=ALTO, A=ALTO, T=MEDIO) = ALTO). Exigencia: '+ [R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 14 requisitos de verificación (7 esenciales).",
+   "org": "Usuarios de TechServ: NOR-05 (contraseñas ≥14 caracteres, no reutilización, cambio ante sospecha); registro previo (R5) por RRHH; ventana de acceso limitada por horario y rol para administradores (R6); suspensión a los 45 días sin uso (R7); acceso remoto sólo por VPN con MFA (R8/R9).",
+   "tec": "MFA obligatorio para todos (R2: contraseña + token FIDO2/app); administradores con certificado en tarjeta criptográfica (R4); AD con políticas de contraseñas y bloqueo; PAM; VPN con MFA y posture check; políticas de horario en AD/PAM; script de suspensión por inactividad.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "NOR-05; GPO-AUTH-01; informe PAM; REG-IAM-SUSP",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'.",
+   "observaciones": null
+  },
+  "op.ext.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 5 requisitos de verificación (0 esenciales).",
+   "org": "Protección de la cadena de suministro: due diligence de seguridad antes de contratar (cuestionario CCN-STIC 830 / ISO 27036), verificación de certificaciones (ENS, 27001), plan de contingencia por proveedor crítico, exigencia de SBOM a desarrolladores externos, revisión anual de riesgos de la cadena.",
+   "tec": "Análisis de composición de software (SCA) en el pipeline; monitorización de exposición de proveedores (rating externo).",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Evaluaciones de proveedores 2026; plan de contingencia PROV-CONT-01; informes SCA",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "Aplica sólo en categoría ALTA → aplica.",
+   "observaciones": null
+  },
+  "mp.eq.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) A; nivel exigido ALTO (máx(A=ALTO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 1 requisitos de verificación (1 esenciales).",
+   "org": "Bloqueo de sesión por inactividad y cierre de sesiones (R1) al final de la jornada o tras inactividad prolongada; obligación de bloquear al ausentarse.",
+   "tec": "GPO: bloqueo a 5 min (puestos) y 2 min (consolas de administración); cierre de sesión forzado a las 8 h; PAM cierra sesiones privilegiadas inactivas a los 10 min.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "GPO-LOCK-01; informes de cumplimiento",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "Dimensión A = ALTO → R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.si.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) C; nivel exigido ALTO (máx(C=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 6 requisitos de verificación (0 esenciales).",
+   "org": "Marcado de soportes según el nivel de calificación de la información (NOR-04): etiqueta con nivel, propietario e identificador; los usuarios conocen el significado de las etiquetas.",
+   "tec": "Etiquetas físicas normalizadas; etiquetado lógico (metadatos) en cintas y discos extraíbles; inventario en CMDB.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "NOR-04; inventario de soportes INV-SOP",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "Dimensión C = ALTO → aplica.",
+   "observaciones": null
+  },
+  "mp.info.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) C; nivel exigido ALTO (máx(C=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 7 requisitos de verificación (2 esenciales).",
+   "org": "Política de calificación de la información NOR-04: niveles (PÚBLICO, USO INTERNO, CONFIDENCIAL, RESERVADO) alineados con el nivel de C del Anexo I; el Responsable de la Información califica; procedimientos de manejo por nivel (etiquetado, acceso, cifrado, transmisión, destrucción).",
+   "tec": "Etiquetado de documentos (MIP/AIP) con DLP asociado; clasificación en repositorios.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "NOR-04; guía de manejo por nivel; informes DLP",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "Dimensión C = ALTO → aplica.",
+   "observaciones": null
+  },
+  "mp.info.5": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) C; nivel exigido ALTO (máx(C=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (1 esenciales).",
+   "org": "Limpieza de documentos: procedimiento de retirada de metadatos, comentarios, cambios y campos ocultos antes de publicar o transferir documentos fuera del nivel de calificación; formación a usuarios.",
+   "tec": "Limpieza automática de metadatos en la pasarela de correo y en el portal de publicación (herramienta OlvidoMeta / DLP); plantillas corporativas sin campos ocultos.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-INFO-02; configuración DLP",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "Dimensión C = ALTO → aplica.",
+   "observaciones": null
+  },
+  "mp.eq.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) C; nivel exigido ALTO (máx(C=ALTO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (1 esenciales).",
+   "org": "Otros dispositivos conectados (impresoras, IoT, cámaras, sondas): inventario, autorización, bastionado, segmentación, productos certificados (R1) cuando existan en el CPSTIC; borrado de datos residuales en impresoras.",
+   "tec": "Segmento de red dedicado con NAC (802.1X / MAB); impresoras con cifrado de disco y borrado automático; firmware actualizado.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "INV-01 (categoría 'otros dispositivos'); política NAC; informe de cumplimiento",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "Dimensión C = ALTO → R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.si.5": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) C; nivel exigido ALTO (máx(C=ALTO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (1 esenciales).",
+   "org": "Borrado y destrucción: procedimiento por tipo de soporte (borrado seguro, desmagnetización, destrucción física) con certificado; productos certificados (R1) para borrado; registro de destrucciones; destrucción de soportes de nivel ALTO siempre física.",
+   "tec": "Software de borrado cualificado; desmagnetizador; trituradora de discos y cintas (DIN 66399 H-5); certificados de la empresa destructora.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-SOP-03; REG-DEST-2026; certificados de destrucción",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "Dimensión C = ALTO → R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "op.cont.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (0 esenciales).",
+   "org": "Análisis de impacto en el negocio BIA-2026 (ISO 22301): procesos y servicios, dependencias, RTO/RPO por servicio (S-01 RTO 4 h/RPO 15 min; S-02/S-03 RTO 24 h/RPO 1 h), recursos mínimos; aprobado por las consejerías.",
+   "tec": "Plantilla BIA en RiskHub; mapa de dependencias desde la CMDB.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "BIA-2026; ACTA-CSI-2026-02",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "Dimensión D = ALTO → aplica.",
+   "observaciones": null
+  },
+  "op.pl.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 7 requisitos de verificación (1 esenciales).",
+   "org": "Estudio de capacidad previo a la puesta en producción (PRO-CAP-01): procesamiento, almacenamiento, comunicaciones, personal e instalaciones; revisión continua trimestral con umbrales y mejora continua (R1).",
+   "tec": "Monitorización de capacidad (Zabbix/Grafana) con alertas al 70/85 %; informes trimestrales de tendencia; autoescalado en el tenant cloud.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "INF-CAP-2026-Q1..Q3; PRO-CAP-01",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "Dimensión D = ALTO → R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.if.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (0 esenciales).",
+   "org": "Garantía de suministro eléctrico y suministro de emergencia (R1): contrato con dos acometidas, mantenimiento preventivo de SAI y grupo, pruebas mensuales de grupo electrógeno.",
+   "tec": "Doble acometida, SAI redundantes (autonomía 30 min), grupo electrógeno con 48 h de combustible y contrato de reposición; apagado ordenado automatizado.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "REG-MANT-ELEC; pruebas mensuales de grupo",
+   "responsable": "Facilities / Resp. del Sistema",
+   "refuerzos_elegidos": "Dimensión D = ALTO → R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.s.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 5 requisitos de verificación (0 esenciales).",
+   "org": "Protección frente a denegación de servicio: planificación de capacidad, tecnologías anti-DoS en el perímetro y en el proveedor de comunicaciones, detección y reacción (R1) con procedimiento específico y contacto con el operador y el CCN-CERT.",
+   "tec": "Servicio anti-DDoS del operador + scrubbing center; rate limiting y WAF; anycast DNS; alertas de anomalía de tráfico en el NDR; runbook de mitigación.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Contrato anti-DDoS; PRO-INC-05 (DoS); prueba de mitigación 03/2026",
+   "responsable": "SOC (SecOps Iberia) / Resp. Seguridad",
+   "refuerzos_elegidos": "Dimensión D = ALTO → R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.info.6": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: '+ R1 + R2'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 11 requisitos de verificación (2 esenciales).",
+   "org": "Política de copias de seguridad: cobertura de información, configuraciones, claves y software; frecuencia según RPO; retención; pruebas de recuperación (R1) mensuales; protección de las copias (R2) con el mismo nivel que los originales (cifrado, control de acceso, copia inmutable off-site).",
+   "tec": "Backup 3-2-1-1-0: replicación entre CPD, copia inmutable en cloud ENS ALTA, cintas cifradas off-site; restauraciones automatizadas de prueba; monitorización de jobs.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "POL-BCK-01; REG-REST-2026 (pruebas de restauración); informes de backup",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "Dimensión D = ALTO → R1+R2 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "op.exp.8": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) T; nivel exigido MEDIO (máx(T=MEDIO) = MEDIO). Exigencia: '+ R1 + R2 + R3 + R4'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 20 requisitos de verificación (2 esenciales).",
+   "org": "Política de registro de actividad: quién, cuándo, qué, resultado; revisión de registros (R1) diaria por el SOC; sincronización de reloj (R2); retención (R3) 2 años (online 12 meses + archivo); control de acceso a los logs (R4) sólo lectura para auditoría.",
+   "tec": "SIEM centralizado con recolección desde todas las fuentes; NTP interno sincronizado con ROA/stratum-1; almacenamiento WORM; cifrado e integridad (hash encadenado); correlación automática (R5) implantada aunque no exigida.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "POL-LOG-01; arquitectura SIEM; informe de retención; REG-LOG-REV",
+   "responsable": "SOC (SecOps Iberia) / Resp. Seguridad",
+   "refuerzos_elegidos": "Dimensión T = MEDIO → exigidos R1-R4; R5 (revisión automática y correlación) no exigido pero implantado voluntariamente (exceso de cumplimiento).",
+   "observaciones": null
+  },
+  "mp.info.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) IA; nivel exigido ALTO (máx(I=ALTO, A=ALTO) = ALTO). Exigencia: '+ R1 + R2 + R3 + R4'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (2 esenciales).",
+   "org": "Política de firma electrónica: uso de certificados cualificados (R1) para actos administrativos con efectos jurídicos y para la firma del personal de TechServ; algoritmos y parámetros autorizados (R2); verificación y validación de firmas (R3) mediante plataforma de validación (@firma / TSA); firma electrónica avanzada basada en certificados cualificados (R4) para los empleados públicos que firman en las aplicaciones.",
+   "tec": "Integración con @firma / AutoFirma / Cl@ve Firma; PKI interna con HSM para sello de órgano; verificación de firmas longevas (XAdES/PAdES-LT).",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "POL-FIRMA-01; DIS-FIRMA-01; informes de validación",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "Dimensiones I/A = ALTO → R1+R2+R3+R4 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "op.acc.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) AT; nivel exigido ALTO (máx(A=ALTO, T=MEDIO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 8 requisitos de verificación (3 esenciales).",
+   "org": "Identificador único por persona/proceso (PRO-IAM-01); prohibición de cuentas compartidas; cuentas de servicio con propietario; bajas en ≤24 h; conservación de cuentas deshabilitadas para trazabilidad; identificación avanzada (R1) mediante vinculación a la identidad verificada de RRHH y a la PKI corporativa.",
+   "tec": "Directorio corporativo (AD) integrado con RRHH (ciclo de vida automatizado); IGA (SailPoint) para gobierno de identidades; identidad de dispositivos mediante certificados.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-IAM-01; REG-IAM (altas/bajas); informe trimestral de revisión de cuentas",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "Dimensiones T (MEDIO) y A (ALTO) → nivel ALTO → R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.info.4": {
+   "aplica": "NO",
+   "justificacion": "NO APLICA: la medida afecta a la(s) dimensión(es) T, cuyo nivel es MEDIO, y el Anexo II sólo la exige en nivel ALTO. Exclusión formal registrada; se revisará si cambia el nivel de la dimensión.",
+   "org": "Sellos de tiempo cualificados: NO EXIGIDO (la medida afecta sólo a la dimensión T, cuyo nivel es MEDIO, y la medida sólo aplica en nivel ALTO). No obstante, las firmas de actos administrativos incorporan sello de tiempo de TSA cualificada por exigencia de la Ley 39/2015 y eIDAS (control voluntario, fuera de la SoA ENS).",
+   "tec": "TSA cualificada integrada en @firma (uso voluntario).",
+   "mc_ref": "—",
+   "estado": "No aplica",
+   "pct": null,
+   "evidencias": "N/A para ENS; DIS-FIRMA-01",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "Exclusión justificada por nivel de dimensión (T = MEDIO). Si T pasara a ALTO, la medida pasaría a exigible.",
+   "observaciones": null
+  },
+  "op.exp.10": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (1 esenciales).",
+   "org": "Política de gestión de claves PRO-CRYPT-01: generación, custodia, distribución, uso, rotación y destrucción; roles y doble control para claves raíz; algoritmos autorizados (R1) según CCN-STIC 807.",
+   "tec": "HSM cualificado (FIPS 140-3 L3 / CPSTIC) para la PKI interna y claves de cifrado; KMS del proveedor cloud ENS ALTA; rotación automática; inventario de certificados.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-CRYPT-01; inventario de claves y certificados; ceremonia de claves 2025",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "op.ext.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (0 esenciales).",
+   "org": "Interconexiones con las consejerías, Red SARA, Cl@ve, AEAT y proveedores documentadas y autorizadas (org.4); acuerdo de interconexión por cada una (CCN-STIC 811); coordinación de actividades (R1) mediante comité técnico con las consejerías y procedimientos conjuntos de cambio e incidente.",
+   "tec": "Pasarelas dedicadas por interconexión; cortafuegos + IPS; listas blancas; VPN site-to-site; monitorización de flujos.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "ACU-INT-01..06 (acuerdos de interconexión); ARQ-02; actas comité técnico",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.per.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (2 esenciales).",
+   "org": "Deberes y obligaciones informados y aceptados por escrito: confidencialidad (vigente tras la baja), uso aceptable, protección de datos, régimen disciplinario; confirmación expresa (R1) firmada al incorporarse y renovada anualmente; personal externo con las mismas obligaciones vía contrato.",
+   "tec": "Firma electrónica de compromisos en el portal del empleado; recordatorio anual automatizado.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Compromisos firmados (100 % plantilla, REG-ACEPT-NOR); cláusulas en contratos de proveedores",
+   "responsable": "Dirección de Personas (RRHH)",
+   "refuerzos_elegidos": "R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.eq.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 1 requisitos de verificación (1 esenciales).",
+   "org": "Norma de puesto despejado NOR-02: sólo el material necesario para la actividad en curso; almacenamiento del material (R1) en armarios/cajones con llave al finalizar la jornada; inspecciones aleatorias.",
+   "tec": "Armarios con cerradura en todos los puestos; impresión segura con liberación por tarjeta.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "NOR-02; REG-INSP-PUESTO (inspecciones trimestrales)",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.sw.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 5 requisitos de verificación (3 esenciales).",
+   "org": "Aceptación y puesta en servicio (PRO-DEV-02): criterios de aceptación de seguridad, pruebas (R1) funcionales y de seguridad en preproducción con datos no reales, análisis de vulnerabilidades y pentest antes del paso a producción de cambios mayores; aprobación formal.",
+   "tec": "Entornos separados; DAST y pentest en pre; gate de calidad en el pipeline (bloqueo si vulnerabilidades altas).",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Actas de aceptación 2026; informes de pruebas",
+   "responsable": "Jefe de Desarrollo",
+   "refuerzos_elegidos": "R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "mp.s.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 9 requisitos de verificación (3 esenciales).",
+   "org": "Protección de la navegación: uso de proxy obligatorio, filtrado por categorías y reputación, bloqueo de descargas peligrosas, monitorización (R1) del tráfico de navegación con alertas al SOC.",
+   "tec": "Proxy web seguro con inspección TLS (excepciones documentadas), aislamiento de navegación para administradores, DNS filtering, integración con SIEM.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Política de proxy; informes de navegación; excepciones aprobadas",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "R1 exigido → cumplido.",
+   "observaciones": null
+  },
+  "op.acc.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) ICAT; nivel exigido ALTO (máx(I=ALTO, C=ALTO, A=ALTO, T=MEDIO) = ALTO). Exigencia: '+ R1'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 5 requisitos de verificación (1 esenciales).",
+   "org": "Matriz de roles y permisos por aplicación (RBAC) aprobada por el Responsable de la Información de cada consejería; mínimo privilegio y necesidad de conocer; separación de privilegios de acceso: los administradores no operan con cuentas privilegiadas en el día a día (R1).",
+   "tec": "Cuentas privilegiadas gestionadas en PAM (CyberArk) con check-out, grabación de sesión y aprobación; restricción de utilidades privilegiadas; acceso al código fuente limitado por Git con revisión.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "MAT-RBAC-S01..S04; PRO-IAM-02; informes PAM",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "R1 Privilegios de acceso exigido en ALTO → cumplido.",
+   "observaciones": null
+  },
+  "mp.si.2": {
+   "aplica": "SÍ (compensada)",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) IC; nivel exigido ALTO (máx(I=ALTO, C=ALTO) = ALTO). Exigencia: '+ R1 + R2'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (0 esenciales).",
+   "org": "Cifrado obligatorio de soportes extraíbles y copias de seguridad con algoritmos autorizados; productos certificados (R1) salvo excepción compensada; copias de seguridad cifradas y con la misma protección que la información original (R2).",
+   "tec": "USB sólo con cifrado hardware (dispositivos CPSTIC); cintas LTO cifradas (AES-256, claves en HSM); backups en cloud cifrados con BYOK; bloqueo de soportes no autorizados en endpoints (DLP).",
+   "mc_ref": "MC-04",
+   "estado": "Parcial (compensada)",
+   "pct": 0.9,
+   "evidencias": "PRO-CRYPT-01; MC-04; inventario de soportes cifrados",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "R1 productos certificados para cintas → medida compensatoria MC-04; R2 cumplido.",
+   "observaciones": null
+  },
+  "op.exp.4": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (2 esenciales).",
+   "org": "Política de parches PRO-PATCH-01: seguimiento de avisos (CCN-CERT, fabricantes, CVE), SLAs (críticas ≤72 h, altas ≤15 d), pruebas en preproducción (R1), análisis de riesgo antes de aplicar (R2), ventanas de mantenimiento; planes de contingencia ante fallo de actualización.",
+   "tec": "WSUS/SCCM, gestor de parches Linux, escáner de vulnerabilidades (Tenable) semanal, entorno de preproducción idéntico; snapshots antes de actualizar.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-PATCH-01; informe mensual de vulnerabilidades; tickets de cambio",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "R1+R2 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "op.nub.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (2 esenciales).",
+   "org": "Uso de servicios cloud sólo con certificación ENS ALTA (R1) y ubicación de datos en la UE; análisis de riesgos específico; guías de configuración segura específicas del proveedor (R2, CCN-STIC 884-like / benchmarks del proveedor); contrato con cláusulas ENS/RGPD; estrategia de salida.",
+   "tec": "Landing zone bastionada; CSPM para control continuo de configuración; cifrado con claves propias (BYOK); logs del proveedor integrados en el SIEM.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Certificado ENS ALTA de NubeAdmin; GUI-CLOUD-01; informes CSPM",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "R1+R2 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "op.mon.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (1 esenciales).",
+   "org": "Detección de intrusión con reglas actualizadas (R1) y procedimientos de respuesta (R2) integrados en PRO-INC-01; revisión mensual de reglas y falsos positivos.",
+   "tec": "IDS/IPS de red (producto CPSTIC), NDR, EDR con detección basada en reglas y comportamiento; honeypots internos; alertas al SOC con playbooks.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Arquitectura de detección DET-01; informes mensuales del SOC",
+   "responsable": "SOC (SecOps Iberia) / Resp. Seguridad",
+   "refuerzos_elegidos": "R1+R2 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "op.mon.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 2 requisitos de verificación (0 esenciales).",
+   "org": "Sistema de métricas (CCN-STIC 815): grado de implantación de medidas, efectividad de la gestión de incidentes (R1: tiempo de detección, contención y resolución, reincidencia), eficiencia del SGSI (R2: recursos, coste por incidente, cumplimiento de PTR); reporte trimestral al CSI e INES anual.",
+   "tec": "Cuadro de mando en RiskHub/Power BI con datos del SIEM e ITSM.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "MET-2026-Q1..Q3; informe INES 2025",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "R1+R2 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "mp.eq.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 7 requisitos de verificación (4 esenciales).",
+   "org": "Norma de dispositivos móviles NOR-03: inventario, autorización, protección fuera de las instalaciones, comunicación inmediata de pérdida/robo, limitación de la información almacenada; cifrado de disco (R1); entornos protegidos (R2) para acceso remoto a información ALTA.",
+   "tec": "MDM/UEM con borrado remoto; cifrado completo de disco (BitLocker con TPM + PIN / FileVault) con claves en escrow; VPN always-on; acceso a información ALTA sólo mediante escritorio virtual (VDI) sin persistencia local (R2).",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "NOR-03; consola MDM (cobertura 100 %); REG-PERD-DISP",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "R1+R2 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "op.exp.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2 + R3'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 13 requisitos de verificación (5 esenciales).",
+   "org": "Gestión continua de la configuración de seguridad (PRO-CFG-02): mantenimiento regular (R1), responsable designado por plataforma (R2), copias de seguridad de configuraciones (R3); revisión ante cambios, incidentes y vulnerabilidades.",
+   "tec": "Gestión de configuración con Ansible/GitOps (configuración como código, control de versiones); backup diario de configuraciones de red/seguridad (Oxidized); detección de desviaciones.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-CFG-02; repositorio Git de configuración; REG-CFG-BK",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "R1+R2+R3 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "op.exp.7": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2 + R3'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 8 requisitos de verificación (2 esenciales).",
+   "org": "Proceso de gestión de incidentes PRO-INC-01 (CCN-STIC 817): detección, clasificación por taxonomía y peligrosidad, respuesta, notificación a las consejerías, al CCN-CERT (R1, obligatoria vía LUCIA), a la AEPD y afectados si procede; detección y respuesta (R2) por SOC 24x7; reconfiguración dinámica (R3) mediante SOAR/EDR.",
+   "tec": "SIEM + SOAR; integración LUCIA/REYES; playbooks; aislamiento automático de hosts; cuadernos de crisis.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-INC-01; REG-INC-2026; evidencias de notificación LUCIA; ejercicio de mesa 05/2026",
+   "responsable": "SOC (SecOps Iberia) / Resp. Seguridad",
+   "refuerzos_elegidos": "R1+R2+R3 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "mp.com.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) C; nivel exigido ALTO (máx(C=ALTO) = ALTO). Exigencia: '+ R1 + R2 + R3'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (0 esenciales).",
+   "org": "Protección de la confidencialidad de las comunicaciones: cifrado obligatorio fuera de la zona de confianza y en toda red no controlada; algoritmos y parámetros autorizados (R1) CCN-STIC 807; dispositivos hardware (R2) y productos certificados (R3) en las pasarelas de los CPD.",
+   "tec": "TLS 1.2/1.3 con suites 807; IPsec en concentradores cualificados con HSM; VPN de acceso remoto con producto CPSTIC; cifrado WPA3-Enterprise; DNS-over-TLS.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PRO-CRYPT-01; inventario de túneles; informe de cumplimiento TLS (escaneo mensual)",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "R1+R2+R3 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "op.pl.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2 + R3'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 7 requisitos de verificación (3 esenciales).",
+   "org": "Documento de arquitectura de seguridad ARQ-02: instalaciones y puntos de acceso, inventario de sistemas y redes, esquema de líneas de defensa (perímetro, DMZ, segmentación, EDR), sistema de I+A (AD/LDAP + PKI + MFA); sistema de gestión (SGSI ISO 27001 certificado) con revisión y aprobación anual (R1, R2); controles técnicos internos de validación de datos en aplicaciones (R3).",
+   "tec": "Diagramas de red con direccionamiento (custodiados como CONFIDENCIAL); firewalls de nueva generación en doble capa de fabricantes distintos; WAF; validación de entradas/salidas en el framework de desarrollo.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "ARQ-02 v3; certificado ISO 27001:2022 nº ES-27001-4521; PRO-DEV-03 validación de datos",
+   "responsable": "Responsable del Sistema",
+   "refuerzos_elegidos": "R1+R2+R3 exigidos en ALTA → cumplidos.",
+   "observaciones": null
+  },
+  "op.exp.6": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2 + R3 + R4'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 12 requisitos de verificación (4 esenciales).",
+   "org": "Política antimalware; escaneo periódico (R1); revisión preventiva del sistema tras incidentes o cambios relevantes (R2); lista blanca de aplicaciones en servidores y puestos críticos (R3); capacidad de respuesta 24x7 (R4) con el SOC.",
+   "tec": "EDR/XDR (producto CPSTIC) en todos los endpoints y servidores; sandboxing de correo; application control (AppLocker/WDAC) en modo bloqueo; integración con SIEM/SOAR para contención automática.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "POL-MALW-01; consola EDR (cobertura 100 %); informes semanales SOC",
+   "responsable": "SOC (SecOps Iberia) / Resp. Seguridad",
+   "refuerzos_elegidos": "R1+R2+R3+R4 exigidos → cumplidos.",
+   "observaciones": null
+  },
+  "mp.sw.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2 + R3 + R4'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 12 requisitos de verificación (0 esenciales).",
+   "org": "Metodología de desarrollo seguro (R2) documentada (PRO-DEV-01, basada en OWASP SAMM y CCN-STIC): seguridad desde el diseño (R3) con modelado de amenazas, requisitos de seguridad, revisión de código, gestión de vulnerabilidades del código; mínimo privilegio (R1) en la arquitectura de aplicaciones; datos de prueba (R4) sintéticos o enmascarados, nunca datos reales de producción; desarrollo subcontratado sujeto a los mismos requisitos.",
+   "tec": "Pipeline CI/CD con SAST, SCA, DAST y secret scanning; pre-producción separada; enmascaramiento de datos automatizado; SBOM.",
+   "mc_ref": "—",
+   "estado": "Parcial",
+   "pct": 0.85,
+   "evidencias": "PRO-DEV-01; informes SAST/DAST; modelos de amenazas por aplicación; PTR-2026-09",
+   "responsable": "Jefe de Desarrollo",
+   "refuerzos_elegidos": "R1+R2+R3+R4 exigidos. R3: modelado de amenazas completado en S-01 y S-04; pendiente S-02/S-03 (PTR-2026-09, 30/11/2026).",
+   "observaciones": null
+  },
+  "op.pl.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R2'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 14 requisitos de verificación (5 esenciales).",
+   "org": "Metodología MAGERIT v3 con herramienta PILAR (licencia CCN). Análisis formal (R2): valoración cuantitativa/cualitativa de activos, amenazas del catálogo, salvaguardas y riesgo residual; criterios de aceptación aprobados por el CSI; revisión anual y ante cambios significativos.",
+   "tec": "PILAR 7.x; exportación al Plan de Tratamiento (PTR-2026) y seguimiento en RiskHub.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "AR-2026-01 (informe PILAR); PTR-2026; ACTA-CSI-2026-02 (aceptación riesgo residual)",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "R2 análisis formal exigido en ALTA → cumplido (PILAR, modo formal).",
+   "observaciones": null
+  },
+  "mp.s.2": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R2 + R3'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 11 requisitos de verificación (6 esenciales).",
+   "org": "Protección de servicios web: análisis de vulnerabilidades y pentest anual (R1, incluido en R2); auditorías de seguridad avanzada (R2) con pruebas manuales OWASP y revisión de código de cambios mayores; protección de cachés (R3) evitando datos sensibles en cachés y CDN; prevención de manipulación de URL, cookies, inyección, escalada; autenticación de doble factor para accesos a información ALTA.",
+   "tec": "WAF (CPSTIC) en modo bloqueo; cabeceras de seguridad; TLS 1.3; gestión de sesiones segura; cachés con Cache-Control: no-store para contenido autenticado; CDN sin cacheo de respuestas autenticadas; escaneo DAST continuo.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "Informe pentest 2026 (S-01, S-02, S-03); configuración WAF; PRO-WEB-01",
+   "responsable": "Jefe de Desarrollo",
+   "refuerzos_elegidos": "R2+R3 exigidos en ALTO → cumplidos.",
+   "observaciones": null
+  },
+  "mp.com.3": {
+   "aplica": "SÍ (compensada)",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) IA; nivel exigido ALTO (máx(I=ALTO, A=ALTO) = ALTO). Exigencia: '+ R1 + R2 + R3 + R4'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 11 requisitos de verificación (2 esenciales).",
+   "org": "Protección de integridad y autenticidad: autenticación mutua de extremos, prevención de manipulación/inyección/secuestro; VPN (R1); algoritmos autorizados (R2); dispositivos hardware (R3) y productos certificados (R4) en los CPD; excepción compensada en el lado cloud.",
+   "tec": "IPsec/IKEv2 con autenticación por certificado; mTLS entre servicios; firmado de mensajes en interconexiones (WS-Security/JWS); concentradores VPN CPSTIC con HSM.",
+   "mc_ref": "MC-03",
+   "estado": "Parcial (compensada)",
+   "pct": 0.9,
+   "evidencias": "ARQ-02; MC-03; informes de auditoría de configuración 807",
+   "responsable": "Jefe de Operaciones TI",
+   "refuerzos_elegidos": "R3 dispositivos hardware en el extremo cloud → medida compensatoria MC-03.",
+   "observaciones": null
+  },
+  "op.mon.3": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: '+ R1 + R2 + R3 + R4 + R5 + R6'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 10 requisitos de verificación (1 esenciales).",
+   "org": "Vigilancia continua: correlación de eventos (R1), análisis dinámico de comportamiento (R2), suscripción a inteligencia de ciberamenazas avanzadas del CCN-CERT y proveedores (R3), observatorios digitales / vigilancia de marca y fuga de credenciales (R4), minería de datos sobre los registros (R5), inspecciones de seguridad periódicas: pentest anual, revisiones de configuración y ejercicio de red team bienal (R6).",
+   "tec": "SIEM con UEBA; plataforma de threat intelligence (MISP) integrada con REYES; servicio de vigilancia digital; analítica sobre data lake de logs (en despliegue); escáner continuo de superficie de ataque.",
+   "mc_ref": "—",
+   "estado": "Parcial",
+   "pct": 0.8,
+   "evidencias": "Contrato SOC; informes TI; informe pentest 2026; plan de despliegue analítica DL-01",
+   "responsable": "SOC (SecOps Iberia) / Resp. Seguridad",
+   "refuerzos_elegidos": "R5 minería de datos en despliegue (data lake) → PTR-2026-07, fecha objetivo 31/12/2026. R1-R4 y R6 cumplidos.",
+   "observaciones": null
+  },
+  "org.1": {
+   "aplica": "SÍ",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 10 requisitos de verificación (6 esenciales).",
+   "org": "Política de Seguridad de la Información PSI-01 v4 aprobada por el Consejo de Administración (30/01/2026) y adherida por las tres consejerías; define misión, marco legal (ENS, RGPD/LOPDGDD, LGT, Ley 39/2015, contratos), roles (Resp. Información/Servicio/Sistema/Seguridad, DPD), Comité de Seguridad, estructura documental y revisión anual.",
+   "tec": "Publicación en la intranet con control de versiones (DMS); firma electrónica del acta de aprobación.",
+   "mc_ref": "—",
+   "estado": "Implantada",
+   "pct": 1,
+   "evidencias": "PSI-01; ACTA-CA-2026-01; REG-COM-04 (difusión); nombramientos NOM-01..05",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "Revisión anual (próxima 01/2027).",
+   "observaciones": null
+  },
+  "op.pl.5": {
+   "aplica": "SÍ (compensada)",
+   "justificacion": "APLICA: medida exigida para la categoría ALTA del sistema (afecta a todas las dimensiones). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 4 requisitos de verificación (2 esenciales).",
+   "org": "Política de uso de productos cualificados (CPSTIC) en op.pl.3; inventario de componentes de seguridad con su estado de cualificación; plan de sustitución.",
+   "tec": "Cortafuegos, VPN, EDR, HSM y cifradores del CPD principal son productos cualificados CPSTIC; excepción documentada para el clúster de cortafuegos del CPD de respaldo.",
+   "mc_ref": "MC-01",
+   "estado": "Parcial (compensada)",
+   "pct": 0.85,
+   "evidencias": "INV-SEC-01 (componentes de seguridad y cualificación); MC-01",
+   "responsable": "Responsable de Seguridad",
+   "refuerzos_elegidos": "Ver medida compensatoria MC-01 (sustitución 2027, PTR-2026-11).",
+   "observaciones": null
+  },
+  "mp.if.6": {
+   "aplica": "SÍ (compensada)",
+   "justificacion": "APLICA: medida vinculada a la(s) dimensión(es) D; nivel exigido ALTO (máx(D=ALTO) = ALTO). Exigencia: 'aplica'. Riesgos tratados según AR-2026-01. CCN-STIC 808: 3 requisitos de verificación (0 esenciales).",
+   "org": "Evaluación del riesgo de inundación; medidas compensatorias documentadas para el CPD principal (planta baja); CPD de respaldo en planta 2 sin riesgo.",
+   "tec": "Suelo técnico elevado, sensores de agua, válvulas de corte, ausencia de conducciones sobre la sala.",
+   "mc_ref": "MC-02",
+   "estado": "Parcial (compensada)",
+   "pct": 0.9,
+   "evidencias": "MC-02; informe de riesgo hidráulico; REG-MANT-SENS",
+   "responsable": "Facilities / Resp. del Sistema",
+   "refuerzos_elegidos": "Ver medida compensatoria MC-02.",
+   "observaciones": null
+  }
+ },
+ "refuerzos": [
+  {
+   "codigo": "op.pl.1",
+   "medida": "Análisis de riesgos",
+   "refuerzo": "R2",
+   "nombre": "Análisis de riesgos formal",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Análisis de riesgos formal.\nSe deberá realizar un análisis formal, usando un lenguaje específico, con un fundamento matemático reconocido internacionalmente, que:\n– [op.pl.1.r2.1] Valore cualitativamente los activos más valiosos del sistema.\n– [op.pl.1.r2.2] Cuantifique las amenazas posibles.\n– [op.pl.1.r2.3] Valore y priorice las salvaguardas adecuadas.\n– [op.pl.1.r2.4] Valore y asuma formalmente el riesgo residual.",
+   "implementacion": "R2 análisis formal exigido en ALTA → cumplido (PILAR, modo formal)."
+  },
+  {
+   "codigo": "op.pl.1",
+   "medida": "Análisis de riesgos",
+   "refuerzo": "R1",
+   "nombre": "Análisis de riesgos semiformal",
+   "niveles": "MEDIO",
+   "nivel_exigido": "ALTO",
+   "exigible": "No",
+   "texto": "R1-Análisis de riesgos semiformal.\nSe deberá realizar un análisis de riesgos semiformal, usando un lenguaje específico, con un catálogo básico de amenazas y una semántica definida. Es decir, una presentación con tablas que:\n– [op.pl.1.r1.1] Valore cualitativamente los activos más valiosos del sistema.\n– [op.pl.1.r1.2] Cuantifique las amenazas más probables.\n– [op.pl.1.r1.3] Valore las salvaguardas que protegen de dichas amenazas.\n– [op.pl.1.r1.4] Valore el riesgo residual.",
+   "implementacion": "—"
+  },
+  {
+   "codigo": "op.pl.2",
+   "medida": "Arquitectura de Seguridad",
+   "refuerzo": "R1",
+   "nombre": "Sistema de gestión",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Sistema de gestión.\n[op.pl.2.r1.1] Sistema de gestión, relativo a la planificación, organización y control de los recursos relativos a la seguridad de la información.",
+   "implementacion": "R1+R2+R3 exigidos en ALTA → cumplidos."
+  },
+  {
+   "codigo": "op.pl.2",
+   "medida": "Arquitectura de Seguridad",
+   "refuerzo": "R2",
+   "nombre": "Sistema de gestión de la seguridad con mejora continua",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Sistema de gestión de la seguridad con mejora continua.\n[op.pl.2.r2.1] Sistema de gestión de la seguridad de la información, con actualización y aprobación periódica.",
+   "implementacion": "R1+R2+R3 exigidos en ALTA → cumplidos."
+  },
+  {
+   "codigo": "op.pl.2",
+   "medida": "Arquitectura de Seguridad",
+   "refuerzo": "R3",
+   "nombre": "Validación de datos",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Validación de datos.\n[op.pl.2.r3.1] Controles técnicos internos, incluyendo la validación de datos de entrada, salida y datos intermedios.",
+   "implementacion": "R1+R2+R3 exigidos en ALTA → cumplidos."
+  },
+  {
+   "codigo": "op.pl.4",
+   "medida": "Dimensionamiento/gestión de la capacidad",
+   "refuerzo": "R1",
+   "nombre": "Mejora continua de la gestión de la capacidad",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1 –Mejora continua de la gestión de la capacidad.\n– [op.pl.4.r1.1] Se realizará una previsión de la capacidad y se mantendrá actualizada durante todo el ciclo de vida del sistema.\n– [op.pl.4.r1.2] Se emplearán herramientas y recursos para la monitorización de la capacidad.",
+   "implementacion": "Dimensión D = ALTO → R1 exigido → cumplido."
+  },
+  {
+   "codigo": "op.acc.1",
+   "medida": "Identificación",
+   "refuerzo": "R1",
+   "nombre": "Identificación avanzada",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Identificación avanzada.\n– [op.acc.1.r1.1] La identificación del usuario permitirá al Responsable del Sistema, al Responsable de la Seguridad o a sus respectivos administradores delegados, singularizar a la persona asociada al mismo, así como sus responsabilidades en el sistema.\n– [op.acc.1.r1.2] Los datos de identificación serán utilizados por el sistema para determinar los privilegios del usuario conforme a los requisitos de control de acceso establecidos en la documentación de seguridad.\n– [op.acc.1.r1.3] Se asegurará la existencia de una lista actualizada de usuarios autorizados y mantenida por el administrador del sistema/de la seguridad del sistema.",
+   "implementacion": "Dimensiones T (MEDIO) y A (ALTO) → nivel ALTO → R1 exigido → cumplido."
+  },
+  {
+   "codigo": "op.acc.2",
+   "medida": "Requisitos de acceso",
+   "refuerzo": "R1",
+   "nombre": "Privilegios de acceso",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Privilegios de acceso.\n– [op.acc.2.r1.1] Todos los usuarios autorizados deben tener un conjunto de atributos de seguridad (privilegios) que puedan ser mantenidos individualmente.\n– [op.acc.2.r1.2] Los privilegios de acceso se implementarán para restringir el tipo de acceso que un usuario puede tener (lectura, escritura, modificación, borrado, etc.).",
+   "implementacion": "R1 Privilegios de acceso exigido en ALTO → cumplido."
+  },
+  {
+   "codigo": "op.acc.3",
+   "medida": "Segregación de funciones y tareas",
+   "refuerzo": "R1",
+   "nombre": "Segregación rigurosa",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Segregación rigurosa.\n– [op.acc.3.r1.1] Siempre que sea posible, la misma persona no aunará funciones de configuración y mantenimiento del sistema.\n– [op.acc.3.r1.2] La misma persona no puede aunar funciones de auditoría o supervisión con cualquier otra función.",
+   "implementacion": null
+  },
+  {
+   "codigo": "op.acc.5",
+   "medida": "Mecanismo de autenticación (usuarios externos)",
+   "refuerzo": "R2",
+   "nombre": "Contraseña + OTP",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R2-Contraseña + OTP.\n– [op.acc.5.r2.1] Se requerirá una contraseña de un solo uso (OTP, en inglés) como complemento a la contraseña de usuario.",
+   "implementacion": "Alternativa elegida: R2 (Cl@ve PIN/permanente) y R3/R4 (certificado/DNIe); + R5 registro. Cumple '[R2 o R3 o R4] + R5'."
+  },
+  {
+   "codigo": "op.acc.5",
+   "medida": "Mecanismo de autenticación (usuarios externos)",
+   "refuerzo": "R3",
+   "nombre": "Certificados",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R3-Certificados.\n– [op.acc.5.r3.1] Se emplearán certificados cualificados como mecanismo de autenticación.\n– [op.acc.5.r3.2] El uso del certificado estará protegido por un segundo factor, del tipo PIN o biométrico.\n– [op.acc.5.r3.3] Las credenciales utilizadas deberán haber sido obtenidas tras un registro previo presencial, o bien telemático, usando un certificado electrónico cualificado.",
+   "implementacion": "Alternativa elegida: R2 (Cl@ve PIN/permanente) y R3/R4 (certificado/DNIe); + R5 registro. Cumple '[R2 o R3 o R4] + R5'."
+  },
+  {
+   "codigo": "op.acc.5",
+   "medida": "Mecanismo de autenticación (usuarios externos)",
+   "refuerzo": "R4",
+   "nombre": "Certificados en dispositivo físico",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R4-Certificados en dispositivo físico.\n– [op.acc.5.r4.1] Se emplearán certificados cualificados como mecanismo de autenticación, en soporte físico (tarjeta o similar) usando algoritmos, parámetros y dispositivos autorizados por el CCN.\n– [op.acc.5.r4.2] El uso del certificado estará protegido por un segundo factor, del tipo PIN o biométrico.\n– [op.acc.5.r4.3] Las credenciales utilizadas deberán haber sido obtenidas tras un registro previo presencial, o bien telemático, usando certificado electrónico cualificado.",
+   "implementacion": "Alternativa elegida: R2 (Cl@ve PIN/permanente) y R3/R4 (certificado/DNIe); + R5 registro. Cumple '[R2 o R3 o R4] + R5'."
+  },
+  {
+   "codigo": "op.acc.5",
+   "medida": "Mecanismo de autenticación (usuarios externos)",
+   "refuerzo": "R5",
+   "nombre": "Registro",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R5-Registro.\n– [op.acc.5.r5.1] Se registrarán los accesos con éxito y los fallidos.\n– [op.acc.5.r5.2] Se informará al usuario del último acceso efectuado con su identidad.",
+   "implementacion": "Alternativa elegida: R2 (Cl@ve PIN/permanente) y R3/R4 (certificado/DNIe); + R5 registro. Cumple '[R2 o R3 o R4] + R5'."
+  },
+  {
+   "codigo": "op.acc.5",
+   "medida": "Mecanismo de autenticación (usuarios externos)",
+   "refuerzo": "R1",
+   "nombre": "Contraseñas",
+   "niveles": "BAJO",
+   "nivel_exigido": "ALTO",
+   "exigible": "No",
+   "texto": "R1-Contraseñas.\n– [op.acc.5.r1.1] Se empleará una contraseña como mecanismo de autenticación.\n– [op.acc.5.r1.2] Se impondrán normas de complejidad mínima y robustez frente a ataques de adivinación (ver guías CCN-STIC).",
+   "implementacion": "—"
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R1",
+   "nombre": "Contraseñas",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R1-Contraseñas.\n– [op.acc.6.r1.1] Se empleará una contraseña como mecanismo de autenticación cuando el acceso se realiza desde zonas controladas y sin atravesar zonas no controladas (véase refuerzo R8).\n– [op.acc.6.r1.2] Se impondrán normas de complejidad mínima y robustez frente a ataques de adivinación (ver guías CCN-STIC).",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R2",
+   "nombre": "Contraseña + otro factor de autenticación",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R2-Contraseña + otro factor de autenticación.\n– [op.acc.6.r2.1] Se requerirá un segundo factor tal como «algo que se tiene», es decir, un dispositivo, una contraseña de un solo uso (OTP, en inglés) como complemento a la contraseña de usuario, o «algo que se es».",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R3",
+   "nombre": "Certificados",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R3-Certificados.\n– [op.acc.6.r3.1] Se emplearán certificados cualificados como mecanismo de autenticación.\n– [op.acc.6.r3.2] El uso del certificado estará protegido por un segundo factor, del tipo PIN o biométrico.",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R4",
+   "nombre": "Certificados en dispositivo físico",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R4-Certificados en dispositivo físico.\n– [op.acc.6.r4.1] Se emplearán certificados cualificados como mecanismo de autenticación, en soporte físico (tarjeta o similar) usando algoritmos, parámetros y dispositivos autorizados por el CCN.\n– [op.acc.6.r4.2] El uso del certificado estará protegido por un segundo factor, del tipo PIN o biométrico.",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R5",
+   "nombre": "Registro",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R5-Registro.\n– [op.acc.6.r5.1] Se registrarán los accesos con éxito y los fallidos.\n– [op.acc.6.r5.2] Se informará al usuario del último acceso efectuado con su identidad.",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R6",
+   "nombre": "Limitación de la ventana de acceso",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R6-Limitación de la ventana de acceso.\n– [op.acc.6.r6.1] Se definirán aquellos puntos en los que el sistema requerirá una renovación de la autenticación del usuario, mediante identificación singular, no bastando con la sesión establecida.",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R7",
+   "nombre": "Suspensión por no utilización",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R7-Suspensión por no utilización.\n– [op.acc.6.r7.1] Las credenciales se suspenderán tras un periodo definido de no utilización.",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R8",
+   "nombre": "Doble factor para acceso desde o a través de zonas no controladas",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R8-Doble factor para acceso desde o a través de zonas no controladas.\nSe denomina «zona controlada» aquella que no es de acceso público, requiriéndose que el usuario, antes de tener acceso al equipo, se haya autenticado previamente de alguna forma (control de acceso a las instalaciones), diferente del mecanismo de autenticación lógica frente al sistema. Un ejemplo de zona no controlada es Internet.\n– [op.acc.6.r8.1] Para el acceso desde o a través de zonas no controladas se requerirá un doble factor de autenticación: R2, R3 o R4.",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.acc.6",
+   "medida": "Mecanismo de autenticación (usuarios de la organización)",
+   "refuerzo": "R9",
+   "nombre": "Acceso remoto (todos los niveles)",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R9-Acceso remoto (todos los niveles).\n– [op.acc.6.r9.1] Será de aplicación la ITS de Interconexión de sistemas de información.\n– [op.acc.6.r9.2] El acceso remoto deberá considerar los siguientes aspectos:\na) Ser autorizado por la autoridad correspondiente.\nb) El tráfico deberá ser cifrado.\nc) Si la utilización no se produce de manera constante, el acceso remoto deberá encontrarse inhabilitado y habilitarse únicamente cuando sea necesario.\nd) Deberán recogerse registros de auditoría de este tipo de conexiones.",
+   "implementacion": "Alternativa elegida: R2 para todo el personal y R4 para administradores. Cumple '[R1 o R2 o R3 o R4] + R5 + R6 + R7 + R8 + R9'."
+  },
+  {
+   "codigo": "op.exp.3",
+   "medida": "Gestión de la configuración de seguridad",
+   "refuerzo": "R1",
+   "nombre": "Mantenimiento regular de la configuración",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Mantenimiento regular de la configuración.\n– [op.exp.3.r1.1] Existirán configuraciones hardware/software, autorizadas y mantenidas regularmente, para los servidores, elementos de red y estaciones de trabajo.\n– [op.exp.3.r1.2] Se verificará periódicamente la configuración hardware/software del sistema para asegurar que no se han introducido ni instalado elementos no autorizados.\n– [op.exp.3.r1.3] Se mantendrá una lista de servicios autorizados para servidores y estaciones de trabajo.",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.3",
+   "medida": "Gestión de la configuración de seguridad",
+   "refuerzo": "R2",
+   "nombre": "Responsabilidad de la configuración",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Responsabilidad de la configuración.\n– [op.exp.3.r2.1] La configuración de seguridad del sistema operativo y aplicaciones, tanto de estaciones y servidores como de la electrónica de red del sistema, será responsabilidad de un número muy limitado de administradores del sistema.",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.3",
+   "medida": "Gestión de la configuración de seguridad",
+   "refuerzo": "R3",
+   "nombre": "Copias de seguridad",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Copias de seguridad.\n– [op.exp.3.r3.1] Se realizarán copias de seguridad de la configuración del sistema de forma que sea posible reconstruirlo en parte o en su totalidad tras un incidente.",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.4",
+   "medida": "Mantenimiento y actualizaciones de seguridad",
+   "refuerzo": "R1",
+   "nombre": "Pruebas en preproducción",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Pruebas en preproducción.\n[op.exp.4.r1.1] Antes de poner en producción una nueva versión o una versión parcheada, se comprobará en un entorno de prueba controlado y consistente en configuración al entorno de producción, que la nueva instalación funciona correctamente y no disminuye la eficacia de las funciones necesarias para el trabajo diario.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.4",
+   "medida": "Mantenimiento y actualizaciones de seguridad",
+   "refuerzo": "R2",
+   "nombre": "Prevención de fallos",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Prevención de fallos.\n[op.exp.4.r2.1] Antes de la aplicación de las configuraciones, parches y actualizaciones de seguridad se preverá un mecanismo para revertirlos en caso de aparición de efectos adversos.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.5",
+   "medida": "Gestión de cambios",
+   "refuerzo": "R1",
+   "nombre": "Prevención de fallos",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Prevención de fallos.\n– [op.exp.5.r1.1] Antes de la aplicación de los cambios, se deberá tener en cuenta la posibilidad de revertirlos en caso de la aparición de efectos adversos.\n– [op.exp.5.r1.2] Todos los fallos en el software y hardware deberán ser comunicados al responsable designado en la organización de la seguridad.\n– [op.exp.5.r1.3] Todos los cambios en el sistema deberán documentarse, incluyendo una valoración del impacto que dicho cambio supone en la seguridad del sistema.",
+   "implementacion": null
+  },
+  {
+   "codigo": "op.exp.6",
+   "medida": "Protección frente a código dañino",
+   "refuerzo": "R1",
+   "nombre": "Escaneo periódico",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Escaneo periódico.\n– [op.exp.6.r1.1] Todo el sistema se escaneará regularmente para detectar código dañino.",
+   "implementacion": "R1+R2+R3+R4 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.6",
+   "medida": "Protección frente a código dañino",
+   "refuerzo": "R2",
+   "nombre": "Revisión preventiva del sistema",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Revisión preventiva del sistema.\n– [op.exp.6.r2.1] Las funciones críticas se analizarán al arrancar el sistema en prevención de modificaciones no autorizadas.",
+   "implementacion": "R1+R2+R3+R4 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.6",
+   "medida": "Protección frente a código dañino",
+   "refuerzo": "R3",
+   "nombre": "Lista blanca",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3 - Lista blanca.\n– [op.exp.6.r3.1] Solamente se podrán ejecutar aquellas aplicaciones previamente autorizadas. Se implementará una lista blanca para impedir la ejecución de aplicaciones no autorizadas.",
+   "implementacion": "R1+R2+R3+R4 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.6",
+   "medida": "Protección frente a código dañino",
+   "refuerzo": "R4",
+   "nombre": "Capacidad de respuesta en caso de incidente",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R4-Capacidad de respuesta en caso de incidente.\n– [op.exp.6.r4.1] Se emplearán herramientas de seguridad orientadas a detectar, investigar y resolver actividades sospechosas en puestos de usuario y servidores (EDR - Endpoint Detection and Response).",
+   "implementacion": "R1+R2+R3+R4 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.7",
+   "medida": "Gestión de incidentes",
+   "refuerzo": "R1",
+   "nombre": "Notificación",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Notificación.\n– [op.exp.7.r1.1] Se dispondrá de soluciones de ventanilla única para la notificación de incidentes al CCN-CERT, que permita la distribución de notificaciones a las diferentes entidades de manera federada, utilizando para ello dependencias administrativas jerárquicas.",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.7",
+   "medida": "Gestión de incidentes",
+   "refuerzo": "R2",
+   "nombre": "Detección y Respuesta",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2 –Detección y Respuesta.\nEl proceso integral para hacer frente a los incidentes que puedan tener un impacto en la seguridad del sistema ([op.exp.7.1]) deberá incluir:\n– [op.exp.7.r2.1] Implantación de medidas urgentes, incluyendo la detención de servicios, el aislamiento del sistema afectado, la recogida de evidencias y protección de los registros, según convenga al caso.\n– [op.exp.7.r2.2] Asignación de recursos para investigar las causas, analizar las consecuencias y resolver el incidente.\n– [op.exp.7.r2.3] Informar del incidente a los responsables de la información y servicios afectados y de las actuaciones llevadas a cabo para su resolución.\n– [op.exp.7.r2.4] Medidas para:\na) Prevenir que se repita el incidente.\nb) Incluir en los procedimientos de usuario la identificación y forma de tratar el incidente.\nc) Actualizar, extender, mejorar u optimizar los procedimientos de resolución de incidentes.",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.7",
+   "medida": "Gestión de incidentes",
+   "refuerzo": "R3",
+   "nombre": "Reconfiguración dinámica",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Reconfiguración dinámica.\nLa reconfiguración dinámica del sistema persigue detener, desviar o limitar ataques, acotando los daños.\n– [op.exp.7.r3.1] La reconfiguración dinámica incluye, por ejemplo, cambios en las reglas de los enrutadores (routers), listas de control de acceso, parámetros del sistema de detección / prevención de intrusiones y reglas en los cortafuegos y puertas de enlace, aislamiento de elementos críticos y aislamiento de las copias de seguridad.\n– [op.exp.7.r3.2] El organismo adaptará los procedimientos de reconfiguración dinámica reaccionando a los anuncios recibidos del CCN-CERT relativos a ciberamenazas sofisticadas y campañas de ataques.",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.exp.8",
+   "medida": "Registro de la actividad",
+   "refuerzo": "R1",
+   "nombre": "Revisión de los registros",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "MEDIO",
+   "exigible": "Sí",
+   "texto": "R1-Revisión de los registros.\n– [op.exp.8.r1.1] Se revisarán informalmente, de forma periódica, los registros de actividad, buscando patrones anormales.",
+   "implementacion": "Dimensión T = MEDIO → exigidos R1-R4; R5 (revisión automática y correlación) no exigido pero implantado voluntariamente (exceso de cumplimiento)."
+  },
+  {
+   "codigo": "op.exp.8",
+   "medida": "Registro de la actividad",
+   "refuerzo": "R2",
+   "nombre": "Sincronización del reloj del sistema",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "MEDIO",
+   "exigible": "Sí",
+   "texto": "R2-Sincronización del reloj del sistema.\n– [op.exp.8.r2.1] El sistema deberá disponer de una referencia de tiempo (timestamp) para facilitar las funciones de registro de eventos y auditoría. La modificación de la referencia de tiempo del sistema será una función de administración y, en caso de realizarse su sincronización con otros dispositivos, deberán utilizarse mecanismos de autenticación e integridad.",
+   "implementacion": "Dimensión T = MEDIO → exigidos R1-R4; R5 (revisión automática y correlación) no exigido pero implantado voluntariamente (exceso de cumplimiento)."
+  },
+  {
+   "codigo": "op.exp.8",
+   "medida": "Registro de la actividad",
+   "refuerzo": "R3",
+   "nombre": "Retención de registros",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "MEDIO",
+   "exigible": "Sí",
+   "texto": "R3-Retención de registros.\n– [op.exp.8.r3.1] En la documentación de seguridad del sistema se deberán indicar los eventos de seguridad que serán auditados y el tiempo de retención de los registros antes de ser eliminados.",
+   "implementacion": "Dimensión T = MEDIO → exigidos R1-R4; R5 (revisión automática y correlación) no exigido pero implantado voluntariamente (exceso de cumplimiento)."
+  },
+  {
+   "codigo": "op.exp.8",
+   "medida": "Registro de la actividad",
+   "refuerzo": "R4",
+   "nombre": "Control de acceso",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "MEDIO",
+   "exigible": "Sí",
+   "texto": "R4-Control de acceso.\n– [op.exp.8.r4.1] Los registros de actividad y, en su caso, las copias de seguridad de los mismos, solamente podrán ser accedidos o eliminarse por personal debidamente autorizado.",
+   "implementacion": "Dimensión T = MEDIO → exigidos R1-R4; R5 (revisión automática y correlación) no exigido pero implantado voluntariamente (exceso de cumplimiento)."
+  },
+  {
+   "codigo": "op.exp.8",
+   "medida": "Registro de la actividad",
+   "refuerzo": "R5",
+   "nombre": "Revisión automática y correlación de eventos",
+   "niveles": "ALTO",
+   "nivel_exigido": "MEDIO",
+   "exigible": "No",
+   "texto": "R5-Revisión automática y correlación de eventos.\n– [op.exp.8.r5.1] El sistema deberá implementar herramientas para analizar y revisar la actividad del sistema y la información de auditoría, en búsqueda de comprometimientos de la seguridad posibles o reales.\n– [op.exp.8.r5.2] Se dispondrá de un sistema automático de recolección de registros, correlación de eventos y respuesta automática ante los mismos.",
+   "implementacion": "—"
+  },
+  {
+   "codigo": "op.exp.10",
+   "medida": "Protección de claves criptográficas",
+   "refuerzo": "R1",
+   "nombre": "Algoritmos autorizados",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Algoritmos autorizados.\n– [op.exp.10.r1.1] Se emplearán algoritmos y parámetros autorizados por el CCN.",
+   "implementacion": "R1 exigido → cumplido."
+  },
+  {
+   "codigo": "op.ext.4",
+   "medida": "Interconexión de sistemas",
+   "refuerzo": "R1",
+   "nombre": "Coordinación de actividades",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Coordinación de actividades.\n– [op.ext.4.r1.1] Cuando se interconecten sistemas en los que la identificación, autenticación y autorización tengan lugar en diferentes dominios de seguridad, bajo distintas responsabilidades, las medidas de seguridad locales se acompañarán de los correspondientes mecanismos y procedimientos de coordinación para la atribución y ejercicio efectivos de las responsabilidades de cada sistema.",
+   "implementacion": "R1 exigido → cumplido."
+  },
+  {
+   "codigo": "op.nub.1",
+   "medida": "Protección de servicios en la nube",
+   "refuerzo": "R1",
+   "nombre": "Servicios certificados",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1- Servicios certificados.\n– [op.nub.1.r1.1] Cuando se utilicen servicios en la nube suministrados por terceros, estos deberán estar certificados bajo una metodología de certificación reconocida por el Organismo de Certificación del Esquema Nacional de Evaluación y Certificación de Seguridad de las Tecnologías de la Información.\n– [op.nub.1.r1.2] Si el servicio en la nube es un servicio de seguridad deberá cumplir con los requisitos establecidos en [op.pl.5].",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.nub.1",
+   "medida": "Protección de servicios en la nube",
+   "refuerzo": "R2",
+   "nombre": "Guías de Configuración de Seguridad Específicas",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Guías de Configuración de Seguridad Específicas.\n– [op.nub.1.r2.1] La configuración de seguridad de los sistemas que proporcionan estos servicios deberá realizarse según la correspondiente guía CCN-STIC de Configuración de Seguridad Específica, orientadas tanto al usuario como al proveedor.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.mon.1",
+   "medida": "Detección de intrusión",
+   "refuerzo": "R1",
+   "nombre": "Detección basada en reglas",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Detección basada en reglas.\n– [op.mon.1.r1.1] El sistema dispondrá de herramientas de detección o prevención de intrusiones basadas en reglas.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.mon.1",
+   "medida": "Detección de intrusión",
+   "refuerzo": "R2",
+   "nombre": "Procedimientos de respuesta",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Procedimientos de respuesta.\n– [op.mon.1.r2.1] Existirán procedimientos de respuesta a las alertas generadas por el sistema de detección o prevención de intrusiones.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.mon.2",
+   "medida": "Sistema de métricas",
+   "refuerzo": "R1",
+   "nombre": "Efectividad del sistema de gestión de incidentes",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Efectividad del sistema de gestión de incidentes.\n– [op.mon.2.r1.1] Se recopilarán los datos precisos que posibiliten evaluar el comportamiento del sistema de gestión de incidentes, de acuerdo con la Instrucción Técnica de Seguridad de Notificación de Incidentes de Seguridad y con la correspondiente guía CCN-STIC.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.mon.2",
+   "medida": "Sistema de métricas",
+   "refuerzo": "R2",
+   "nombre": "Eficiencia del sistema de gestión de la seguridad",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Eficiencia del sistema de gestión de la seguridad.\n– [op.mon.2.r2.1] Se recopilarán los datos precisos para conocer la eficiencia del sistema de seguridad, en relación con los recursos consumidos, en términos de horas y presupuesto.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "op.mon.3",
+   "medida": "Vigilancia",
+   "refuerzo": "R1",
+   "nombre": "Correlación de eventos",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Correlación de eventos.\n– [op.mon.3.r1.1] Se dispondrá de un sistema automático de recolección de eventos de seguridad que permita la correlación de los mismos.",
+   "implementacion": "R5 minería de datos en despliegue (data lake) → PTR-2026-07, fecha objetivo 31/12/2026. R1-R4 y R6 cumplidos."
+  },
+  {
+   "codigo": "op.mon.3",
+   "medida": "Vigilancia",
+   "refuerzo": "R2",
+   "nombre": "Análisis dinámico",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Análisis dinámico.\n– [op.mon.3.r2.1] Se dispondrá de soluciones de vigilancia que permitan determinar la superficie de exposición con relación a vulnerabilidades y deficiencias de configuración.",
+   "implementacion": "R5 minería de datos en despliegue (data lake) → PTR-2026-07, fecha objetivo 31/12/2026. R1-R4 y R6 cumplidos."
+  },
+  {
+   "codigo": "op.mon.3",
+   "medida": "Vigilancia",
+   "refuerzo": "R3",
+   "nombre": "Ciberamenazas avanzadas",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Ciberamenazas avanzadas.\n– [op.mon.3.r3.1] Se dispondrá de sistemas para detección de amenazas avanzadas y comportamientos anómalos.\n– [op.mon.3.r3.2] Se dispondrá de sistemas para la detección de amenazas persistentes avanzadas (Advanced Persistent Threat, APT) mediante la detección de anomalías significativas en el tráfico de la red.",
+   "implementacion": "R5 minería de datos en despliegue (data lake) → PTR-2026-07, fecha objetivo 31/12/2026. R1-R4 y R6 cumplidos."
+  },
+  {
+   "codigo": "op.mon.3",
+   "medida": "Vigilancia",
+   "refuerzo": "R4",
+   "nombre": "Observatorios digitales",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R4-Observatorios digitales.\n– [op.mon.3.r4.1] Se dispondrá de observatorios digitales con fines de cibervigilancia dedicados a la detección y seguimiento de anomalías que pudieran representar indicadores de amenaza en contenidos digitales.",
+   "implementacion": "R5 minería de datos en despliegue (data lake) → PTR-2026-07, fecha objetivo 31/12/2026. R1-R4 y R6 cumplidos."
+  },
+  {
+   "codigo": "op.mon.3",
+   "medida": "Vigilancia",
+   "refuerzo": "R5",
+   "nombre": "Minería de datos",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R5-Minería de datos.\nSe aplicarán medidas para prevenir, detectar y reaccionar frente a intentos de minería de datos:\n– [op.mon.3.r5.1] Limitación de las consultas, monitorizando volumen y frecuencia.\n– [op.mon.3.r5.2] Alerta a los administradores de seguridad de comportamientos sospechosos en tiempo real.",
+   "implementacion": "R5 minería de datos en despliegue (data lake) → PTR-2026-07, fecha objetivo 31/12/2026. R1-R4 y R6 cumplidos."
+  },
+  {
+   "codigo": "op.mon.3",
+   "medida": "Vigilancia",
+   "refuerzo": "R6",
+   "nombre": "Inspecciones de seguridad",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R6-Inspecciones de seguridad.\nPeriódicamente, o tras incidentes que hayan desvelado vulnerabilidades del sistema nuevas o subestimadas, se realizarán las siguientes inspecciones:\n– [op.mon.3.r6.1] Verificación de configuración.\n– [op.mon.3.r6.2] Análisis de vulnerabilidades.\n– [op.mon.3.r6.3] Pruebas de penetración.",
+   "implementacion": "R5 minería de datos en despliegue (data lake) → PTR-2026-07, fecha objetivo 31/12/2026. R1-R4 y R6 cumplidos."
+  },
+  {
+   "codigo": "mp.if.4",
+   "medida": "Energía eléctrica",
+   "refuerzo": "R1",
+   "nombre": "Suministro eléctrico de emergencia",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Suministro eléctrico de emergencia.\n– [mp.if.4.r1.1] En caso de fallo del suministro principal, el abastecimiento eléctrico deberá estar garantizado durante el tiempo suficiente para una terminación ordenada de los procesos y la salvaguarda de la información.",
+   "implementacion": "Dimensión D = ALTO → R1 exigido → cumplido."
+  },
+  {
+   "codigo": "mp.per.2",
+   "medida": "Deberes y obligaciones",
+   "refuerzo": "R1",
+   "nombre": "Confirmación expresa",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Confirmación expresa.\n– [mp.per.2.r1.1] Se ha de obtener la confirmación expresa de que los usuarios conocen las instrucciones de seguridad necesarias y obligatorias y su aceptación, así como los procedimientos necesarios para llevarlas a cabo de manera adecuada.",
+   "implementacion": "R1 exigido → cumplido."
+  },
+  {
+   "codigo": "mp.eq.1",
+   "medida": "Puesto de trabajo despejado",
+   "refuerzo": "R1",
+   "nombre": "Almacenamiento del material",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Almacenamiento del material.\n– [mp.eq.1.r1.1] Una vez usado, y siempre que sea factible, el material se almacenará en lugar cerrado.",
+   "implementacion": "R1 exigido → cumplido."
+  },
+  {
+   "codigo": "mp.eq.2",
+   "medida": "Bloqueo de puesto de trabajo",
+   "refuerzo": "R1",
+   "nombre": "Cierre de sesiones",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Cierre de sesiones.\n– [mp.eq.2.r1.1] Pasado un cierto tiempo, superior al anterior, se cancelarán las sesiones abiertas desde dicho puesto de trabajo.\nUna Guía CCN-STIC concretará la implementación de la configuración de seguridad adaptada a la categorización del sistema o perfil de cumplimiento asociado.",
+   "implementacion": "Dimensión A = ALTO → R1 exigido → cumplido."
+  },
+  {
+   "codigo": "mp.eq.3",
+   "medida": "Protección de dispositivos portátiles",
+   "refuerzo": "R1",
+   "nombre": "Cifrado del disco",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1– Cifrado del disco.\n– [mp.eq.3.r1.1] Se protegerá el dispositivo portátil mediante cifrado del disco duro cuando el nivel de confidencialidad de la información almacenada en el mismo sea de nivel MEDIO.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.eq.3",
+   "medida": "Protección de dispositivos portátiles",
+   "refuerzo": "R2",
+   "nombre": "Entornos protegidos",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2– Entornos protegidos.\n– [mp.eq.3.r2.1] El uso de dispositivos portátiles fuera de las instalaciones de la organización se restringirá a entornos protegidos, donde el acceso sea controlado y a salvo de hurtos y miradas indiscretas.",
+   "implementacion": "R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.eq.4",
+   "medida": "Otros dispositivos conectados a la red",
+   "refuerzo": "R1",
+   "nombre": "Productos certificados",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Productos certificados.\n– [mp.eq.4.r1.1] Se usarán, cuando sea posible, productos o servicios que cumplan lo establecido en [op.pl.5].",
+   "implementacion": "Dimensión C = ALTO → R1 exigido → cumplido."
+  },
+  {
+   "codigo": "mp.com.2",
+   "medida": "Protección de la confidencialidad",
+   "refuerzo": "R1",
+   "nombre": "Algoritmos y parámetros autorizados",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Algoritmos y parámetros autorizados.\n– [mp.com.2.r1.1] Se emplearán algoritmos y parámetros autorizados por el CCN.",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.com.2",
+   "medida": "Protección de la confidencialidad",
+   "refuerzo": "R2",
+   "nombre": "Dispositivos hardware",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Dispositivos hardware.\n– [mp.com.2.r2.1] Se emplearán, dispositivos hardware en el establecimiento y utilización de la red privada virtual.",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.com.2",
+   "medida": "Protección de la confidencialidad",
+   "refuerzo": "R3",
+   "nombre": "Productos certificados",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Productos certificados.\n– [mp.com.2.r3.1] Se usarán productos o servicios que cumplan lo establecido en [op.pl.5].",
+   "implementacion": "R1+R2+R3 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.com.3",
+   "medida": "Protección de la integridad y de la autenticidad",
+   "refuerzo": "R1",
+   "nombre": "Redes privadas virtuales",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Redes privadas virtuales.\n– [mp.com.3.r1.1] Se emplearán redes privadas virtuales cifradas cuando la comunicación discurra por redes fuera del propio dominio de seguridad.",
+   "implementacion": "R3 dispositivos hardware en el extremo cloud → medida compensatoria MC-03."
+  },
+  {
+   "codigo": "mp.com.3",
+   "medida": "Protección de la integridad y de la autenticidad",
+   "refuerzo": "R2",
+   "nombre": "Algoritmos y parámetros autorizados",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Algoritmos y parámetros autorizados.\n– [mp.com.3.r2.1] Se emplearán algoritmos y parámetros autorizados por el CCN.",
+   "implementacion": "R3 dispositivos hardware en el extremo cloud → medida compensatoria MC-03."
+  },
+  {
+   "codigo": "mp.com.3",
+   "medida": "Protección de la integridad y de la autenticidad",
+   "refuerzo": "R3",
+   "nombre": "Dispositivos hardware",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Dispositivos hardware.\n– [mp.com.3.r3.1] Se recomienda emplear dispositivos hardware en el establecimiento y utilización de la red privada virtual.",
+   "implementacion": "R3 dispositivos hardware en el extremo cloud → medida compensatoria MC-03."
+  },
+  {
+   "codigo": "mp.com.3",
+   "medida": "Protección de la integridad y de la autenticidad",
+   "refuerzo": "R4",
+   "nombre": "Productos certificados",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R4-Productos certificados.\n– [mp.com.3.r4.1] Se emplearán productos certificados conforme a lo establecido en [op.pl.5].",
+   "implementacion": "R3 dispositivos hardware en el extremo cloud → medida compensatoria MC-03."
+  },
+  {
+   "codigo": "mp.com.4",
+   "medida": "Separación de flujos de información en la red",
+   "refuerzo": "R2",
+   "nombre": "Segmentación lógica avanzada",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R2-Segmentación lógica avanzada.\n– [mp.com.4.r2.1] Los segmentos de red se implementarán por medio de redes privadas virtuales (Virtual Private Network, VPN).",
+   "implementacion": "Alternativa elegida: R2 (segmentación lógica avanzada) + R4; R3 físico adicional para gestión. Cumple '[R2 o R3] + R4'."
+  },
+  {
+   "codigo": "mp.com.4",
+   "medida": "Separación de flujos de información en la red",
+   "refuerzo": "R3",
+   "nombre": "Segmentación física",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Alternativa (elegir ≥1 del grupo)",
+   "texto": "R3-Segmentación física.\n– [mp.com.4.r3.1] Los segmentos de red se implementarán con medios físicos separados.",
+   "implementacion": "Alternativa elegida: R2 (segmentación lógica avanzada) + R4; R3 físico adicional para gestión. Cumple '[R2 o R3] + R4'."
+  },
+  {
+   "codigo": "mp.com.4",
+   "medida": "Separación de flujos de información en la red",
+   "refuerzo": "R4",
+   "nombre": "Puntos de interconexión",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R4-Puntos de interconexión.\n– [mp.com.4.r4.1] Control de entrada de los usuarios que llegan a cada segmento y control de entrada y salida de la información disponible en cada segmento.\n– [mp.com.4.r4.2] El punto de interconexión estará particularmente asegurado, mantenido y monitorizado, (como en [mp.com.1]).",
+   "implementacion": "Alternativa elegida: R2 (segmentación lógica avanzada) + R4; R3 físico adicional para gestión. Cumple '[R2 o R3] + R4'."
+  },
+  {
+   "codigo": "mp.com.4",
+   "medida": "Separación de flujos de información en la red",
+   "refuerzo": "R1",
+   "nombre": "Segmentación lógica básica",
+   "niveles": "MEDIO",
+   "nivel_exigido": "ALTO",
+   "exigible": "No",
+   "texto": "R1-Segmentación lógica básica.\n– [mp.com.4.r1.1] Los segmentos de red se implementarán por medio de redes de área local virtuales (Virtual Local Area Network, VLAN).\n– [mp.com.4.r1.2] La red que conforma el sistema deberá segregarse en distintas subredes contemplando como mínimo:\n• Usuarios.\n• Servicios.\n• Administración.",
+   "implementacion": "—"
+  },
+  {
+   "codigo": "mp.si.2",
+   "medida": "Criptografía",
+   "refuerzo": "R1",
+   "nombre": "Productos certificados",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1– Productos certificados.\n– [mp.si.2.r1.1] Se emplearán productos certificados conforme a lo establecido en [op.pl.5].",
+   "implementacion": "R1 productos certificados para cintas → medida compensatoria MC-04; R2 cumplido."
+  },
+  {
+   "codigo": "mp.si.2",
+   "medida": "Criptografía",
+   "refuerzo": "R2",
+   "nombre": "Copias de seguridad",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Copias de seguridad.\n– [mp.si.2.r2.1] Las copias se seguridad se cifrarán utilizando algoritmos y parámetros autorizados por el CCN.",
+   "implementacion": "R1 productos certificados para cintas → medida compensatoria MC-04; R2 cumplido."
+  },
+  {
+   "codigo": "mp.si.5",
+   "medida": "Borrado y destrucción",
+   "refuerzo": "R1",
+   "nombre": "Productos certificados",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Productos certificados.\n– [mp.si.5.r1.1] Se usarán productos o servicios que cumplan lo establecido en [op.pl.5].",
+   "implementacion": "Dimensión C = ALTO → R1 exigido → cumplido."
+  },
+  {
+   "codigo": "mp.sw.1",
+   "medida": "Desarrollo de aplicaciones",
+   "refuerzo": "R1",
+   "nombre": "Mínimo privilegio",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Mínimo privilegio.\n– [mp.sw.1.r1.1] Las aplicaciones se desarrollarán respetando el principio de mínimo privilegio, accediendo únicamente a los recursos imprescindibles para su función, y con los privilegios que sean indispensables.",
+   "implementacion": "R1+R2+R3+R4 exigidos. R3: modelado de amenazas completado en S-01 y S-04; pendiente S-02/S-03 (PTR-2026-09, 30/11/2026)."
+  },
+  {
+   "codigo": "mp.sw.1",
+   "medida": "Desarrollo de aplicaciones",
+   "refuerzo": "R2",
+   "nombre": "Metodología de desarrollo seguro",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Metodología de desarrollo seguro.\n– [mp.sw.1.r2.1] Se aplicará una metodología de desarrollo seguro reconocida que:\na) Tendrá en consideración los aspectos de seguridad a lo largo de todo el ciclo de vida.\nb) Incluirá normas de programación segura, especialmente: control de asignación y liberación de memoria, desbordamiento de memoria (overflow).\nc) Tratará específicamente los datos usados en pruebas.\nd) Permitirá la inspección del código fuente.",
+   "implementacion": "R1+R2+R3+R4 exigidos. R3: modelado de amenazas completado en S-01 y S-04; pendiente S-02/S-03 (PTR-2026-09, 30/11/2026)."
+  },
+  {
+   "codigo": "mp.sw.1",
+   "medida": "Desarrollo de aplicaciones",
+   "refuerzo": "R3",
+   "nombre": "Seguridad desde el diseño",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Seguridad desde el diseño.\n– [mp.sw.1.r3.1] Los siguientes elementos serán parte integral del diseño del sistema:\na) Los mecanismos de identificación y autenticación.\nb) Los mecanismos de protección de la información tratada.\nc) La generación y tratamiento de pistas de auditoría.",
+   "implementacion": "R1+R2+R3+R4 exigidos. R3: modelado de amenazas completado en S-01 y S-04; pendiente S-02/S-03 (PTR-2026-09, 30/11/2026)."
+  },
+  {
+   "codigo": "mp.sw.1",
+   "medida": "Desarrollo de aplicaciones",
+   "refuerzo": "R4",
+   "nombre": "Datos de pruebas",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R4-Datos de pruebas.\n– [mp.sw.1.r4.1] Preferiblemente, las pruebas previas a la implantación o modificación de los sistemas de información no se realizarán con datos reales. En caso de que fuese necesario recurrir a datos reales se garantizará el nivel de seguridad correspondiente.",
+   "implementacion": "R1+R2+R3+R4 exigidos. R3: modelado de amenazas completado en S-01 y S-04; pendiente S-02/S-03 (PTR-2026-09, 30/11/2026)."
+  },
+  {
+   "codigo": "mp.sw.2",
+   "medida": "Aceptación y puesta en servicio",
+   "refuerzo": "R1",
+   "nombre": "Pruebas",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1- Pruebas.\n– [mp.sw.2.r1.1] Las pruebas se realizarán en un entorno aislado (pre-producción).",
+   "implementacion": "R1 exigido → cumplido."
+  },
+  {
+   "codigo": "mp.info.3",
+   "medida": "Firma electrónica",
+   "refuerzo": "R1",
+   "nombre": "Certificados cualificados",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Certificados cualificados.\n– [mp.info.3.r1.1] Cuando se empleen sistemas de firma electrónica avanzada basados en certificados, estos serán cualificados.",
+   "implementacion": "Dimensiones I/A = ALTO → R1+R2+R3+R4 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.info.3",
+   "medida": "Firma electrónica",
+   "refuerzo": "R2",
+   "nombre": "Algoritmos y parámetros autorizados",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Algoritmos y parámetros autorizados.\n– [mp.info.3.r2.1] Se emplearán algoritmos y parámetros autorizados por el CCN o por un esquema nacional o europeo que resulte de aplicación.\nEl CCN determinará los algoritmos criptográficos que hayan sido autorizados nominalmente para su uso en el Esquema Nacional de Seguridad conforme a la Instrucción Técnica de Seguridad Criptología de empleo en el ENS.",
+   "implementacion": "Dimensiones I/A = ALTO → R1+R2+R3+R4 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.info.3",
+   "medida": "Firma electrónica",
+   "refuerzo": "R3",
+   "nombre": "Verificación y validación de firma",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Verificación y validación de firma.\n– [mp.info.3.r3.1] Cuando proceda, se garantizará la verificación y validación de la firma electrónica durante el tiempo requerido por la actividad administrativa que aquélla soporte, sin perjuicio de que se pueda ampliar este período de acuerdo con lo que establezca la Política de Firma Electrónica y de Certificados que sea de aplicación. Para tal fin se adjuntará a la firma, o se referenciará, toda la información pertinente para su verificación y validación, incluyendo certificados o datos de verificación y validación.",
+   "implementacion": "Dimensiones I/A = ALTO → R1+R2+R3+R4 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.info.3",
+   "medida": "Firma electrónica",
+   "refuerzo": "R4",
+   "nombre": "Firma electrónica avanzada basada en certificados cualificados",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R4-Firma electrónica avanzada basada en certificados cualificados.\n– [mp.info.3.r4.1] Se usará firma electrónica avanzada basada en certificados cualificados complementada por un segundo factor del tipo «algo que se sabe» o «algo que se es».",
+   "implementacion": "Dimensiones I/A = ALTO → R1+R2+R3+R4 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.info.6",
+   "medida": "Copias de seguridad",
+   "refuerzo": "R1",
+   "nombre": "Pruebas de recuperación",
+   "niveles": "MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Pruebas de recuperación.\n– [mp.info.6.r1.1] Los procedimientos de copia de seguridad y restauración deben probarse regularmente. Su frecuencia dependerá de la criticidad de los datos y del impacto que cause la falta de disponibilidad.",
+   "implementacion": "Dimensión D = ALTO → R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.info.6",
+   "medida": "Copias de seguridad",
+   "refuerzo": "R2",
+   "nombre": "Protección de las copias de seguridad",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Protección de las copias de seguridad.\n– [mp.info.6.r2.1] Al menos, una de las copias de seguridad se almacenará de forma separada en lugar diferente, de tal manera que un incidente no pueda afectar tanto al repositorio original como a la copia simultáneamente.",
+   "implementacion": "Dimensión D = ALTO → R1+R2 exigidos → cumplidos."
+  },
+  {
+   "codigo": "mp.s.2",
+   "medida": "Protección de servicios y aplicaciones web",
+   "refuerzo": "R2",
+   "nombre": "Auditorías de seguridad avanzada",
+   "niveles": "BAJO/MEDIO/ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R2-Auditorías de seguridad avanzada.\n– [mp.s.2.r2.1] Se realizarán auditorías de seguridad de «caja blanca» sobre las aplicaciones web durante la fase de desarrollo.\n– [mp.s.2.r2.2] Se emplearán metodologías definidas y herramientas automáticas de detección de vulnerabilidades en la realización de las auditorías de seguridad sobre las aplicaciones web.\n– [mp.s.2.r2.3] Una vez finalizada una auditoría de seguridad, se analizarán los resultados y se solventarán las vulnerabilidades encontradas mediante los procedimientos definidos [op.exp.5].",
+   "implementacion": "R2+R3 exigidos en ALTO → cumplidos."
+  },
+  {
+   "codigo": "mp.s.2",
+   "medida": "Protección de servicios y aplicaciones web",
+   "refuerzo": "R3",
+   "nombre": "Protección de las cachés",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R3-Protección de las cachés.\n– [mp.s.2.r3.1] Se prevendrán ataques de manipulación de programas o dispositivos que realizan una acción en representación de otros, conocidos en terminología inglesa como \"proxies\" y, sistemas especiales de almacenamiento de alta velocidad, conocidos en terminología inglesa como \"cachés\".",
+   "implementacion": "R2+R3 exigidos en ALTO → cumplidos."
+  },
+  {
+   "codigo": "mp.s.2",
+   "medida": "Protección de servicios y aplicaciones web",
+   "refuerzo": "R1",
+   "nombre": "Auditorías de seguridad",
+   "niveles": "BAJO/MEDIO",
+   "nivel_exigido": "ALTO",
+   "exigible": "No",
+   "texto": "R1-Auditorías de seguridad.\n– [mp.s.2.r1.1] Se realizarán auditorías continuas de seguridad de «caja negra» sobre las aplicaciones web durante la fase de desarrollo y antes de la fase de producción.\n– [mp.s.2.r1.2] La frecuencia de estas auditorías de seguridad quedará definida en el procedimiento de auditoría.",
+   "implementacion": "—"
+  },
+  {
+   "codigo": "mp.s.3",
+   "medida": "Protección de la navegación web",
+   "refuerzo": "R1",
+   "nombre": "Monitorización",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1 - Monitorización.\n– [mp.s.3.r1.1] Se registrará el uso de la navegación web, estableciendo los elementos que se registran, el periodo de retención de estos registros y el uso que el organismo prevé hacer de ellos.\n– [mp.s.3.r1.2] Se establecerá una función para la ruptura de canales cifrados a fin de inspeccionar su contenido, indicando qué se analiza, qué se registra, durante cuánto tiempo se retienen los registros y qué uso prevé hacer el organismo de estas inspecciones. Todo ello sin perjuicio de que se puedan autorizar accesos cifrados singulares a destinos de confianza.\n– [mp.s.3.r1.3] Se establecerá una lista negra de destinos vetados.",
+   "implementacion": "R1 exigido → cumplido."
+  },
+  {
+   "codigo": "mp.s.4",
+   "medida": "Protección frente a denegación de servicio",
+   "refuerzo": "R1",
+   "nombre": "Detección y reacción",
+   "niveles": "ALTO",
+   "nivel_exigido": "ALTO",
+   "exigible": "Sí",
+   "texto": "R1-Detección y reacción.\n– [mp.s.4.r1.1] Se establecerá un sistema de detección y tratamiento de ataques de denegación de servicio (DoS y DDoS).\n– [mp.s. 4.r1.2] Se establecerán procedimientos de reacción a los ataques, incluyendo la comunicación con el proveedor de comunicaciones.",
+   "implementacion": "Dimensión D = ALTO → R1 exigido → cumplido."
+  }
+ ],
+ "compensatorias": [
+  {
+   "id": "MC-01",
+   "medida": "op.pl.5 Componentes certificados",
+   "ambito": "Clúster de cortafuegos del CPD de respaldo (Tres Cantos): fabricante sin producto cualificado en el CPSTIC para la versión desplegada.",
+   "limitaciones": "El contrato de mantenimiento vence en 2027; la sustitución anticipada supone 180 k€ no presupuestados. El CPD de respaldo sólo está activo en contingencia.",
+   "objetivo": "Garantizar que la funcionalidad de seguridad del perímetro de respaldo ofrece garantías equivalentes a un producto cualificado (op.pl.5).",
+   "riesgo": "Vulnerabilidades no evaluadas en el firmware del cortafuegos; menor confianza en la robustez de la implementación (R-034 del AR-2026-01, riesgo residual MEDIO).",
+   "definicion": "1) Bastionado según guía del fabricante y CCN-STIC 600-series; 2) doble capa: IPS/IDS de producto cualificado (CPSTIC) delante del clúster; 3) escaneo de vulnerabilidades semanal y parcheo ≤72 h para críticas; 4) reglas exportadas y revisadas trimestralmente; 5) plan de sustitución aprobado por producto CPSTIC en 2027 (PTR-2026-11).",
+   "validacion": "Pentest anual externo sobre el perímetro de respaldo; prueba de conmutación del CPD (op.cont.3) incluye verificación de reglas; revisión del CSI 30/06/2026.",
+   "mantenimiento": "Revisión trimestral en el CSI; cierre al sustituir el equipo (fecha objetivo 30/06/2027).",
+   "aprobacion": "CSI – ACTA-CSI-2026-03; verificada por auditor en auditoría de certificación 2026"
+  },
+  {
+   "id": "MC-02",
+   "medida": "mp.if.6 Protección frente a inundaciones",
+   "ambito": "CPD principal (Alcobendas): sala técnica en planta baja de edificio arrendado; no es posible reubicar la sala ni instalar drenaje perimetral por restricciones del arrendador.",
+   "limitaciones": "Contrato de arrendamiento hasta 2029; el propietario no autoriza obras estructurales.",
+   "objetivo": "Reducir la probabilidad e impacto de daño por agua a un nivel equivalente al exigido por [mp.if.6].",
+   "riesgo": "Inundación por rotura de conducción o lluvias torrenciales (amenaza [I.2]/[N.*] MAGERIT), R-051, riesgo inherente ALTO.",
+   "definicion": "1) Suelo técnico elevado 40 cm y racks sobre bancada; 2) sensores de agua bajo suelo técnico con alarma al SOC y al NOC; 3) válvulas de corte automático en conducciones que atraviesan la planta; 4) ausencia de canalizaciones de agua sobre la sala (certificado del arrendador); 5) CPD de respaldo con RTO 4 h que absorbe la pérdida total de la sala.",
+   "validacion": "Prueba semestral de sensores; inspección anual de la propiedad; simulacro de conmutación anual (REG-CONT-03).",
+   "mantenimiento": "Revisión anual y ante cualquier obra en el edificio; reevaluar en la renovación del arrendamiento (2029).",
+   "aprobacion": "CSI – ACTA-CSI-2026-03; verificada por auditor en auditoría de certificación 2026"
+  },
+  {
+   "id": "MC-03",
+   "medida": "mp.com.3 R3 Dispositivos hardware (cifrado)",
+   "ambito": "Túneles IPsec site-to-site entre el tenant IaaS (NubeAdmin) y los CPD: el proveedor cloud no ofrece terminación en HSM/dispositivo hardware dedicado.",
+   "limitaciones": "Limitación técnica del proveedor cloud; la alternativa (línea dedicada MPLS con cifrador hardware) triplica el coste y no está prevista hasta 2027.",
+   "objetivo": "Proteger integridad y autenticidad de las comunicaciones al nivel exigido por [mp.com.3] R3 en categoría ALTA.",
+   "riesgo": "Compromiso del material criptográfico en la pasarela software del lado cloud (R-062, residual MEDIO).",
+   "definicion": "1) Terminación en los CPD sobre appliance cualificado CPSTIC (cumple R4) con claves en HSM; 2) lado cloud: pasarela con claves custodiadas en el KMS del proveedor con certificación ENS ALTA y rotación mensual; 3) algoritmos y parámetros CCN-STIC 807 (IKEv2, AES-256-GCM, SHA-384, DH grupo 19+); 4) doble capa: TLS 1.3 con mTLS extremo a extremo en las aplicaciones sobre el túnel.",
+   "validacion": "Auditoría de configuración anual (CCN-STIC 807); pruebas de intercepción en pentest; evidencia de rotación de claves.",
+   "mantenimiento": "Revisión anual; migración a cifrador hardware dedicado planificada (PTR-2026-14, T3 2027).",
+   "aprobacion": "CSI – ACTA-CSI-2026-03; verificada por auditor en auditoría de certificación 2026"
+  },
+  {
+   "id": "MC-04",
+   "medida": "mp.si.2 R1 Productos certificados (cifrado de soportes)",
+   "ambito": "Cintas LTO-9 de copias de seguridad externalizadas: el software de cifrado del robot de cintas no figura en el CPSTIC.",
+   "limitaciones": "Plataforma de backup heredada del contrato anterior; sustitución prevista en la renovación 2027.",
+   "objetivo": "Asegurar la confidencialidad e integridad de la información en soportes extraíbles al nivel de [mp.si.2] en ALTO.",
+   "riesgo": "Pérdida o robo de cintas durante el transporte/custodia externa (R-070).",
+   "definicion": "1) Cifrado AES-256 nativo de la unidad LTO con claves gestionadas en HSM cualificado; 2) transporte en maletines con cierre y precinto numerado, empresa de custodia con ISO 27001; 3) inventario y registro de movimientos (mp.si.3/mp.si.4); 4) copia adicional cifrada en el tenant cloud ENS ALTA (cumple R2).",
+   "validacion": "Prueba de restauración trimestral desde cinta cifrada; auditoría del proveedor de custodia anual.",
+   "mantenimiento": "Revisión anual; cierre al migrar a plataforma de backup con producto cualificado.",
+   "aprobacion": "CSI – ACTA-CSI-2026-03; verificada por auditor en auditoría de certificación 2026"
+  }
+ ],
+ "apetito": "M",
+ "activos": [
+  {
+   "id": "ACT-001",
+   "nombre": "Base de datos de expedientes ciudadanos",
+   "tipo": "[D]",
+   "soporta": [
+    "I-01",
+    "I-02",
+    "I-03"
+   ],
+   "descripcion": "BBDD con los expedientes administrativos de las tres consejerías",
+   "valoracion": {
+    "D": 8,
+    "I": 9,
+    "C": 9,
+    "A": 8,
+    "T": 8
+   }
+  },
+  {
+   "id": "ACT-002",
+   "nombre": "Servicio web Sede Electrónica",
+   "tipo": "[essential.service]",
+   "soporta": [
+    "S-01",
+    "S-02",
+    "S-03"
+   ],
+   "descripcion": "Portal donde la ciudadanía presenta trámites con Cl@ve o certificado",
+   "valoracion": {
+    "D": 9,
+    "I": 8,
+    "C": 7,
+    "A": 9,
+    "T": 9
+   }
+  },
+  {
+   "id": "ACT-003",
+   "nombre": "Servidores de aplicación (clúster)",
+   "tipo": "[HW]",
+   "soporta": [
+    "S-01",
+    "S-02",
+    "S-03",
+    "S-04"
+   ],
+   "descripcion": "Clúster que aloja la sede electrónica y el backoffice",
+   "valoracion": {
+    "D": 8,
+    "I": 6,
+    "C": 6,
+    "A": 5,
+    "T": 5
+   }
+  },
+  {
+   "id": "ACT-004",
+   "nombre": "Personal técnico (administradores)",
+   "tipo": "[P]",
+   "soporta": [
+    "S-04"
+   ],
+   "descripcion": "3 administradores con privilegios sobre sistemas críticos",
+   "valoracion": {
+    "D": 7,
+    "I": 6,
+    "C": 7,
+    "A": 6,
+    "T": 5
+   }
+  },
+  {
+   "id": "ACT-005",
+   "nombre": "CPD principal (Alcobendas)",
+   "tipo": "[L]",
+   "soporta": [
+    "S-01",
+    "S-02",
+    "S-03",
+    "S-04"
+   ],
+   "descripcion": "Sala técnica en planta baja de edificio arrendado",
+   "valoracion": {
+    "D": 9,
+    "I": 3,
+    "C": 3,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "ACT-006",
+   "nombre": "Clúster de cortafuegos del CPD de respaldo",
+   "tipo": "[COM]",
+   "soporta": [
+    "S-04"
+   ],
+   "descripcion": "Perímetro de Tres Cantos; fabricante sin producto cualificado CPSTIC",
+   "valoracion": {
+    "D": 7,
+    "I": 7,
+    "C": 7,
+    "A": 5,
+    "T": 3
+   }
+  },
+  {
+   "id": "ACT-007",
+   "nombre": "Túnel IPsec tenant cloud ↔ CPD",
+   "tipo": "[COM]",
+   "soporta": [
+    "S-01",
+    "S-04"
+   ],
+   "descripcion": "Interconexión site-to-site con NubeAdmin; pasarela software en el lado cloud",
+   "valoracion": {
+    "D": 6,
+    "I": 9,
+    "C": 9,
+    "A": 8,
+    "T": 3
+   }
+  },
+  {
+   "id": "ACT-008",
+   "nombre": "Cintas LTO-9 de copia externalizada",
+   "tipo": "[Media]",
+   "soporta": [
+    "I-01",
+    "I-02",
+    "I-03"
+   ],
+   "descripcion": "Copias en custodia externa; software de cifrado no incluido en el CPSTIC",
+   "valoracion": {
+    "D": 6,
+    "I": 7,
+    "C": 9,
+    "A": 0,
+    "T": 0
+   }
+  }
+ ],
+ "amenazas": [
+  {
+   "id": "R-001",
+   "activoId": "ACT-001",
+   "codigo": "[A.11]",
+   "nombre": "Acceso no autorizado",
+   "prob": "M",
+   "deg": {
+    "D": 0,
+    "I": 50,
+    "C": 100,
+    "A": 0,
+    "T": 30
+   }
+  },
+  {
+   "id": "R-002",
+   "activoId": "ACT-001",
+   "codigo": "[A.15]",
+   "nombre": "Modificación deliberada de la información",
+   "prob": "B",
+   "deg": {
+    "D": 0,
+    "I": 100,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-003",
+   "activoId": "ACT-001",
+   "codigo": "[A.18]",
+   "nombre": "Destrucción de información",
+   "prob": "B",
+   "deg": {
+    "D": 100,
+    "I": 50,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-004",
+   "activoId": "ACT-001",
+   "codigo": "[E.15]",
+   "nombre": "Alteración accidental de la información",
+   "prob": "M",
+   "deg": {
+    "D": 0,
+    "I": 60,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-005",
+   "activoId": "ACT-001",
+   "codigo": "[E.19]",
+   "nombre": "Fugas de información",
+   "prob": "M",
+   "deg": {
+    "D": 0,
+    "I": 0,
+    "C": 80,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-006",
+   "activoId": "ACT-002",
+   "codigo": "[A.24]",
+   "nombre": "Denegación de servicio (DoS)",
+   "prob": "A",
+   "deg": {
+    "D": 100,
+    "I": 0,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-007",
+   "activoId": "ACT-002",
+   "codigo": "[A.5]",
+   "nombre": "Suplantación de la identidad",
+   "prob": "M",
+   "deg": {
+    "D": 0,
+    "I": 60,
+    "C": 80,
+    "A": 100,
+    "T": 50
+   }
+  },
+  {
+   "id": "R-008",
+   "activoId": "ACT-002",
+   "codigo": "[E.24]",
+   "nombre": "Caída por agotamiento de recursos",
+   "prob": "M",
+   "deg": {
+    "D": 80,
+    "I": 0,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-009",
+   "activoId": "ACT-003",
+   "codigo": "[I.5]",
+   "nombre": "Avería de origen físico o lógico",
+   "prob": "M",
+   "deg": {
+    "D": 70,
+    "I": 0,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-010",
+   "activoId": "ACT-003",
+   "codigo": "[I.6]",
+   "nombre": "Corte del suministro eléctrico",
+   "prob": "B",
+   "deg": {
+    "D": 100,
+    "I": 0,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-011",
+   "activoId": "ACT-003",
+   "codigo": "[A.8]",
+   "nombre": "Difusión de software dañino (malware)",
+   "prob": "M",
+   "deg": {
+    "D": 60,
+    "I": 50,
+    "C": 50,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-012",
+   "activoId": "ACT-004",
+   "codigo": "[A.30]",
+   "nombre": "Ingeniería social",
+   "prob": "A",
+   "deg": {
+    "D": 0,
+    "I": 50,
+    "C": 80,
+    "A": 30,
+    "T": 30
+   }
+  },
+  {
+   "id": "R-013",
+   "activoId": "ACT-004",
+   "codigo": "[E.7]",
+   "nombre": "Deficiencias en la organización",
+   "prob": "M",
+   "deg": {
+    "D": 30,
+    "I": 30,
+    "C": 30,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-014",
+   "activoId": "ACT-004",
+   "codigo": "[E.28]",
+   "nombre": "Indisponibilidad del personal",
+   "prob": "B",
+   "deg": {
+    "D": 50,
+    "I": 0,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-051",
+   "activoId": "ACT-005",
+   "codigo": "[N.2]",
+   "nombre": "Daños por agua",
+   "prob": "M",
+   "deg": {
+    "D": 100,
+    "I": 0,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-052",
+   "activoId": "ACT-005",
+   "codigo": "[N.1]",
+   "nombre": "Fuego",
+   "prob": "B",
+   "deg": {
+    "D": 100,
+    "I": 0,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-034",
+   "activoId": "ACT-006",
+   "codigo": "[A.22]",
+   "nombre": "Manipulación de programas/equipos",
+   "prob": "M",
+   "deg": {
+    "D": 50,
+    "I": 70,
+    "C": 70,
+    "A": 30,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-062",
+   "activoId": "ACT-007",
+   "codigo": "[A.14]",
+   "nombre": "Interceptación de información (escucha)",
+   "prob": "B",
+   "deg": {
+    "D": 0,
+    "I": 0,
+    "C": 100,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-063",
+   "activoId": "ACT-007",
+   "codigo": "[A.12]",
+   "nombre": "Análisis de tráfico",
+   "prob": "B",
+   "deg": {
+    "D": 0,
+    "I": 0,
+    "C": 30,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-070",
+   "activoId": "ACT-008",
+   "codigo": "[A.25]",
+   "nombre": "Robo",
+   "prob": "B",
+   "deg": {
+    "D": 50,
+    "I": 0,
+    "C": 100,
+    "A": 0,
+    "T": 0
+   }
+  },
+  {
+   "id": "R-071",
+   "activoId": "ACT-008",
+   "codigo": "[E.25]",
+   "nombre": "Pérdida de equipos",
+   "prob": "M",
+   "deg": {
+    "D": 50,
+    "I": 0,
+    "C": 100,
+    "A": 0,
+    "T": 0
+   }
+  }
+ ],
+ "salvaguardas": [
+  {
+   "id": "SAL-001",
+   "codigo": "H.AC",
+   "nombre": "Control de acceso lógico",
+   "madurez": "L3",
+   "reduceProb": 70,
+   "reduceImp": 20,
+   "cubre": [
+    "R-001"
+   ]
+  },
+  {
+   "id": "SAL-002",
+   "codigo": "H.IA",
+   "nombre": "Identificación y autenticación",
+   "madurez": "L3",
+   "reduceProb": 60,
+   "reduceImp": 10,
+   "cubre": [
+    "R-007",
+    "R-001"
+   ]
+  },
+  {
+   "id": "SAL-003",
+   "codigo": "D.A",
+   "nombre": "Copias de seguridad (backup)",
+   "madurez": "L4",
+   "reduceProb": 0,
+   "reduceImp": 80,
+   "cubre": [
+    "R-003",
+    "R-004",
+    "R-009",
+    "R-011"
+   ]
+  },
+  {
+   "id": "SAL-004",
+   "codigo": "D.C",
+   "nombre": "Cifrado de la información",
+   "madurez": "L2",
+   "reduceProb": 50,
+   "reduceImp": 60,
+   "cubre": [
+    "R-001",
+    "R-005"
+   ]
+  },
+  {
+   "id": "SAL-005",
+   "codigo": "H.tools.LA",
+   "nombre": "Análisis de logs (SIEM)",
+   "madurez": "L3",
+   "reduceProb": 30,
+   "reduceImp": 30,
+   "cubre": [
+    "R-001",
+    "R-002"
+   ]
+  },
+  {
+   "id": "SAL-006",
+   "codigo": "S.www",
+   "nombre": "Protección de servicios web (WAF)",
+   "madurez": "L3",
+   "reduceProb": 60,
+   "reduceImp": 40,
+   "cubre": [
+    "R-006",
+    "R-007"
+   ]
+  },
+  {
+   "id": "SAL-007",
+   "codigo": "IP.SPP",
+   "nombre": "Sistema de protección perimetral (firewall)",
+   "madurez": "L4",
+   "reduceProb": 50,
+   "reduceImp": 30,
+   "cubre": [
+    "R-006",
+    "R-001",
+    "R-011"
+   ]
+  },
+  {
+   "id": "SAL-008",
+   "codigo": "HW.A",
+   "nombre": "Aseguramiento disponibilidad HW (redundancia)",
+   "madurez": "L3",
+   "reduceProb": 30,
+   "reduceImp": 70,
+   "cubre": [
+    "R-009",
+    "R-006"
+   ]
+  },
+  {
+   "id": "SAL-009",
+   "codigo": "AUX.power",
+   "nombre": "Suministro eléctrico (SAI/generador)",
+   "madurez": "L4",
+   "reduceProb": 0,
+   "reduceImp": 90,
+   "cubre": [
+    "R-010"
+   ]
+  },
+  {
+   "id": "SAL-010",
+   "codigo": "H.tools.AV",
+   "nombre": "Herramienta antimalware",
+   "madurez": "L4",
+   "reduceProb": 70,
+   "reduceImp": 40,
+   "cubre": [
+    "R-011"
+   ]
+  },
+  {
+   "id": "SAL-011",
+   "codigo": "PS.AT",
+   "nombre": "Formación y concienciación",
+   "madurez": "L2",
+   "reduceProb": 50,
+   "reduceImp": 30,
+   "cubre": [
+    "R-012",
+    "R-013",
+    "R-004"
+   ]
+  },
+  {
+   "id": "SAL-012",
+   "codigo": "H.ST",
+   "nombre": "Segregación de tareas",
+   "madurez": "L2",
+   "reduceProb": 40,
+   "reduceImp": 30,
+   "cubre": [
+    "R-013",
+    "R-002"
+   ]
+  },
+  {
+   "id": "SAL-013",
+   "codigo": "L.A",
+   "nombre": "Aseguramiento disponibilidad de instalaciones (MC-02)",
+   "madurez": "L4",
+   "reduceProb": 40,
+   "reduceImp": 80,
+   "cubre": [
+    "R-051",
+    "R-052"
+   ]
+  },
+  {
+   "id": "SAL-014",
+   "codigo": "H.tools.IDS",
+   "nombre": "IDS/IPS cualificado delante del clúster (MC-01)",
+   "madurez": "L4",
+   "reduceProb": 50,
+   "reduceImp": 30,
+   "cubre": [
+    "R-034"
+   ]
+  },
+  {
+   "id": "SAL-015",
+   "codigo": "H.VM",
+   "nombre": "Gestión de vulnerabilidades (parcheo ≤72 h)",
+   "madurez": "L3",
+   "reduceProb": 60,
+   "reduceImp": 20,
+   "cubre": [
+    "R-034"
+   ]
+  },
+  {
+   "id": "SAL-016",
+   "codigo": "COM.C",
+   "nombre": "Cifrado de las comunicaciones (IKEv2 + mTLS, MC-03)",
+   "madurez": "L4",
+   "reduceProb": 80,
+   "reduceImp": 60,
+   "cubre": [
+    "R-062",
+    "R-063"
+   ]
+  },
+  {
+   "id": "SAL-017",
+   "codigo": "MP.IC",
+   "nombre": "Cifrado de soportes LTO con claves en HSM (MC-04)",
+   "madurez": "L4",
+   "reduceProb": 50,
+   "reduceImp": 90,
+   "cubre": [
+    "R-070",
+    "R-071"
+   ]
+  },
+  {
+   "id": "SAL-018",
+   "codigo": "L.AC",
+   "nombre": "Custodia externa con precinto e inventario",
+   "madurez": "L3",
+   "reduceProb": 60,
+   "reduceImp": 0,
+   "cubre": [
+    "R-070",
+    "R-071"
+   ]
+  }
+ ],
+ "hallazgos": [
+  {
+   "id": "H-01",
+   "titulo": "Inyección SQL en el buscador de expedientes del backoffice",
+   "categoria": "SQLI",
+   "cvss": 9.1,
+   "activoId": "ACT-001",
+   "estado": "abierto",
+   "fuente": "Pentest externo PT-2026 (ejemplo)"
+  },
+  {
+   "id": "H-02",
+   "titulo": "Panel de administración de la sede accesible sin doble factor",
+   "categoria": "AUTH_MFA",
+   "cvss": 8.1,
+   "activoId": "ACT-002",
+   "estado": "abierto",
+   "fuente": "Pentest externo PT-2026 (ejemplo)"
+  },
+  {
+   "id": "H-03",
+   "titulo": "TLS 1.0 y 1.1 habilitados en el balanceador del portal",
+   "categoria": "TLS",
+   "cvss": 5.9,
+   "activoId": "ACT-002",
+   "estado": "abierto",
+   "fuente": "Pentest externo PT-2026 (ejemplo)"
+  },
+  {
+   "id": "H-04",
+   "titulo": "Credenciales por defecto en las interfaces iDRAC de los servidores",
+   "categoria": "DEFCREDS",
+   "cvss": 8.8,
+   "activoId": "ACT-003",
+   "estado": "abierto",
+   "fuente": "Pentest interno PT-2026 (ejemplo)"
+  },
+  {
+   "id": "H-05",
+   "titulo": "Phishing simulado: 18 % de clics y 6 % de credenciales entregadas",
+   "categoria": "PHISHING",
+   "cvss": 7,
+   "activoId": "ACT-004",
+   "estado": "abierto",
+   "fuente": "Campaña de concienciación 2026 (ejemplo)"
+  },
+  {
+   "id": "H-06",
+   "titulo": "Firmware del cortafuegos de respaldo con CVE crítica sin parchear",
+   "categoria": "OUTDATED",
+   "cvss": 9.8,
+   "activoId": "ACT-006",
+   "estado": "abierto",
+   "fuente": "Escaneo de vulnerabilidades semanal (ejemplo)"
+  },
+  {
+   "id": "H-07",
+   "titulo": "Registro de auditoría de la BBDD sin protección de integridad",
+   "categoria": "LOGGING",
+   "cvss": 4.3,
+   "activoId": "ACT-001",
+   "estado": "cerrado",
+   "fuente": "Auditoría interna 2026 (ejemplo)"
+  }
+ ],
+ "tratamiento": {
+  "R-001": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-002": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-003": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-004": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-005": {
+   "opcion": "mitigar",
+   "responsable": "Responsable de Seguridad",
+   "plazo": "2027-01-31",
+   "notas": "Reforzar salvaguardas hasta situar el riesgo dentro del apetito."
+  },
+  "R-006": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-007": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-008": {
+   "opcion": "mitigar",
+   "responsable": "Responsable de Seguridad",
+   "plazo": "2027-03-31",
+   "notas": "Reforzar salvaguardas hasta situar el riesgo dentro del apetito."
+  },
+  "R-009": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-010": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-011": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-012": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-013": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-014": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-051": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-052": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-034": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-062": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-063": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-070": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  },
+  "R-071": {
+   "opcion": "aceptar",
+   "responsable": "Responsable de la Información",
+   "plazo": "",
+   "notas": "Riesgo residual dentro del apetito declarado."
+  }
+ }
+}

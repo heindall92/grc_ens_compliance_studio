@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.xlsx binary
+*.docx binary
+*.png binary
+app/dist/*.html linguist-generated=true
+app/vendor/** linguist-vendored=true

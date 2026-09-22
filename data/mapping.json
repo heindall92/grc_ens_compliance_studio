@@ -1,0 +1,659 @@
+{
+ "_doc": "Tablas de trazabilidad de ENS Compliance Studio. Criterio propio del autor, razonado a partir de MAGERIT v3 (Libro II, catálogos de amenazas y salvaguardas), RD 311/2022 Anexo II y la guía CCN-STIC 804. Son tablas de apoyo docente: un analista debe revisarlas para cada sistema real.",
+ "salvaguarda_ens": {
+  "H.IA": [
+   "op.acc.1",
+   "op.acc.5",
+   "op.acc.6"
+  ],
+  "H.AC": [
+   "op.acc.2",
+   "op.acc.4"
+  ],
+  "H.ST": [
+   "op.acc.3"
+  ],
+  "H.IR": [
+   "op.exp.7",
+   "op.exp.9"
+  ],
+  "H.tools.AV": [
+   "op.exp.6"
+  ],
+  "H.tools.IDS": [
+   "op.mon.1"
+  ],
+  "H.tools.VA": [
+   "op.exp.4",
+   "op.mon.3"
+  ],
+  "H.tools.DLP": [
+   "mp.info.2",
+   "op.mon.3"
+  ],
+  "H.tools.LA": [
+   "op.exp.8",
+   "op.mon.3"
+  ],
+  "H.VM": [
+   "op.exp.4"
+  ],
+  "H.AU": [
+   "op.exp.8",
+   "op.mon.2"
+  ],
+  "D.A": [
+   "mp.info.6"
+  ],
+  "D.I": [
+   "mp.com.3",
+   "mp.info.3"
+  ],
+  "D.C": [
+   "mp.si.2",
+   "mp.com.2"
+  ],
+  "D.DS": [
+   "mp.info.3"
+  ],
+  "K.IC": [
+   "op.exp.10"
+  ],
+  "K.509": [
+   "op.exp.10",
+   "mp.info.3"
+  ],
+  "S.A": [
+   "mp.s.4",
+   "op.cont.2"
+  ],
+  "S.www": [
+   "mp.s.2"
+  ],
+  "S.email": [
+   "mp.s.1"
+  ],
+  "SW.A": [
+   "mp.info.6"
+  ],
+  "SW.SC": [
+   "op.exp.2",
+   "op.exp.3"
+  ],
+  "SW.CM": [
+   "op.exp.5",
+   "op.exp.4"
+  ],
+  "HW.A": [
+   "op.cont.4",
+   "op.pl.4"
+  ],
+  "HW.SC": [
+   "op.exp.2",
+   "op.exp.3"
+  ],
+  "COM.aut": [
+   "mp.com.3",
+   "op.acc.5"
+  ],
+  "COM.I": [
+   "mp.com.3"
+  ],
+  "COM.C": [
+   "mp.com.2"
+  ],
+  "COM.DS": [
+   "mp.com.4"
+  ],
+  "IP.SPP": [
+   "mp.com.1",
+   "op.ext.4"
+  ],
+  "MP.IC": [
+   "mp.si.2"
+  ],
+  "MP.end": [
+   "mp.si.5"
+  ],
+  "AUX.power": [
+   "mp.if.4"
+  ],
+  "AUX.AC": [
+   "mp.if.3"
+  ],
+  "L.AC": [
+   "mp.if.1",
+   "mp.if.2",
+   "mp.if.7"
+  ],
+  "L.A": [
+   "mp.if.5",
+   "mp.if.6",
+   "op.cont.4"
+  ],
+  "PS.AT": [
+   "mp.per.3",
+   "mp.per.4"
+  ],
+  "G.RM": [
+   "op.pl.1"
+  ],
+  "G.plan": [
+   "op.pl.2",
+   "org.1"
+  ],
+  "G.exam": [
+   "op.mon.2",
+   "op.mon.3"
+  ],
+  "BC.BIA": [
+   "op.cont.1"
+  ],
+  "BC.DRP": [
+   "op.cont.2",
+   "op.cont.3"
+  ]
+ },
+ "amenaza_ens": {
+  "[N.1]": [
+   "mp.if.5",
+   "op.cont.2"
+  ],
+  "[N.2]": [
+   "mp.if.6",
+   "op.cont.2"
+  ],
+  "[N.*]": [
+   "mp.if.3",
+   "op.cont.2",
+   "op.cont.4"
+  ],
+  "[I.1]": [
+   "mp.if.5",
+   "op.cont.2"
+  ],
+  "[I.2]": [
+   "mp.if.6",
+   "op.cont.2"
+  ],
+  "[I.*]": [
+   "mp.if.3",
+   "op.cont.2",
+   "op.cont.4"
+  ],
+  "[I.3]": [
+   "mp.if.3"
+  ],
+  "[I.4]": [
+   "mp.if.3"
+  ],
+  "[I.5]": [
+   "op.pl.4",
+   "op.cont.4",
+   "mp.info.6"
+  ],
+  "[I.6]": [
+   "mp.if.4"
+  ],
+  "[I.7]": [
+   "mp.if.3"
+  ],
+  "[I.8]": [
+   "op.ext.1",
+   "op.cont.4",
+   "op.nub.1"
+  ],
+  "[I.9]": [
+   "op.ext.1",
+   "op.cont.2",
+   "op.nub.1"
+  ],
+  "[I.10]": [
+   "mp.si.3",
+   "mp.info.6"
+  ],
+  "[I.11]": [
+   "mp.if.1"
+  ],
+  "[E.1]": [
+   "mp.per.3",
+   "mp.per.4",
+   "op.acc.2"
+  ],
+  "[E.2]": [
+   "org.3",
+   "op.acc.3",
+   "op.exp.3",
+   "op.exp.5"
+  ],
+  "[E.3]": [
+   "op.exp.8"
+  ],
+  "[E.4]": [
+   "op.exp.2",
+   "op.exp.3",
+   "op.exp.5",
+   "org.4"
+  ],
+  "[E.7]": [
+   "org.1",
+   "org.3",
+   "mp.per.1"
+  ],
+  "[E.8]": [
+   "op.exp.6",
+   "mp.s.1",
+   "mp.s.3"
+  ],
+  "[E.9]": [
+   "mp.com.4"
+  ],
+  "[E.10]": [
+   "mp.com.3"
+  ],
+  "[E.14]": [
+   "mp.info.2",
+   "mp.com.2",
+   "mp.per.2",
+   "mp.info.5",
+   "mp.eq.1"
+  ],
+  "[E.15]": [
+   "op.acc.2",
+   "mp.info.6"
+  ],
+  "[E.18]": [
+   "mp.info.6",
+   "op.cont.2"
+  ],
+  "[E.19]": [
+   "mp.info.2",
+   "mp.com.2",
+   "mp.si.2",
+   "mp.per.2",
+   "mp.info.1",
+   "mp.eq.1"
+  ],
+  "[E.20]": [
+   "op.exp.4",
+   "mp.sw.1",
+   "mp.sw.2",
+   "op.pl.3"
+  ],
+  "[E.21]": [
+   "op.exp.4",
+   "op.exp.5",
+   "mp.sw.2"
+  ],
+  "[E.23]": [
+   "op.exp.4",
+   "op.ext.2"
+  ],
+  "[E.24]": [
+   "op.pl.4",
+   "mp.s.4"
+  ],
+  "[E.25]": [
+   "op.exp.1",
+   "mp.eq.3",
+   "mp.si.2",
+   "mp.si.3",
+   "mp.si.1",
+   "mp.si.4"
+  ],
+  "[E.28]": [
+   "mp.per.1",
+   "op.cont.2"
+  ],
+  "[A.4]": [
+   "op.exp.3",
+   "op.exp.5",
+   "op.exp.8",
+   "org.4"
+  ],
+  "[A.5]": [
+   "op.acc.1",
+   "op.acc.5",
+   "op.acc.6",
+   "mp.info.3"
+  ],
+  "[A.6]": [
+   "op.acc.3",
+   "op.acc.4",
+   "op.exp.8",
+   "op.mon.3"
+  ],
+  "[A.7]": [
+   "org.2",
+   "mp.per.2",
+   "op.exp.8"
+  ],
+  "[A.8]": [
+   "op.exp.6",
+   "mp.s.1",
+   "mp.s.3"
+  ],
+  "[A.11]": [
+   "op.acc.2",
+   "op.acc.4",
+   "op.acc.6",
+   "mp.com.1",
+   "op.mon.1",
+   "mp.eq.2"
+  ],
+  "[A.12]": [
+   "mp.com.2"
+  ],
+  "[A.13]": [
+   "mp.info.3",
+   "mp.info.4",
+   "op.exp.8"
+  ],
+  "[A.14]": [
+   "mp.com.2",
+   "mp.com.3"
+  ],
+  "[A.15]": [
+   "op.acc.4",
+   "mp.com.3",
+   "mp.info.6",
+   "op.exp.8"
+  ],
+  "[A.18]": [
+   "mp.info.6",
+   "op.cont.2"
+  ],
+  "[A.19]": [
+   "mp.info.2",
+   "mp.com.2",
+   "mp.si.2",
+   "op.exp.8",
+   "mp.info.1"
+  ],
+  "[A.22]": [
+   "op.pl.5",
+   "op.exp.2",
+   "op.ext.3",
+   "mp.sw.2",
+   "mp.eq.4",
+   "op.pl.3"
+  ],
+  "[A.24]": [
+   "op.pl.4",
+   "mp.s.2",
+   "mp.s.4"
+  ],
+  "[A.25]": [
+   "op.exp.1",
+   "mp.eq.3",
+   "mp.si.2",
+   "mp.si.3",
+   "mp.si.4"
+  ],
+  "[A.26]": [
+   "mp.if.1",
+   "op.cont.4"
+  ],
+  "[A.27]": [
+   "mp.if.1"
+  ],
+  "[A.28]": [
+   "mp.per.1",
+   "op.cont.2"
+  ],
+  "[A.29]": [
+   "mp.per.2",
+   "op.exp.7"
+  ],
+  "[A.30]": [
+   "mp.per.3",
+   "mp.per.4",
+   "mp.s.1",
+   "op.acc.6"
+  ]
+ },
+ "hallazgo_categorias": {
+  "SQLI": {
+   "label": "Inyección SQL",
+   "cwe": "CWE-89",
+   "amenaza": "[A.15]",
+   "deg": {
+    "D": 30,
+    "I": 100,
+    "C": 100,
+    "A": 0,
+    "T": 20
+   },
+   "ens": [
+    "mp.s.2",
+    "mp.sw.1",
+    "op.exp.4"
+   ],
+   "salvaguarda": "S.www"
+  },
+  "XSS": {
+   "label": "Cross-Site Scripting",
+   "cwe": "CWE-79",
+   "amenaza": "[A.5]",
+   "deg": {
+    "D": 0,
+    "I": 40,
+    "C": 60,
+    "A": 60,
+    "T": 0
+   },
+   "ens": [
+    "mp.s.2",
+    "mp.sw.1"
+   ],
+   "salvaguarda": "S.www"
+  },
+  "AUTH_MFA": {
+   "label": "Autenticación sin doble factor",
+   "cwe": "CWE-308",
+   "amenaza": "[A.5]",
+   "deg": {
+    "D": 0,
+    "I": 60,
+    "C": 80,
+    "A": 100,
+    "T": 40
+   },
+   "ens": [
+    "op.acc.5",
+    "op.acc.6"
+   ],
+   "salvaguarda": "H.IA"
+  },
+  "BRUTE": {
+   "label": "Sin límite de intentos de autenticación",
+   "cwe": "CWE-307",
+   "amenaza": "[A.5]",
+   "deg": {
+    "D": 0,
+    "I": 40,
+    "C": 60,
+    "A": 80,
+    "T": 20
+   },
+   "ens": [
+    "op.acc.5",
+    "op.acc.6",
+    "mp.s.2"
+   ],
+   "salvaguarda": "H.IA"
+  },
+  "TLS": {
+   "label": "Criptografía débil en tránsito",
+   "cwe": "CWE-327",
+   "amenaza": "[A.14]",
+   "deg": {
+    "D": 0,
+    "I": 30,
+    "C": 80,
+    "A": 30,
+    "T": 0
+   },
+   "ens": [
+    "mp.com.2",
+    "mp.com.3"
+   ],
+   "salvaguarda": "COM.C"
+  },
+  "DEFCREDS": {
+   "label": "Credenciales por defecto",
+   "cwe": "CWE-1392",
+   "amenaza": "[A.11]",
+   "deg": {
+    "D": 50,
+    "I": 80,
+    "C": 80,
+    "A": 80,
+    "T": 30
+   },
+   "ens": [
+    "op.exp.2",
+    "op.acc.6"
+   ],
+   "salvaguarda": "HW.SC"
+  },
+  "OUTDATED": {
+   "label": "Componente con vulnerabilidad conocida (CVE)",
+   "cwe": "CWE-1104",
+   "amenaza": "[E.20]",
+   "deg": {
+    "D": 50,
+    "I": 50,
+    "C": 50,
+    "A": 0,
+    "T": 0
+   },
+   "ens": [
+    "op.exp.4",
+    "mp.sw.2"
+   ],
+   "salvaguarda": "H.VM"
+  },
+  "IDOR": {
+   "label": "Control de acceso roto (IDOR)",
+   "cwe": "CWE-639",
+   "amenaza": "[A.11]",
+   "deg": {
+    "D": 0,
+    "I": 50,
+    "C": 90,
+    "A": 0,
+    "T": 20
+   },
+   "ens": [
+    "op.acc.2",
+    "op.acc.4",
+    "mp.s.2"
+   ],
+   "salvaguarda": "H.AC"
+  },
+  "LOGGING": {
+   "label": "Registro de actividad insuficiente",
+   "cwe": "CWE-778",
+   "amenaza": "[E.3]",
+   "deg": {
+    "D": 0,
+    "I": 0,
+    "C": 0,
+    "A": 30,
+    "T": 100
+   },
+   "ens": [
+    "op.exp.8",
+    "op.mon.1"
+   ],
+   "salvaguarda": "H.AU"
+  },
+  "INFOLEAK": {
+   "label": "Exposición de información sensible",
+   "cwe": "CWE-200",
+   "amenaza": "[A.19]",
+   "deg": {
+    "D": 0,
+    "I": 0,
+    "C": 70,
+    "A": 0,
+    "T": 0
+   },
+   "ens": [
+    "mp.info.2",
+    "op.exp.2"
+   ],
+   "salvaguarda": "SW.SC"
+  },
+  "NETSEG": {
+   "label": "Segmentación de red deficiente",
+   "cwe": "CWE-653",
+   "amenaza": "[A.11]",
+   "deg": {
+    "D": 30,
+    "I": 50,
+    "C": 70,
+    "A": 0,
+    "T": 0
+   },
+   "ens": [
+    "mp.com.1",
+    "mp.com.4"
+   ],
+   "salvaguarda": "COM.DS"
+  },
+  "PHISHING": {
+   "label": "Susceptibilidad a phishing",
+   "cwe": "CAPEC-98",
+   "amenaza": "[A.30]",
+   "deg": {
+    "D": 20,
+    "I": 50,
+    "C": 80,
+    "A": 50,
+    "T": 20
+   },
+   "ens": [
+    "mp.per.3",
+    "mp.per.4",
+    "mp.s.1"
+   ],
+   "salvaguarda": "PS.AT"
+  },
+  "DOS": {
+   "label": "Sin protección ante agotamiento de recursos",
+   "cwe": "CWE-770",
+   "amenaza": "[A.24]",
+   "deg": {
+    "D": 100,
+    "I": 0,
+    "C": 0,
+    "A": 0,
+    "T": 0
+   },
+   "ens": [
+    "mp.s.4",
+    "op.pl.4"
+   ],
+   "salvaguarda": "S.A"
+  },
+  "BACKUP": {
+   "label": "Copias de seguridad expuestas o sin probar",
+   "cwe": "CWE-530",
+   "amenaza": "[A.18]",
+   "deg": {
+    "D": 100,
+    "I": 60,
+    "C": 60,
+    "A": 0,
+    "T": 0
+   },
+   "ens": [
+    "mp.info.6",
+    "op.cont.3"
+   ],
+   "salvaguarda": "D.A"
+  }
+ }
+}
