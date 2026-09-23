@@ -1,5 +1,10 @@
 # Cambios
 
+## Sin publicar
+- `package.json` (sin dependencias npm, solo `engines`/scripts) y `requirements.txt` (openpyxl, pytest, playwright fijados) para builds y entornos de prueba reproducibles.
+- `SECURITY.md`: proceso de reporte de vulnerabilidades con contacto, plazos y versiones soportadas; riesgo residual de CVE-2023-30533 (SheetJS CE 0.18.5 vía `xlsx-js-style`) documentado explícitamente con su mitigación.
+- README: instrucciones de entorno virtual para ejecutar la suite completa (`requirements.txt` + `playwright install chromium`).
+
 ## 2.0.1 · septiembre de 2026
 - Los círculos de acento y de avatar se ven en tema claro y oscuro, y el color activo tiñe la navegación, los botones y las tarjetas seleccionadas (verde agua, azul, verde, amarillo, rojo y grafito).
 - Las tarjetas de los casos de ejemplo conservan su color en tema oscuro.

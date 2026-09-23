@@ -1,0 +1,8 @@
+# Dependencias para el auditor CLI (auditor/ens_soa_audit.py) y la suite de pruebas.
+# Instalar en un entorno virtual:
+#   python3 -m venv .venv && source .venv/bin/activate
+#   pip install -r requirements.txt
+#   playwright install chromium
+openpyxl==3.1.5
+pytest==9.1.1
+playwright==1.63.0
