@@ -1,0 +1,15 @@
+{
+  "name": "ens-compliance-studio",
+  "version": "2.0.1",
+  "private": true,
+  "description": "Categorización ENS, análisis de riesgos MAGERIT, SoA y preauditoría en un único fichero HTML autocontenido.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node app/build.js",
+    "test:engine": "node --test tests/engine.test.js",
+    "test": "bash run_tests.sh"
+  }
+}

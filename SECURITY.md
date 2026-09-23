@@ -31,6 +31,34 @@ ENS Compliance Studio maneja información sensible: el estado de cumplimiento de
 
 Sin servidor, sin cuentas, sin analítica ni telemetría. Los datos viven en el `localStorage` del navegador y salen de él solo mediante las exportaciones que el usuario pide. Las fuentes tipográficas se cargan de Google Fonts; si se prefiere no hacerlo, la aplicación funciona igual con las fuentes del sistema.
 
+## Riesgo residual aceptado
+
+`app/vendor/xlsx.bundle.js` empaqueta `xlsx-js-style` 1.2.0, construido sobre SheetJS Community Edition 0.18.5. Esa base es la afectada por **CVE-2023-30533** (prototype pollution al leer un `.xlsx` manipulado) y no tiene una versión parcheada de SheetJS CE que sustituirla sin romper el fork de estilos del que depende la exportación con formato.
+
+Mitigación aplicada, no eliminación de la causa:
+
+- `Object.prototype` se congela (`Object.freeze`) antes de leer cualquier fichero, así que una contaminación de prototipo no puede escribir en él.
+- La lectura se hace sin fórmulas ni HTML incrustado.
+- Se aplican límites de tamaño y de filas/columnas/hojas antes de parsear.
+- Todo lo que sale del parser pasa por `sanitizeState` antes de entrar en el estado de la aplicación.
+- `tests/e2e_app.py` verifica en cada pasada que `Object.prototype` no queda contaminado tras importar un Excel hostil.
+
+Este riesgo se acepta explícitamente para la versión actual porque no hay upstream parcheado que integrar. Se revisará en cada actualización de `xlsx-js-style` y queda registrado en el [CHANGELOG](CHANGELOG.md) cuando cambie.
+
+## Versiones soportadas
+
+| Versión | Soporte |
+|---|---|
+| 2.0.x | Sí — versión actual |
+| < 2.0 | No — actualizar a 2.0.1 |
+
 ## Informar de una vulnerabilidad
 
-Abre una *issue* privada (Security Advisory) en el repositorio o escribe al autor. Se agradece incluir una prueba de concepto mínima.
+1. **No abras una *issue* pública.** Usa el *Security Advisory* privado del repositorio (pestaña «Security» → «Report a vulnerability») o escribe directamente a **yoandyramirezdelgado@gmail.com** con el asunto `[SECURITY] ens-compliance-studio`.
+2. Incluye una prueba de concepto mínima (fichero de entrada, pasos, resultado esperado vs. obtenido) y, si es posible, el impacto (qué dato o control se ve comprometido).
+3. Confirmación de recepción: en un plazo de **72 horas**.
+4. Primer diagnóstico (válida / no válida / necesita más información): en un plazo de **7 días naturales**.
+5. Si se confirma, se publica una corrección y un aviso en el CHANGELOG. Al ser una aplicación estática sin backend ni usuarios registrados, no hay despliegue centralizado que parchear: el aviso indica qué versión de `dist/` sustituye a la vulnerable.
+6. Se acredita al reportante en el aviso, salvo que pida lo contrario.
+
+No se ofrece recompensa económica (bug bounty); es un proyecto sin ánimo de lucro.
