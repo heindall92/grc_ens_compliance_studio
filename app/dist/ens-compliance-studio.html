@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mosUtWFuK2Km5IOSqiYWkl3QoXdx4Zqg1aL4jX5rHDc=' 'sha256-UQTTxqoQgiNR/bB6NxTutwZL/WJ94gTDgrYv7C8NKiw=' 'sha256-ZNbkehEi8v15p6XdSlPJehOmCRLzTCuahA10JTiS1g0=' 'sha256-zAFRMKqFIefwiPiImOupSczcv7ON8L0Sm0S3Jzw6b0E=' 'sha256-HHq/KZP/LNYeUI+SaOms2gCYyXlvOSXSug0leQcmU+I='; style-src 'sha256-1OVK/FIn8aQvY4+71RzdJ3+nSLDL4/HL8DKw4X9YnPI='; style-src-attr 'unsafe-inline'; font-src 'none'; img-src data: blob:; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mosUtWFuK2Km5IOSqiYWkl3QoXdx4Zqg1aL4jX5rHDc=' 'sha256-UQTTxqoQgiNR/bB6NxTutwZL/WJ94gTDgrYv7C8NKiw=' 'sha256-/KndOqSA8ivH0f8MdSkHGk15+NlMh2FulTJly17Ss58=' 'sha256-zAFRMKqFIefwiPiImOupSczcv7ON8L0Sm0S3Jzw6b0E=' 'sha256-HHq/KZP/LNYeUI+SaOms2gCYyXlvOSXSug0leQcmU+I='; style-src 'sha256-H7wDm6MuM91DFALb7+DaGfGtyAXZmALOlrkWsq0d2sU='; style-src-attr 'unsafe-inline'; font-src 'none'; img-src data: blob:; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ENS Compliance Studio</title>
@@ -113,7 +113,7 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
 .only-mobile { display: none !important; }
 
 /* ============ Shell ============ */
-.app { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100%; }
+.app { display: grid; grid-template-columns: 280px minmax(0, 1fr); min-height: 100%; }
 .side { position: sticky; top: env(safe-area-inset-top, 0px); height: 100vh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--line); padding: 16px 12px; display: flex; flex-direction: column; gap: 14px; z-index: 30; }
 .brand { display: flex; align-items: center; gap: 10px; padding: 2px 8px 4px; }
 .brand b { display: block; font-size: .98rem; letter-spacing: -.02em; line-height: 1.1; }
@@ -623,6 +623,10 @@ pre.code { max-width: 100%; font: .78rem/1.55 var(--f-mono); background: var(--s
 .faq summary { cursor: pointer; font-weight: 500; }
 .faq p { margin-top: 8px; color: var(--ink-2); font-size: .88rem; }
 .about p { margin-bottom: 10px; color: var(--ink-2); }
+.about-card { display: flex; align-items: center; gap: 14px; margin: 16px 0 12px; }
+.about-card b { display: block; font-size: 1.02rem; letter-spacing: -.01em; }
+.about-card small { color: var(--muted); }
+.about-links { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
 .empty-state { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 36px 20px; color: var(--muted); }
 .empty-state h3 { color: var(--ink); }
 .empty-state p { max-width: 46ch; font-size: .88rem; }
@@ -718,14 +722,14 @@ body { background: var(--bg); }
 }
 
 /* ============ Barra lateral: completa o compacta ============
-   Desde 901 px la barra es fija a la izquierda con dos anchos: completa (264 px) y compacta (76 px).
+   Desde 901 px la barra es fija a la izquierda con dos anchos: completa (280 px) y compacta (76 px).
    Compacta entre 901 y 1240 px o si se pliega (botón o «[»); en compacta se despliega por encima del
    contenido al pasar el ratón, con el foco de teclado o con el botón (táctil). Todo se maqueta al ancho
    completo y la barra recorta: los iconos no se mueven y solo cambian anchos, posiciones y opacidades,
    controlados por --x (0 plegada, 1 desplegada). */
 .rail-tg, .rail-sp, .nav-glow, .nav-item .lk { display: none; }
 @media (min-width: 901px) {
-  :root { --rail-full: 264px; --rail-mini: 76px; --rail-w: var(--rail-full); --rail-t: .4s var(--ease); --rail-d: calc(var(--rail-full) - var(--rail-mini)); }
+  :root { --rail-full: 280px; --rail-mini: 76px; --rail-w: var(--rail-full); --rail-t: .4s var(--ease); --rail-d: calc(var(--rail-full) - var(--rail-mini)); }
   :root[data-mini] { --rail-w: var(--rail-mini); }
   .app { display: block; padding-left: var(--rail-w); }
   :root.ready .app { transition: padding-left var(--rail-t); }
@@ -766,6 +770,7 @@ body { background: var(--bg); }
   .nav-item .count { position: absolute; margin: 0; top: calc(1px + var(--x) * 9px); left: calc(28px + var(--x) * (var(--rail-d) + 2px));
     padding: 2px 6px; font-size: .64rem; transition: top var(--rail-t), left var(--rail-t); box-shadow: 0 0 0 2px var(--surface); }
   .nav-item .lk { display: block; position: absolute; left: calc(var(--rail-d) + 26px); top: 50%; transform: translateY(-50%); color: var(--muted); opacity: calc(var(--x) * .8); }
+  .nav-item[data-locked] .lbl, .nav-item:has(.count) .lbl { padding-right: 34px; }
   /* Pie */
   .side-foot { width: calc(52px + var(--x) * var(--rail-d)); transition: width var(--rail-t); }
   .side-foot .nav-item { width: 100%; }
@@ -787,6 +792,8 @@ body { background: var(--bg); }
   .act-row .ar-main { grid-column: 1 / -1; }
   .help-layout { grid-template-columns: minmax(0, 1fr); }
 }
+/* En el cajón móvil la barra es material pesado y opaco: no se apila sobre el contenido translúcido */
+@media (max-width: 900px) { .side { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; } }
 @media (max-width: 560px) { .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 </style>
@@ -1291,7 +1298,7 @@ const EN = {
   'Busca una medida (op.acc.6), un riesgo, una sección o una acción…': 'Search a measure (op.acc.6), a risk, a section or an action…',
   'Cambiar tema': 'Change theme', 'Abrir menú': 'Open menu', 'Sin resultados.': 'No results.', 'Sin resultados': 'No results',
   'Ir a': 'Go to', 'Acciones': 'Actions', 'Casos de ejemplo': 'Sample cases', 'Medidas': 'Measures', 'Riesgos': 'Risks',
-  'Nuevo proyecto': 'New project', 'Sin proyecto abierto': 'No open project', 'Se guardan sin cifrar. Cualquier página del mismo origen puede leerlos: todos los HTML abiertos desde el disco (file://) y todos los proyectos publicados en heindall92.github.io. Con datos reales de una organización, usa el fichero descargado en un equipo y perfil de navegador propios, y borra los datos al terminar.': 'They are stored unencrypted. Any page on the same origin can read them: every HTML file opened from disk (file://) and every project published on heindall92.github.io. With real organisational data, use the downloaded file on your own computer and browser profile, and delete the data when you finish.', 'Ir al contenido': 'Skip to content', 'Las vistas del proyecto se activan al crear o abrir uno.': 'Project views unlock when you create or open a project.', 'Plegar menú lateral': 'Collapse sidebar', 'Desplegar menú lateral': 'Expand sidebar', 'Plegar menú lateral · [': 'Collapse sidebar · [', 'Desplegar menú lateral · [': 'Expand sidebar · [', 'Elige o crea uno': 'Choose or create one',
+  'Nuevo proyecto': 'New project', 'Sin proyecto abierto': 'No open project', 'Diseño y desarrollo · Junior Pentester · eJPTv2 · AI Governance (ISO 42001)': 'Design and development · Junior Pentester · eJPTv2 · AI Governance (ISO 42001)', 'Portafolio': 'Portfolio', 'Correo': 'Email', 'Otra herramienta del autor:': 'Another tool by the author:', ', que relaciona el ENS con ISO/IEC 27001, NIS2 e ISO/IEC 42001.': ', which maps the ENS to ISO/IEC 27001, NIS2 and ISO/IEC 42001.', 'Lectura de Excel con SheetJS CE 0.20.3 y exportación con xlsx-js-style 1.2.0, ambas Apache-2.0. Código bajo licencia MIT.': 'Excel reading with SheetJS CE 0.20.3 and export with xlsx-js-style 1.2.0, both Apache-2.0. Code under the MIT licence.', 'Se guardan sin cifrar. Cualquier página del mismo origen puede leerlos: todos los HTML abiertos desde el disco (file://) y todos los proyectos publicados en heindall92.github.io. Con datos reales de una organización, usa el fichero descargado en un equipo y perfil de navegador propios, y borra los datos al terminar.': 'They are stored unencrypted. Any page on the same origin can read them: every HTML file opened from disk (file://) and every project published on heindall92.github.io. With real organisational data, use the downloaded file on your own computer and browser profile, and delete the data when you finish.', 'Ir al contenido': 'Skip to content', 'Las vistas del proyecto se activan al crear o abrir uno.': 'Project views unlock when you create or open a project.', 'Plegar menú lateral': 'Collapse sidebar', 'Desplegar menú lateral': 'Expand sidebar', 'Plegar menú lateral · [': 'Collapse sidebar · [', 'Desplegar menú lateral · [': 'Expand sidebar · [', 'Elige o crea uno': 'Choose or create one',
   'Caso de ejemplo': 'Sample case', 'Mi proyecto': 'My project', 'Mis proyectos': 'My projects',
   'Casos de ejemplo abiertos': 'Open sample cases', 'Importar SoA desde Excel': 'Import SoA from Excel',
   'Todos los proyectos y casos': 'All projects and cases',
@@ -1661,7 +1668,7 @@ const HALL = D.mapping.hallazgo_categorias;
 const CAT_AM = D.catalogos.AMENAZAS;
 const CAT_SAL = D.catalogos.SALVAGUARDAS;
 const TIPOS = D.catalogos.TIPOS_ACTIVO;
-const VERSION = '2.0.0';
+const VERSION = '2.1.0';
 
 const clone = (o) => JSON.parse(JSON.stringify(o));
 const $ = (s, r = document) => r.querySelector(s);
@@ -2040,7 +2047,7 @@ function render() {
   else if (fkey) { const el = document.querySelector('#side ' + fkey + ', #top ' + fkey + ', #view ' + fkey + ', #palette ' + fkey); if (el) el.focus({ preventScroll: true }); }
   if (ui.confirm) { const c = document.querySelector('#view [data-act="del-project"], #view [data-act="wipe"]'); if (c && fkey && /data-act="ask"/.test(fkey)) c.focus({ preventScroll: true }); }
 }
-/* Barra lateral: completa (264 px) o compacta (76 px). Compacta entre 901 y 1240 px o si el usuario la pliega
+/* Barra lateral: completa (280 px) o compacta (76 px). Compacta entre 901 y 1240 px o si el usuario la pliega
  * (botón o tecla «[»); en compacta se despliega por encima del contenido al pasar el ratón, con el teclado o
  * con el botón (pantallas táctiles). El aspecto lo controla la variable --x en styles.css. */
 const railMedium = () => window.innerWidth > 900 && window.innerWidth <= 1240;
@@ -2446,10 +2453,12 @@ function vAyuda() {
     body = `<div class="faq">${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>`;
   } else {
     body = `<div class="about"><p><b>ENS Compliance Studio ${VERSION}</b> · Proyecto de fin de máster en Ciberseguridad &amp; IA (Evolve Academy), módulo de Gobierno, Riesgo y Cumplimiento.</p>
-      <p>Autor: Yoandy Ramírez Delgado.</p>
+      <div class="about-card"><span class="avatar c-blue" style="--s:52px">YR</span><div><b>Yoandy Ramírez Delgado</b><small>Diseño y desarrollo · Junior Pentester · eJPTv2 · AI Governance (ISO 42001)</small></div></div>
+      <div class="about-links">${[['https://www.linkedin.com/in/yoandyrd92/', 'LinkedIn'], ['https://github.com/heindall92', 'GitHub'], ['https://yoandyramirez.com', 'Portafolio'], ['https://profile.hackthebox.com/profile/019c5812-b4ca-7315-b12f-14db6d2b42fa', 'HackTheBox'], ['mailto:yoandyramirezdelgado@gmail.com', 'Correo']].map(([h, l]) => `<a class="btn sm" href="${h}" target="_blank" rel="noopener noreferrer">${icon('external', 14)}${l}</a>`).join('')}</div>
+      <p>Otra herramienta del autor: <a href="https://github.com/heindall92/rosetta_multinorma" target="_blank" rel="noopener noreferrer">Rosetta</a>, que relaciona el ENS con ISO/IEC 27001, NIS2 e ISO/IEC 42001.</p>
       <p>Normativa de referencia: Real Decreto 311/2022 (BOE-A-2022-7191), MAGERIT v3, guías CCN-STIC 802, 803, 804, 808 y 825, ISO/IEC 27001:2022.</p>
       <p>Herramienta de apoyo y preauditoría: no sustituye a PILAR ni a la auditoría formal del art. 31. Los casos de ejemplo son ficticios.</p>
-      <p class="muted small">Exportación a Excel con xlsx-js-style (Apache-2.0). Código bajo licencia MIT.</p></div>`;
+      <p class="muted small">Lectura de Excel con SheetJS CE 0.20.3 y exportación con xlsx-js-style 1.2.0, ambas Apache-2.0. Código bajo licencia MIT.</p></div>`;
   }
   return `${pageHead('Centro de ayuda', 'Ayuda', 'Flujo de trabajo, método de cálculo, reglas de preauditoría, glosario y atajos de teclado.')}
   <div class="help-layout"><nav class="help-nav">${tabs.map(([id, l, ic]) => `<button type="button" data-act="help-tab" data-tab="${id}"${t === id ? ' aria-current="page"' : ''}>${icon(ic, 16)}${l}</button>`).join('')}</nav>

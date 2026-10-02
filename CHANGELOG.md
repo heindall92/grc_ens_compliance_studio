@@ -3,7 +3,7 @@
 ## 2.1.0 · octubre de 2026
 
 **Interfaz**
-- Barra lateral con dos anchos: completa (264 px) y compacta (76 px). Compacta automática entre 901 y 1240 px o al plegarla con el botón o con «[»; en compacta se despliega por encima del contenido con el ratón o el teclado, sin mover los iconos. El resaltado sigue al puntero.
+- Barra lateral con dos anchos: completa (280 px) y compacta (76 px). Compacta automática entre 901 y 1240 px o al plegarla con el botón o con «[»; en compacta se despliega por encima del contenido con el ratón o el teclado, sin mover los iconos. El resaltado sigue al puntero.
 - Sin proyecto abierto, las vistas del proyecto aparecen con candado y una nota que explica cómo activarlas.
 - Estilo según las guías de Apple: fuente del sistema, grises y colores del sistema (contraste aumentado en claro), azul por defecto, sin degradados de fondo, material translúcido solo en la barra superior, la lateral, los menús y la paleta, transiciones sin rebote, respuesta al pulsar, `prefers-reduced-transparency` y `prefers-contrast`.
 - Textos revisados: 62 cambios para quitar eslóganes, tono de chat y afirmaciones que el código no sostenía (privacidad del asistente, firma en el plan de acción). El motor de reglas se llama «preauditoría» para no confundirlo con la auditoría formal del art. 31.

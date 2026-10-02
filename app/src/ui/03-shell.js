@@ -85,7 +85,7 @@ function render() {
   else if (fkey) { const el = document.querySelector('#side ' + fkey + ', #top ' + fkey + ', #view ' + fkey + ', #palette ' + fkey); if (el) el.focus({ preventScroll: true }); }
   if (ui.confirm) { const c = document.querySelector('#view [data-act="del-project"], #view [data-act="wipe"]'); if (c && fkey && /data-act="ask"/.test(fkey)) c.focus({ preventScroll: true }); }
 }
-/* Barra lateral: completa (264 px) o compacta (76 px). Compacta entre 901 y 1240 px o si el usuario la pliega
+/* Barra lateral: completa (280 px) o compacta (76 px). Compacta entre 901 y 1240 px o si el usuario la pliega
  * (botón o tecla «[»); en compacta se despliega por encima del contenido al pasar el ratón, con el teclado o
  * con el botón (pantallas táctiles). El aspecto lo controla la variable --x en styles.css. */
 const railMedium = () => window.innerWidth > 900 && window.innerWidth <= 1240;

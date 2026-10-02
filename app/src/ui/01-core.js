@@ -13,7 +13,7 @@ const HALL = D.mapping.hallazgo_categorias;
 const CAT_AM = D.catalogos.AMENAZAS;
 const CAT_SAL = D.catalogos.SALVAGUARDAS;
 const TIPOS = D.catalogos.TIPOS_ACTIVO;
-const VERSION = '2.0.0';
+const VERSION = '2.1.0';
 
 const clone = (o) => JSON.parse(JSON.stringify(o));
 const $ = (s, r = document) => r.querySelector(s);

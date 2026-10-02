@@ -103,7 +103,7 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
 .only-mobile { display: none !important; }
 
 /* ============ Shell ============ */
-.app { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100%; }
+.app { display: grid; grid-template-columns: 280px minmax(0, 1fr); min-height: 100%; }
 .side { position: sticky; top: env(safe-area-inset-top, 0px); height: 100vh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--line); padding: 16px 12px; display: flex; flex-direction: column; gap: 14px; z-index: 30; }
 .brand { display: flex; align-items: center; gap: 10px; padding: 2px 8px 4px; }
 .brand b { display: block; font-size: .98rem; letter-spacing: -.02em; line-height: 1.1; }
@@ -613,6 +613,10 @@ pre.code { max-width: 100%; font: .78rem/1.55 var(--f-mono); background: var(--s
 .faq summary { cursor: pointer; font-weight: 500; }
 .faq p { margin-top: 8px; color: var(--ink-2); font-size: .88rem; }
 .about p { margin-bottom: 10px; color: var(--ink-2); }
+.about-card { display: flex; align-items: center; gap: 14px; margin: 16px 0 12px; }
+.about-card b { display: block; font-size: 1.02rem; letter-spacing: -.01em; }
+.about-card small { color: var(--muted); }
+.about-links { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
 .empty-state { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 36px 20px; color: var(--muted); }
 .empty-state h3 { color: var(--ink); }
 .empty-state p { max-width: 46ch; font-size: .88rem; }
@@ -708,14 +712,14 @@ body { background: var(--bg); }
 }
 
 /* ============ Barra lateral: completa o compacta ============
-   Desde 901 px la barra es fija a la izquierda con dos anchos: completa (264 px) y compacta (76 px).
+   Desde 901 px la barra es fija a la izquierda con dos anchos: completa (280 px) y compacta (76 px).
    Compacta entre 901 y 1240 px o si se pliega (botón o «[»); en compacta se despliega por encima del
    contenido al pasar el ratón, con el foco de teclado o con el botón (táctil). Todo se maqueta al ancho
    completo y la barra recorta: los iconos no se mueven y solo cambian anchos, posiciones y opacidades,
    controlados por --x (0 plegada, 1 desplegada). */
 .rail-tg, .rail-sp, .nav-glow, .nav-item .lk { display: none; }
 @media (min-width: 901px) {
-  :root { --rail-full: 264px; --rail-mini: 76px; --rail-w: var(--rail-full); --rail-t: .4s var(--ease); --rail-d: calc(var(--rail-full) - var(--rail-mini)); }
+  :root { --rail-full: 280px; --rail-mini: 76px; --rail-w: var(--rail-full); --rail-t: .4s var(--ease); --rail-d: calc(var(--rail-full) - var(--rail-mini)); }
   :root[data-mini] { --rail-w: var(--rail-mini); }
   .app { display: block; padding-left: var(--rail-w); }
   :root.ready .app { transition: padding-left var(--rail-t); }
@@ -756,6 +760,7 @@ body { background: var(--bg); }
   .nav-item .count { position: absolute; margin: 0; top: calc(1px + var(--x) * 9px); left: calc(28px + var(--x) * (var(--rail-d) + 2px));
     padding: 2px 6px; font-size: .64rem; transition: top var(--rail-t), left var(--rail-t); box-shadow: 0 0 0 2px var(--surface); }
   .nav-item .lk { display: block; position: absolute; left: calc(var(--rail-d) + 26px); top: 50%; transform: translateY(-50%); color: var(--muted); opacity: calc(var(--x) * .8); }
+  .nav-item[data-locked] .lbl, .nav-item:has(.count) .lbl { padding-right: 34px; }
   /* Pie */
   .side-foot { width: calc(52px + var(--x) * var(--rail-d)); transition: width var(--rail-t); }
   .side-foot .nav-item { width: 100%; }
@@ -777,4 +782,6 @@ body { background: var(--bg); }
   .act-row .ar-main { grid-column: 1 / -1; }
   .help-layout { grid-template-columns: minmax(0, 1fr); }
 }
+/* En el cajón móvil la barra es material pesado y opaco: no se apila sobre el contenido translúcido */
+@media (max-width: 900px) { .side { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; } }
 @media (max-width: 560px) { .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

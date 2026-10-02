@@ -25,7 +25,7 @@ def states(page):
     J = page.evaluate
     for v in GLOBAL:
         J(f"window.__ENS_STUDIO__.go('{v}')"); yield v
-    for t in ["reglas", "glosario"]:
+    for t in ["reglas", "glosario", "faq", "acerca"]:
         if page.locator(f'[data-act="help-tab"][data-tab="{t}"]').count():
             J(f"window.__ENS_STUDIO__.go('ayuda')"); page.click(f'[data-act="help-tab"][data-tab="{t}"]'); yield f"ayuda/{t}"
     J("window.__ENS_STUDIO__.go('nuevo')")
