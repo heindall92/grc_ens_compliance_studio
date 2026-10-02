@@ -55,8 +55,14 @@ function go(view) {
   render(); window.scrollTo({ top: 0 });
   const h = $('#main h1'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
 }
+/* Tras redibujar, el foco vuelve al mismo control: por su id o, si no tiene, por sus data-* */
+const FOCUS_KEYS = ['act', 'view', 'tab', 'v', 'k', 'code', 'id', 'case', 'i', 'what', 'menu', 'sev', 'f'];
+function focusKey(el) {
+  if (!el || !el.dataset || !el.dataset.act) return null;
+  return FOCUS_KEYS.filter((k) => el.dataset[k] !== undefined).map((k) => `[data-${k}="${CSS.escape(el.dataset[k])}"]`).join('');
+}
 function render() {
-  const ae = document.activeElement; const active = ae && ae.id;
+  const ae = document.activeElement; const active = ae && ae.id; const fkey = !active && ae !== document.body ? focusKey(ae) : null;
   let sel = null; try { if (ae && typeof ae.selectionStart === 'number') sel = [ae.selectionStart, ae.selectionEnd]; } catch (e) { sel = null; }
   applyRail(); $('#side').innerHTML = renderSide(); $('#side').classList.toggle('menu-open', ui.menu === 'proyectos');
   moveGlow(null, true);
@@ -66,7 +72,18 @@ function render() {
   document.body.classList.toggle('drawer-open', ui.drawer);
   renderPalette();
   localize();
+  // Los datos que solo están en el tooltip también se alcanzan con el teclado y llegan al lector de pantalla
+  document.querySelectorAll('#view .bar-g[data-tip], #view .bar-row[data-tip], #view .cell.has[data-tip]').forEach((el) => {
+    const t = lang() === 'en' ? tr(el.getAttribute('data-tip')) : el.getAttribute('data-tip');
+    el.setAttribute('tabindex', '0'); el.setAttribute('role', 'img'); el.setAttribute('aria-label', t);
+  });
+  document.querySelectorAll('#view .table-wrap, #view .norma, #view pre.code').forEach((el) => {
+    if (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) { el.setAttribute('tabindex', '0'); if (!el.hasAttribute('aria-label')) { el.setAttribute('role', 'region'); el.setAttribute('aria-label', lang() === 'en' ? 'Scrollable table' : 'Tabla desplazable'); } }
+  });
+  const sk = document.querySelector('.skip'); if (sk) sk.textContent = lang() === 'en' ? 'Skip to content' : 'Ir al contenido';
   if (active) { const el = document.getElementById(active); if (el) { el.focus({ preventScroll: true }); if (sel) { try { el.setSelectionRange(sel[0], sel[1]); } catch (e) { /* n/a */ } } } }
+  else if (fkey) { const el = document.querySelector('#side ' + fkey + ', #top ' + fkey + ', #view ' + fkey + ', #palette ' + fkey); if (el) el.focus({ preventScroll: true }); }
+  if (ui.confirm) { const c = document.querySelector('#view [data-act="del-project"], #view [data-act="wipe"]'); if (c && fkey && /data-act="ask"/.test(fkey)) c.focus({ preventScroll: true }); }
 }
 /* Barra lateral: completa (264 px) o compacta (76 px). Compacta entre 901 y 1240 px o si el usuario la pliega
  * (botón o tecla «[»); en compacta se despliega por encima del contenido al pasar el ratón, con el teclado o
@@ -135,14 +152,14 @@ function renderSide() {
 }
 function projectMenu() {
   const own = ws.projects.filter((p) => p.kind === 'own'); const demos = ws.projects.filter((p) => p.kind === 'demo');
-  const row = (p) => `<button type="button" class="menu-item${p.id === ws.activeId ? ' on' : ''}" data-act="open-project" data-id="${esc(p.id)}">${icon(p.kind === 'demo' ? caseIcon(p.caseId) : 'building', 16)}<span>${esc(p.nombre)}</span>${p.id === ws.activeId ? icon('check', 16, 'accent') : ''}</button>`;
+  const row = (p) => `<button type="button" role="menuitem" class="menu-item${p.id === ws.activeId ? ' on' : ''}" data-act="open-project" data-id="${esc(p.id)}">${icon(p.kind === 'demo' ? caseIcon(p.caseId) : 'building', 16)}<span>${esc(p.nombre)}</span>${p.id === ws.activeId ? icon('check', 16, 'accent') : ''}</button>`;
   return `<div class="menu" role="menu">
-    ${own.length ? `<div class="menu-label">Mis proyectos</div>${own.map(row).join('')}` : ''}
-    ${demos.length ? `<div class="menu-label">Casos de ejemplo abiertos</div>${demos.map(row).join('')}` : ''}
-    <div class="menu-sep"></div>
-    <button type="button" class="menu-item" data-act="nav" data-view="nuevo">${icon('plus', 16)}<span>Nuevo proyecto</span></button>
-    <button type="button" class="menu-item" data-act="import-xlsx">${icon('upload', 16)}<span>Importar SoA desde Excel</span></button>
-    <button type="button" class="menu-item" data-act="nav" data-view="inicio">${icon('home', 16)}<span>Todos los proyectos y casos</span></button>
+    ${own.length ? `<div class="menu-label" role="presentation">Mis proyectos</div>${own.map(row).join('')}` : ''}
+    ${demos.length ? `<div class="menu-label" role="presentation">Casos de ejemplo abiertos</div>${demos.map(row).join('')}` : ''}
+    <div class="menu-sep" role="separator"></div>
+    <button type="button" role="menuitem" class="menu-item" data-act="nav" data-view="nuevo">${icon('plus', 16)}<span>Nuevo proyecto</span></button>
+    <button type="button" role="menuitem" class="menu-item" data-act="import-xlsx">${icon('upload', 16)}<span>Importar SoA desde Excel</span></button>
+    <button type="button" role="menuitem" class="menu-item" data-act="nav" data-view="inicio">${icon('home', 16)}<span>Todos los proyectos y casos</span></button>
   </div>`;
 }
 const TITLES = { inicio: 'Inicio', nuevo: 'Nuevo proyecto', perfil: 'Perfil', ajustes: 'Ajustes', ayuda: 'Ayuda', panel: 'Panel', categorizacion: 'Categorización', riesgos: 'Análisis de riesgos', soa: 'Declaración de Aplicabilidad', compensatorias: 'Medidas compensatorias', hallazgos: 'Evidencia técnica', plan: 'Plan de acción', auditoria: 'Auditoría', exportar: 'Exportar' };
@@ -160,9 +177,9 @@ function renderTop() {
 }
 function demoBanner() {
   const p = activeMeta();
-  return `<div class="demo-banner">${icon('info', 18)}<p><b>Caso de ejemplo con datos ficticios.</b> Puedes editarlo libremente: los cambios solo afectan a esta copia.</p>
+  return `<div class="demo-banner">${icon('info', 18)}<p><b>Caso de ejemplo con datos ficticios.</b> Los cambios se guardan en una copia local; «Restablecer» recupera el estado original.</p>
     <div class="row"><button type="button" class="btn sm ghost" data-act="reset-case" data-case="${esc(p.caseId)}">${icon('refresh', 15)}Restablecer</button>
-    <button type="button" class="btn sm primary" data-act="nav" data-view="nuevo">Empezar con mis datos${icon('arrowRight', 15)}</button></div></div>`;
+    <button type="button" class="btn sm primary" data-act="nav" data-view="nuevo">Nuevo proyecto${icon('arrowRight', 15)}</button></div></div>`;
 }
 
 /* ---------- Paleta de comandos ---------- */
@@ -173,7 +190,7 @@ function paletteItems() {
   for (const [v, l, ic] of V) if (state || !PROJECT_VIEWS.includes(v)) items.push({ grupo: 'Ir a', label: l, ic, act: () => go(v) });
   if (state) {
     items.push({ grupo: 'Acciones', label: 'Descargar la SoA en Excel', ic: 'sheet', act: () => exportXlsx() });
-    items.push({ grupo: 'Acciones', label: 'Descargar el informe de auditoría', ic: 'download', act: () => saveFile(`${slug()}_informe_preauditoria_${today()}.md`, informeMd()) });
+    items.push({ grupo: 'Acciones', label: 'Descargar el informe de preauditoría (.md)', ic: 'download', act: () => saveFile(`${slug()}_informe_preauditoria_${today()}.md`, informeMd()) });
   }
   items.push({ grupo: 'Acciones', label: 'Cambiar entre tema claro y oscuro', ic: 'moon', act: () => { ws.settings.tema = document.documentElement.getAttribute('data-theme') === 'dark' || (ws.settings.tema === 'sistema' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'claro' : 'oscuro'; saveWs(); applyTheme(); render(); } });
   for (const c of D.casos) items.push({ grupo: 'Casos de ejemplo', label: `Abrir ${c.titulo}`, ic: caseIcon(c.id), act: () => openCase(c.id) });
@@ -187,20 +204,27 @@ function paletteItems() {
 }
 function renderPalette() {
   const host = $('#palette');
-  if (!ui.palette) { host.hidden = true; host.innerHTML = ''; return; }
+  if (!ui.palette) {
+    const wasOpen = !host.hidden; host.hidden = true; host.innerHTML = '';
+    // Al cerrar, el foco vuelve a quien abrió la paleta
+    if (wasOpen && ui._palReturn && document.contains(ui._palReturn)) ui._palReturn.focus({ preventScroll: true });
+    ui._palReturn = null; return;
+  }
   const items = paletteItems(); ui._pItems = items;
   if (ui.paletteIdx >= items.length) ui.paletteIdx = Math.max(0, items.length - 1);
   let last = ''; let html = '';
   items.forEach((it, i) => {
     if (it.grupo !== last) { html += `<div class="pal-group">${esc(it.grupo)}</div>`; last = it.grupo; }
-    html += `<button type="button" class="pal-item${i === ui.paletteIdx ? ' on' : ''}" data-act="pal-run" data-i="${i}" id="pal-${i}">${icon(it.ic, 16)}<span>${esc(it.label)}</span>${it.hint ? `<small>${esc(it.hint)}</small>` : ''}</button>`;
+    html += `<button type="button" class="pal-item${i === ui.paletteIdx ? ' on' : ''}" data-act="pal-run" data-i="${i}" id="pal-${i}" role="option" aria-selected="${i === ui.paletteIdx}" tabindex="-1">${icon(it.ic, 16)}<span>${esc(it.label)}</span>${it.hint ? `<small>${esc(it.hint)}</small>` : ''}</button>`;
   });
   const wasOpen = !host.hidden;
+  if (host.hidden && !ui._palReturn) ui._palReturn = document.activeElement !== document.body ? document.activeElement : null;
   host.hidden = false;
   if (!wasOpen || !$('#pal-q')) {
-    host.innerHTML = `<div class="overlay" data-act="pal-close"></div><div class="palette" role="dialog" aria-label="Buscar"><div class="pal-in">${icon('search', 18)}<input id="pal-q" type="text" placeholder="Busca una medida (op.acc.6), un riesgo, una sección o una acción…" value="${esc(ui.paletteQ)}" autocomplete="off"><kbd>Esc</kbd></div><div class="pal-list" id="pal-list"></div></div>`;
+    host.innerHTML = `<div class="overlay" data-act="pal-close"></div><div class="palette" role="dialog" aria-modal="true" aria-label="Buscar"><div class="pal-in">${icon('search', 18)}<input id="pal-q" type="text" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-autocomplete="list" aria-label="Buscar" placeholder="Busca una medida (op.acc.6), un riesgo, una sección o una acción…" value="${esc(ui.paletteQ)}" autocomplete="off"><kbd>Esc</kbd></div><div class="pal-list" id="pal-list" role="listbox" aria-label="Resultados"></div></div>`;
   }
-  $('#pal-list').innerHTML = html || '<div class="pal-empty">Sin resultados.</div>';
+  $('#pal-list').innerHTML = html || '<div class="pal-empty" role="status">Sin resultados.</div>';
+  const q = $('#pal-q'); if (q) { if (items.length) q.setAttribute('aria-activedescendant', 'pal-' + ui.paletteIdx); else q.removeAttribute('aria-activedescendant'); }
   localize();
   const on = $('#pal-' + ui.paletteIdx); if (on) on.scrollIntoView({ block: 'nearest' });
   if (!wasOpen) $('#pal-q').focus();

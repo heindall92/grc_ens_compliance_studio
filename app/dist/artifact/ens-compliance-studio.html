@@ -1,5 +1,5 @@
 <title>ENS Compliance Studio</title>
-<meta name="description" content="Categorización ENS, análisis de riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría en una sola herramienta.">
+<meta name="description" content="Categorización ENS (RD 311/2022), análisis de riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría documental.">
 <style>
 /* ============ Tokens ============
    Paleta y tipografía de Apple (Human Interface Guidelines): grises neutros del sistema, colores del sistema
@@ -8,11 +8,11 @@
    no se descarga ninguna fuente. Sin degradados decorativos. */
 :root {
   --bg: #f5f5f7; --surface: #ffffff; --surface-2: #fbfbfd; --sunken: #f0f0f3; --hover: #f2f2f5;
-  --ink: #1d1d1f; --ink-2: #424245; --muted: #6e6e73; --line: #e5e5ea; --line-2: #d2d2d7;
+  --ink: #1d1d1f; --ink-2: #424245; --muted: #636366; --line: #e5e5ea; --line-2: #d2d2d7;
   --accent: #0071e3; --accent-xl: #0071E3; --accent-ink: #ffffff;
   --accent-2: color-mix(in srgb, var(--accent) 82%, #000);
   --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
-  --ok: #248a3d; --ok-soft: #e8f6ec; --warn: #b25000; --warn-soft: #fff2e0; --crit: #d70015; --crit-soft: #ffe9eb;
+  --ok: #1e7b34; --ok-soft: #e8f6ec; --warn: #b25000; --warn-soft: #fff2e0; --crit: #d70015; --crit-soft: #ffe9eb;
   --dim-D: #0040dd; --dim-I: #248a3d; --dim-C: #d70015; --dim-A: #c93400; --dim-T: #8944ab;
   --r-MB: #d8f3df; --r-B: #b4e4bf; --r-M: #ffe08a; --r-A: #ffb36b; --r-MA: #ff6961; --r-ink: #1d1d1f;
   --sh-1: 0 1px 2px rgba(0, 0, 0, .04), 0 1px 3px rgba(0, 0, 0, .05);
@@ -39,7 +39,7 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --bg: #000000; --surface: #1c1c1e; --surface-2: #232325; --sunken: #111113; --hover: #2c2c2e;
-    --ink: #f5f5f7; --ink-2: #d1d1d6; --muted: #98989d; --line: #2c2c2e; --line-2: #3a3a3c;
+    --ink: #f5f5f7; --ink-2: #d1d1d6; --muted: #aeaeb2; --line: #2c2c2e; --line-2: #3a3a3c;
     --accent-ink: #000000;
     --accent-soft: color-mix(in srgb, var(--accent) 22%, var(--surface));
     --accent-2: color-mix(in srgb, var(--accent) 80%, #fff);
@@ -61,7 +61,7 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #000000; --surface: #1c1c1e; --surface-2: #232325; --sunken: #111113; --hover: #2c2c2e;
-  --ink: #f5f5f7; --ink-2: #d1d1d6; --muted: #98989d; --line: #2c2c2e; --line-2: #3a3a3c;
+  --ink: #f5f5f7; --ink-2: #d1d1d6; --muted: #aeaeb2; --line: #2c2c2e; --line-2: #3a3a3c;
   --accent-ink: #000000;
   --accent-soft: color-mix(in srgb, var(--accent) 22%, var(--surface));
   --accent-2: color-mix(in srgb, var(--accent) 80%, #fff);
@@ -95,8 +95,8 @@ p { margin: 0; }
 code, .mono { font-family: var(--f-mono); font-size: .86em; }
 .num { font-variant-numeric: tabular-nums; }
 .muted { color: var(--muted); } .small { font-size: .85rem; } .crit-t { color: var(--crit); }
-.ic { flex: none; } .ic.muted { color: var(--muted); } .ic.accent { color: var(--accent); }
-.eyebrow { font-size: .75rem; font-weight: 600; color: var(--accent); letter-spacing: .02em; margin-bottom: 6px; }
+.ic { flex: none; } .ic.muted { color: var(--muted); } .ic.accent { color: var(--accent-2); }
+.eyebrow { font-size: .75rem; font-weight: 600; color: var(--accent-2); letter-spacing: .02em; margin-bottom: 6px; }
 .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .row.spread { justify-content: space-between; }
 .stack { display: flex; flex-direction: column; gap: 12px; }
@@ -118,20 +118,23 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
 .proj-txt { min-width: 0; flex: 1; }
 .proj-txt b { display: block; font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .proj-txt small { display: block; color: var(--muted); font-size: .74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.proj-ic { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); flex: none; }
+.proj-ic { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-2); flex: none; }
 .proj-ic.demo { background: var(--sunken); color: var(--ink-2); }
 .proj-ic.lg { width: 38px; height: 38px; border-radius: 10px; }
 .nav { display: flex; flex-direction: column; gap: 1px; }
 .nav-group { font-size: .7rem; font-weight: 600; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; padding: 14px 10px 6px; }
 .nav-item { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 9px; color: var(--ink-2); cursor: pointer; font-size: .9rem; font-weight: 500; width: 100%; }
+.nav-item .lbl { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+/* El título recibe el foco al cambiar de vista para los lectores de pantalla; no necesita anillo */
+h1[tabindex="-1"]:focus { outline: none; }
 .nav-item .ic { color: var(--muted); }
 .nav-item:hover { background: var(--hover); color: var(--ink); }
 .nav-item[aria-current="page"] { background: var(--accent-soft); color: var(--ink); box-shadow: inset 3px 0 0 var(--accent); }
-.nav-item[aria-current="page"] .ic { color: var(--accent); }
+.nav-item[aria-current="page"] .ic { color: var(--accent-2); }
 .nav-item.locked { color: var(--muted); }
 .nav-item.locked .ic { opacity: .7; }
 .nav-note { margin: 8px 4px 2px; padding: 10px 12px; border-radius: 10px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); color: var(--ink); font-size: .78rem; line-height: 1.4; }
-.nav-note b { display: block; margin-bottom: 2px; color: var(--accent); font-weight: 600; }
+.nav-note b { display: block; margin-bottom: 2px; color: var(--accent-2); font-weight: 600; }
 .nav-item:focus-visible { outline: 2px solid var(--accent); }
 .count { margin-left: auto; font: 600 .7rem/1 var(--f-mono); padding: 3px 7px; border-radius: 999px; background: var(--sunken); color: var(--ink-2); }
 .count.warn { background: var(--warn-soft); color: var(--warn); } .count.crit { background: var(--crit-soft); color: var(--crit); }
@@ -193,7 +196,7 @@ kbd { font: 500 .7rem/1 var(--f-mono); padding: 4px 6px; border-radius: 6px; bor
 .btn:active { transform: translateY(1px); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .btn.primary:hover { background: var(--accent-2); border-color: var(--accent-2); }
-.btn.ghost { background: transparent; border-color: transparent; box-shadow: none; color: var(--accent); }
+.btn.ghost { background: transparent; border-color: transparent; box-shadow: none; color: var(--accent-2); }
 .btn.ghost:hover { background: var(--accent-soft); }
 .btn.danger { color: var(--crit); }
 .btn.danger-solid { background: var(--crit); border-color: var(--crit); color: #fff; }
@@ -226,7 +229,7 @@ input.late { border-color: var(--crit); color: var(--crit); }
 .seg { display: inline-flex; flex-wrap: wrap; max-width: 100%; padding: 3px; background: var(--sunken); border-radius: 10px; gap: 2px; border: 1px solid var(--line); }
 .seg button { all: unset; box-sizing: border-box; display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-size: .83rem; font-weight: 500; color: var(--ink-2); }
 .seg button:hover { color: var(--ink); }
-.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-2); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
 .lang-switch { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--surface); flex: none; }
 .lang-switch button { all: unset; box-sizing: border-box; cursor: pointer; padding: 6px 8px; font: 600 .72rem/1 var(--f-mono); color: var(--muted); }
 .lang-switch button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
@@ -246,11 +249,11 @@ input.late { border-color: var(--crit); color: var(--crit); }
 /* Chips y badges */
 .badge { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; font-size: .74rem; font-weight: 600; white-space: nowrap; }
 .badge.ok { background: var(--ok-soft); color: var(--ok); } .badge.warn { background: var(--warn-soft); color: var(--warn); } .badge.crit { background: var(--crit-soft); color: var(--crit); }
-.badge.accent { background: var(--accent-soft); color: var(--accent); } .badge.neutral { background: var(--sunken); color: var(--muted); }
+.badge.accent { background: var(--accent-soft); color: var(--accent-2); } .badge.neutral { background: var(--sunken); color: var(--muted); }
 .chip { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 7px; border-radius: 6px; font: 500 .74rem/1 var(--f-mono); background: var(--sunken); color: var(--ink-2); border: 1px solid var(--line); white-space: nowrap; }
 .chip em { font-style: normal; color: var(--muted); }
 .chips { display: flex; flex-wrap: wrap; gap: 4px; }
-.code-chip { all: unset; box-sizing: border-box; display: inline-flex; align-items: center; height: 22px; padding: 0 7px; border-radius: 6px; font: 500 .74rem/1 var(--f-mono); background: var(--accent-soft); color: var(--accent); cursor: pointer; white-space: nowrap; }
+.code-chip { all: unset; box-sizing: border-box; display: inline-flex; align-items: center; height: 22px; padding: 0 7px; border-radius: 6px; font: 500 .74rem/1 var(--f-mono); background: var(--accent-soft); color: var(--accent-2); cursor: pointer; white-space: nowrap; }
 .code-chip:hover { background: var(--accent); color: var(--accent-ink); }
 .code-chip:focus-visible { outline: 2px solid var(--accent); }
 .cat-pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; font-size: .75rem; font-weight: 600; white-space: nowrap; }
@@ -263,7 +266,7 @@ input.late { border-color: var(--crit); color: var(--crit); }
 .dims { display: inline-flex; gap: 3px; }
 .dimcat { font-size: .78rem; color: var(--muted); font-weight: 500; }
 .risk { display: inline-grid; place-items: center; min-width: 32px; height: 22px; padding: 0 6px; border-radius: 6px; font: 600 .72rem/1 var(--f-mono); color: var(--r-ink); }
-.risk.MB { background: var(--r-MB); } .risk.B { background: var(--r-B); } .risk.M { background: var(--r-M); } .risk.A { background: var(--r-A); } .risk.MA { background: var(--r-MA); color: #fff; }
+.risk.MB { background: var(--r-MB); } .risk.B { background: var(--r-B); } .risk.M { background: var(--r-M); } .risk.A { background: var(--r-A); } .risk.MA { background: var(--r-MA); color: var(--r-ink); }
 .risk.none { background: transparent; color: var(--muted); border: 1px dashed var(--line-2); }
 .over { font-size: .68rem; font-weight: 600; color: var(--crit); margin-top: 3px; white-space: nowrap; }
 .lvl-tag { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 6px; font-size: .74rem; font-weight: 600; }
@@ -284,7 +287,8 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .tbl tbody tr:hover td { background: var(--hover); }
 .tbl td.c, .tbl th.c { text-align: center; }
 .tbl tr.derived td { background: color-mix(in srgb, var(--warn-soft) 60%, transparent); }
-.tbl tr.dim-row td { opacity: .6; }
+.tbl tr.dim-row td { color: var(--muted); }
+.tbl tr.dim-row td .badge, .tbl tr.dim-row td .code-chip { filter: grayscale(1); }
 .t-strong { font-weight: 500; }
 .tbl code { white-space: nowrap; }
 .tbl.wide { min-width: 1120px; }
@@ -298,7 +302,7 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .sub-t { margin-top: 4px; }
 .cover { display: flex; flex-wrap: wrap; gap: 4px; max-width: 360px; }
 .cover label { display: inline-flex; gap: 4px; align-items: center; height: 24px; font: 500 .72rem var(--f-mono); border: 1px solid var(--line-2); border-radius: 6px; padding: 0 7px; cursor: pointer; }
-.cover label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.cover label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-2); }
 .cover input { margin: 0; accent-color: var(--accent); }
 
 /* ============ Inicio ============ */
@@ -312,10 +316,10 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .start-card:focus-visible { outline: 2px solid var(--accent); }
 .start-card b { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; }
 .start-card > span:not(.sc-ic) { color: var(--ink-2); font-size: .88rem; flex: 1; }
-.start-card em { font-style: normal; color: var(--accent); font-weight: 600; font-size: .86rem; display: inline-flex; gap: 6px; align-items: center; margin-top: 6px; }
-.sc-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); margin-bottom: 6px; }
+.start-card em { font-style: normal; color: var(--accent-2); font-weight: 600; font-size: .86rem; display: inline-flex; gap: 6px; align-items: center; margin-top: 6px; }
+.sc-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-2); margin-bottom: 6px; }
 .start-card.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.start-card.primary > span:not(.sc-ic), .start-card.primary em { color: color-mix(in srgb, var(--accent-ink) 88%, transparent); }
+.start-card.primary > span:not(.sc-ic), .start-card.primary em { color: var(--accent-ink); }
 .start-card.primary .sc-ic { background: color-mix(in srgb, var(--accent-ink) 16%, transparent); color: var(--accent-ink); }
 .block { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 80px; }
 .block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
@@ -354,7 +358,7 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 
 /* Banner de demo */
 .demo-banner { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: var(--r); background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); color: var(--ink); flex-wrap: wrap; }
-.demo-banner > .ic { color: var(--accent); }
+.demo-banner > .ic { color: var(--accent-2); }
 .demo-banner p { flex: 1 1 280px; font-size: .88rem; }
 
 /* ============ Panel ============ */
@@ -412,14 +416,14 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .f-t { font-weight: 600; font-size: .92rem; }
 .f-d { font-size: .86rem; color: var(--ink-2); }
 .f-r { font-size: .84rem; display: flex; gap: 6px; align-items: flex-start; color: var(--ink); }
-.f-r .ic { color: var(--accent); margin-top: 3px; }
+.f-r .ic { color: var(--accent-2); margin-top: 3px; }
 .f-ref { font: 500 .72rem var(--f-mono); color: var(--muted); }
 .findings.compact .finding { padding: 11px 14px 11px 16px; }
 .sev-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); }
 .sev-card { all: unset; box-sizing: border-box; display: flex; flex-direction: column; gap: 2px; padding: 16px 20px; border-radius: var(--r-lg); border: 1px solid var(--line); background: var(--surface); cursor: pointer; box-shadow: var(--sh-1); }
 .sev-card b { font-size: 1.9rem; font-weight: 600; letter-spacing: -.03em; line-height: 1.1; }
 .sev-card span { color: var(--muted); font-size: .84rem; font-weight: 500; }
-.sev-card.crit b { color: var(--crit); } .sev-card.warn b { color: var(--warn); } .sev-card.accent b { color: var(--accent); }
+.sev-card.crit b { color: var(--crit); } .sev-card.warn b { color: var(--warn); } .sev-card.accent b { color: var(--accent-2); }
 .sev-card:hover { border-color: var(--line-2); }
 .sev-card.on { outline: 2px solid currentColor; background: var(--accent-soft); }
 .sev-card.crit.on { background: var(--crit-soft); } .sev-card.warn.on { background: var(--warn-soft); }
@@ -430,7 +434,7 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .cat-result { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px 22px; align-items: center; }
 .cat-result > p { grid-column: 1 / -1; }
 .seal { --c: var(--crit); width: 104px; height: 104px; border-radius: 50%; display: grid; place-content: center; text-align: center; color: var(--c); background: color-mix(in srgb, var(--c) 9%, var(--surface)); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--c) 55%, transparent), 0 0 0 6px color-mix(in srgb, var(--c) 8%, transparent); }
-.seal small { font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 600; opacity: .85; }
+.seal small { font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 600; }
 .seal b { font-size: 1.35rem; font-weight: 700; letter-spacing: .02em; }
 .seal.MEDIA { --c: var(--warn); } .seal.BASICA { --c: var(--ok); }
 .dim-levels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
@@ -470,7 +474,7 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 26px; padding: 20px 20px 24px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
 .d-left, .d-right { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .norma { font-size: .9rem; line-height: 1.6; color: var(--ink-2); white-space: pre-line; padding: 12px 14px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); max-height: 260px; overflow-y: auto; }
-.refs { margin-top: 8px; } .refs summary { cursor: pointer; font-size: .82rem; color: var(--accent); font-weight: 500; }
+.refs { margin-top: 8px; } .refs summary { cursor: pointer; font-size: .82rem; color: var(--accent-2); font-weight: 500; }
 .refs .norma { margin-top: 8px; }
 .kv { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 8px 14px; font-size: .86rem; margin: 0; }
 .kv dt { color: var(--muted); } .kv dd { margin: 0; min-width: 0; }
@@ -480,12 +484,12 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .ok-box { display: flex; gap: 8px; align-items: center; color: var(--ok); font-weight: 500; font-size: .88rem; padding: 10px 12px; border-radius: var(--r); background: var(--ok-soft); }
 .assist { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: var(--r); background: var(--surface); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); }
 .assist.col { flex-direction: column; gap: 8px; }
-.assist > .ic, .assist b .ic { color: var(--accent); vertical-align: -3px; }
+.assist > .ic, .assist b .ic { color: var(--accent-2); vertical-align: -3px; }
 .proposal { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); font-size: .87rem; width: 100%; }
 
 /* ============ Compensatorias, hallazgos, plan ============ */
 .mc .card-head h3 { font-size: 1rem; }
-.mc-id { font: 600 .78rem var(--f-mono); padding: 4px 8px; border-radius: 7px; background: var(--accent-soft); color: var(--accent); }
+.mc-id { font: 600 .78rem var(--f-mono); padding: 4px 8px; border-radius: 7px; background: var(--accent-soft); color: var(--accent-2); }
 .mc textarea { min-height: 64px; }
 pre.code { max-width: 100%; font: .78rem/1.55 var(--f-mono); background: var(--sunken); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; overflow-x: auto; margin: 0 0 12px; white-space: pre; }
 .act-table { display: flex; flex-direction: column; }
@@ -505,7 +509,7 @@ pre.code { max-width: 100%; font: .78rem/1.55 var(--f-mono); background: var(--s
 .ex { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
 .ex p { color: var(--ink-2); font-size: .86rem; flex: 1; }
 .ex-ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--sunken); color: var(--ink-2); }
-.primary-ex .ex-ic { background: var(--accent-soft); color: var(--accent); }
+.primary-ex .ex-ic { background: var(--accent-soft); color: var(--accent-2); }
 
 /* ============ Nuevo proyecto ============ */
 .wizard { display: flex; flex-direction: column; gap: 20px; padding: 26px; }
@@ -514,7 +518,7 @@ pre.code { max-width: 100%; font: .78rem/1.55 var(--f-mono); background: var(--s
 .stepper li + li::before { content: ""; width: 28px; height: 1px; background: var(--line-2); margin-right: 6px; }
 .stepper li span { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line-2); font: 600 .78rem var(--f-mono); background: var(--surface); }
 .stepper li.on { color: var(--ink); } .stepper li.on span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.stepper li.done span { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+.stepper li.done span { background: var(--accent-soft); border-color: transparent; color: var(--accent-2); }
 .wz-foot { display: flex; justify-content: space-between; gap: 10px; padding-top: 16px; border-top: 1px solid var(--line); }
 .criteria { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .criteria > div { padding: 12px; border-radius: var(--r); background: var(--surface-2); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
@@ -585,19 +589,19 @@ pre.code { max-width: 100%; font: .78rem/1.55 var(--f-mono); background: var(--s
 .help-nav button .ic { color: var(--muted); }
 .help-nav button:hover { background: var(--surface); }
 .help-nav button[aria-current="page"] { background: var(--surface); color: var(--ink); box-shadow: var(--sh-1); }
-.help-nav button[aria-current="page"] .ic { color: var(--accent); }
+.help-nav button[aria-current="page"] .ic { color: var(--accent-2); }
 .help-nav button:focus-visible { outline: 2px solid var(--accent); }
 .help-body { padding: 26px; } .help-body > h2 { margin-bottom: 16px; font-size: 1.25rem; }
 .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .steps li { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); }
 .steps li:first-child { border-top: 0; }
 .steps p { color: var(--ink-2); font-size: .87rem; }
-.step-n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font: 600 .82rem var(--f-mono); }
+.step-n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-2); font: 600 .82rem var(--f-mono); }
 .flow { display: grid; grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1.1fr) 30px minmax(0, 1fr); gap: 10px; align-items: center; }
 .flow-col { display: flex; flex-direction: column; gap: 10px; }
 .flow-arrow { color: var(--muted); display: grid; place-items: center; }
 .fnode { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: center; padding: 12px 14px; border-radius: var(--r); border: 1px solid var(--line); background: var(--surface-2); }
-.fnode .ic { grid-row: span 2; color: var(--accent); }
+.fnode .ic { grid-row: span 2; color: var(--accent-2); }
 .fnode small { color: var(--muted); font-size: .76rem; }
 .fnode.big { padding: 20px; background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
 .glossary { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -629,7 +633,7 @@ pre.code { max-width: 100%; font: .78rem/1.55 var(--f-mono); background: var(--s
 .pal-item small { font: 500 .72rem var(--f-mono); color: var(--muted); }
 .pal-item .ic { color: var(--muted); }
 .pal-item.on, .pal-item:hover { background: var(--accent-soft); }
-.pal-item.on .ic { color: var(--accent); }
+.pal-item.on .ic { color: var(--accent-2); }
 .pal-empty { padding: 24px; text-align: center; color: var(--muted); }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(22px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: .88rem; box-shadow: var(--sh-3); z-index: 70; display: flex; gap: 8px; align-items: center; max-width: min(520px, calc(100vw - 32px)); }
 .toast .ic { color: var(--accent-2); }
@@ -762,13 +766,30 @@ body { background: var(--bg); }
   .me small { max-width: 170px; }
 }
 
+/* ============ Accesibilidad y móvil (auditoría de UX) ============ */
+.toast[hidden], .tip[hidden] { display: none; }
+.skip { position: absolute; left: 8px; top: -60px; z-index: 100; padding: 8px 14px; border-radius: 10px; background: var(--ink); color: var(--bg); font-weight: 600; text-decoration: none; transition: top .2s var(--ease); }
+.skip:focus { top: 8px; }
+#view:focus { outline: none; }
+.help-body { min-width: 0; }
+@media (max-width: 900px) {
+  .crumbs .cat-pill { display: none; }
+  .crumb-cur { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .soa-head { display: none; }
+  .act-row > select, .act-row > .badge { grid-column: auto; }
+  .act-row .ar-main { grid-column: 1 / -1; }
+  .help-layout { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) { .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
 </style>
+<a class="skip" href="#view">Ir al contenido</a>
 <div class="app">
   <aside id="side" class="side" aria-label="Navegación principal"></aside>
   <div class="scrim" data-act="drawer" aria-hidden="true"></div>
   <main id="main" class="main">
     <header id="top" class="top"></header>
-    <div id="view" class="view"></div>
+    <div id="view" class="view" tabindex="-1"></div>
   </main>
 </div>
 <div id="palette" hidden></div>
@@ -1205,7 +1226,7 @@ window.ENS_DATA = {"anexo":{"org.1":{"nombre":"Política de seguridad","dims":"C
 <script>
 (function () {
 'use strict';
-try { Object.freeze(Object.prototype); } catch (e) { /* entorno que no lo permite */ }
+try { Object.freeze(Object.prototype); Object.freeze(Array.prototype); } catch (e) { /* entorno que no lo permite */ }
 /* ===== 00-i18n.js ===== */
 /* ---------- Idioma de la interfaz (es / en) ---------- */
 function lang() {
@@ -1227,29 +1248,28 @@ const EN = {
   'Sistema sigue la configuración de tu equipo.': 'System follows your device setting.',
   'Se aplica a botones, la navegación, las tarjetas activas y los resaltes.': 'Applied to buttons, navigation, active cards and highlights.',
   'Compacta muestra más filas en tablas y listas.': 'Compact shows more rows in tables and lists.',
-  'Español o inglés para menús, ajustes y ayuda. El texto del Anexo II y los hallazgos del auditor siguen en español, que es el de la norma.': 'Spanish or English for menus, settings and help. Annex II wording and auditor findings stay in Spanish, the language of the regulation.',
-  'Personaliza la apariencia y los criterios de análisis y auditoría. Los cambios se aplican al instante a todos los proyectos.': 'Customise appearance and the analysis and audit criteria. Changes apply at once to every project.',
+  'Idioma de menús, ajustes y ayuda. El texto del Anexo II, las incidencias de preauditoría y los datos de los proyectos se muestran en español.': 'Language for menus, settings and help. Annex II text, pre-audit findings and project data are shown in Spanish.',
+  'Apariencia, criterios del análisis de riesgos y reglas de preauditoría. Salvo el apetito por defecto, que solo afecta a proyectos nuevos, los cambios se aplican a todos los proyectos de este navegador.': 'Appearance, risk-analysis criteria and pre-audit rules. Except for the default appetite, which only affects new projects, changes apply to every project in this browser.',
   'Buscar medida, riesgo o acción…': 'Search a measure, risk or action…',
   'Busca una medida (op.acc.6), un riesgo, una sección o una acción…': 'Search a measure (op.acc.6), a risk, a section or an action…',
   'Cambiar tema': 'Change theme', 'Abrir menú': 'Open menu', 'Sin resultados.': 'No results.', 'Sin resultados': 'No results',
   'Ir a': 'Go to', 'Acciones': 'Actions', 'Casos de ejemplo': 'Sample cases', 'Medidas': 'Measures', 'Riesgos': 'Risks',
-  'Nuevo proyecto': 'New project', 'Sin proyecto abierto': 'No open project', 'Las vistas del proyecto se activan al crear o abrir uno.': 'Project views unlock when you create or open a project.', 'Plegar menú lateral': 'Collapse sidebar', 'Desplegar menú lateral': 'Expand sidebar', 'Plegar menú lateral · [': 'Collapse sidebar · [', 'Desplegar menú lateral · [': 'Expand sidebar · [', 'Elige o crea uno': 'Choose or create one',
+  'Nuevo proyecto': 'New project', 'Sin proyecto abierto': 'No open project', 'Se guardan sin cifrar. Cualquier página del mismo origen puede leerlos: todos los HTML abiertos desde el disco (file://) y todos los proyectos publicados en heindall92.github.io. Con datos reales de una organización, usa el fichero descargado en un equipo y perfil de navegador propios, y borra los datos al terminar.': 'They are stored unencrypted. Any page on the same origin can read them: every HTML file opened from disk (file://) and every project published on heindall92.github.io. With real organisational data, use the downloaded file on your own computer and browser profile, and delete the data when you finish.', 'Ir al contenido': 'Skip to content', 'Las vistas del proyecto se activan al crear o abrir uno.': 'Project views unlock when you create or open a project.', 'Plegar menú lateral': 'Collapse sidebar', 'Desplegar menú lateral': 'Expand sidebar', 'Plegar menú lateral · [': 'Collapse sidebar · [', 'Desplegar menú lateral · [': 'Expand sidebar · [', 'Elige o crea uno': 'Choose or create one',
   'Caso de ejemplo': 'Sample case', 'Mi proyecto': 'My project', 'Mis proyectos': 'My projects',
   'Casos de ejemplo abiertos': 'Open sample cases', 'Importar SoA desde Excel': 'Import SoA from Excel',
   'Todos los proyectos y casos': 'All projects and cases',
-  'Descargar la SoA en Excel': 'Download the SoA as Excel', 'Descargar el informe de auditoría': 'Download the audit report',
+  'Descargar la SoA en Excel': 'Download the SoA as Excel', 'Descargar el informe de preauditoría (.md)': 'Download the pre-audit report (.md)',
   'Cambiar entre tema claro y oscuro': 'Switch between light and dark theme',
-  'Bienvenido a ENS Compliance Studio': 'Welcome to ENS Compliance Studio',
-  'Categoriza tu sistema, analiza sus riesgos, declara la aplicabilidad de las 73 medidas del Esquema Nacional de Seguridad y comprueba que todo cuadra, incluida la evidencia de tus pruebas de intrusión.': 'Categorise your system, analyse its risks, declare applicability of the 73 National Security Framework measures and check that everything lines up, including evidence from your intrusion tests.',
-  'Antes de empezar, ¿quién eres?': 'Before you start, who are you?',
+  'Proyectos y casos de ejemplo': 'Projects and sample cases',
+  'Categorización del sistema (Anexo I), análisis de riesgos MAGERIT, Declaración de Aplicabilidad de las 73 medidas del Anexo II y comprobación de coherencia entre la SoA, el análisis de riesgos y los hallazgos de pruebas de intrusión.': 'System categorisation (Annex I), MAGERIT risk analysis, Statement of Applicability for the 73 Annex II measures and consistency checks between the SoA, the risk analysis and penetration-test findings.',
+  'Autor de los informes (opcional)': 'Report author (optional)',
   'Tu nombre y tu rol aparecen como autor en los informes y en la SoA exportada. Todo se guarda solo en este navegador.': 'Your name and role appear as the author of reports and of the exported SoA. Everything stays in this browser only.',
   'Nombre': 'Name', 'Nombre y apellidos': 'Full name', 'Rol': 'Role', 'Elige tu rol': 'Choose your role',
-  'Guardar': 'Save', 'Ahora no': 'Not now', 'Empezar con mis datos': 'Start with my data',
-  'Asistente en tres pasos: organización, activos esenciales y punto de partida. Sale con la categoría y las medidas exigidas calculadas.': 'A three-step assistant: organisation, essential assets and starting point. It comes out with the category and the required measures already calculated.',
+  'Guardar': 'Save', 'Omitir': 'Skip', 'Asistente en tres pasos: organización, activos esenciales y estado inicial de la SoA. Al terminar, la categoría y las medidas exigidas están calculadas.': 'Three-step wizard: organisation, essential assets and initial SoA status. When it finishes, the category and the required measures are calculated.',
   'Crear proyecto': 'Create project', 'Importar mi SoA': 'Import my SoA',
-  'Trae tu Declaración de Aplicabilidad en Excel (plantilla de 73 medidas) y audítala al momento.': 'Bring your Statement of Applicability in Excel (73-measure template) and audit it at once.',
+  'Crea un proyecto a partir de una Declaración de Aplicabilidad en Excel (plantilla de 73 medidas). Las reglas de preauditoría se aplican al importar.': 'Creates a project from a Statement of Applicability in Excel (73-measure template). The pre-audit rules run on import.',
   'Elegir fichero .xlsx': 'Choose .xlsx file', 'Explorar un caso': 'Explore a case',
-  'Cinco organizaciones ficticias, de categoría básica a alta, cada una con problemas distintos que descubrir.': 'Five fictional organisations, from basic to high category, each with different problems to uncover.',
+  'Cinco organizaciones ficticias de categoría BÁSICA, MEDIA y ALTA, cada una con no conformidades distintas.': 'Five fictional organisations in BASIC, MEDIUM and HIGH categories, each with different nonconformities.',
   'Ver casos': 'View cases', 'Tus proyectos': 'Your projects', 'Casos de ejemplo': 'Sample cases',
   'Datos ficticios con fines formativos': 'Fictional data for training', 'Abrir caso': 'Open case', 'Continuar': 'Continue',
   'Abrir': 'Open', 'Eliminar': 'Delete', 'Cancelar': 'Cancel', '¿Eliminar?': 'Delete?',
@@ -1267,7 +1287,7 @@ const EN = {
   'Proceso definido': 'Defined process', 'Gestionado y medible': 'Managed and measurable', 'Optimizado': 'Optimised',
   'Organización': 'Organisation', 'Sector': 'Sector', 'Selecciona': 'Select',
   'Empieza con tus datos': 'Start with your data',
-  'Tres pasos y tendrás tu categoría, las medidas que te exige el Anexo II y un auditor revisando tu declaración desde el primer momento.': 'Three steps and you will have your category, the measures Annex II requires, and an auditor reviewing your statement from the first moment.',
+  'Datos de la organización, valoración de los activos esenciales y estado inicial de la SoA. Con esos datos se calculan la categoría del sistema y las medidas exigidas del Anexo II.': 'Organisation details, essential-asset valuation and initial SoA status. These determine the system category and the Annex II measures required.',
   'Atrás': 'Back', 'Continuar': 'Continue',
   'Organización': 'Organisation', 'Activos esenciales': 'Essential assets', 'Punto de partida': 'Starting point',
   'Sistema de información': 'Information system', 'Elaborada por': 'Prepared by',
@@ -1276,9 +1296,9 @@ const EN = {
   'Tipo': 'Type', 'Activo esencial': 'Essential asset', 'Responsable': 'Owner',
   'Añadir activo esencial': 'Add essential asset', 'Quitar': 'Remove',
   'Todas las medidas pendientes': 'All measures pending',
-  'Declararás una a una la aplicabilidad, el estado y las evidencias. Lo más riguroso.': 'You will declare applicability, status and evidence one by one. The most rigorous option.',
+  'Todas las medidas empiezan sin declarar; la aplicabilidad, el estado y las evidencias se declaran una a una.': 'Every measure starts undeclared; applicability, status and evidence are declared one by one.',
   'Aplicabilidad sugerida': 'Suggested applicability',
-  'La herramienta marca como aplicables las medidas que exige tu categoría; tú completas estado y evidencias.': 'The tool marks as applicable the measures your category requires; you fill in status and evidence.',
+  'Las medidas exigidas por la categoría se marcan «SÍ» y las no exigidas «NO»; el estado y las evidencias quedan pendientes.': 'Measures required by the category are set to “YES” and the rest to “NO”; status and evidence stay pending.',
   'Apetito de riesgo': 'Risk appetite', 'Tu organización': 'Your organisation',
   'Activos esenciales': 'Essential assets', 'Nivel por dimensión': 'Level by dimension',
   'Medidas exigidas': 'Required measures', 'Refuerzos': 'Reinforcements',
@@ -1288,7 +1308,7 @@ const EN = {
   'Auditoría formal y Certificación de Conformidad': 'Formal audit and Certification of Conformity',
   'Indica la organización y el sistema de información.': 'Enter the organisation and the information system.',
   'Pon nombre a todos los activos esenciales (o quita los que sobren).': 'Name every essential asset (or remove the spare ones).',
-  'Se usa como autor en los informes, en la portada de la SoA exportada y en el plan de acción. Se guarda solo en este navegador.': 'Used as the author of reports, of the exported SoA cover and of the action plan. Stored only in this browser.',
+  'Figura como autor en el informe de preauditoría y en la portada del Excel de la SoA, y como «Elaborada por» por defecto en los proyectos nuevos. Se guarda solo en este navegador.': 'Shown as author of the pre-audit report and of the SoA Excel cover sheet, and as default “Prepared by” in new projects. Stored only in this browser.',
   'Datos': 'Data', 'Correo electrónico': 'Email', 'Color del avatar': 'Avatar colour',
   'proyectos': 'projects', 'casos abiertos': 'open cases',
   'En los informes aparecerá:': 'Reports will show:',
@@ -1304,55 +1324,55 @@ const EN = {
   'Una medida declarada implantada al 100 % cuya salvaguarda esté en este nivel o por debajo genera la no conformidad AR-01.': 'A measure declared 100% implemented whose safeguard is at this level or below raises nonconformity AR-01.',
   'Reglas activas': 'Active rules',
   'Sugerencias en el análisis y en la SoA': 'Suggestions in the analysis and the SoA',
-  'Propone amenazas del catálogo MAGERIT para un activo y borradores de justificación de aplicabilidad. Siempre requieren tu revisión. Solo disponible en la versión publicada en línea.': 'Suggests MAGERIT catalogue threats for an asset and drafts of applicability justification. They always need your review. Only available in the online version.',
+  'Un modelo de lenguaje propone amenazas del catálogo MAGERIT para un activo y borradores de justificación de aplicabilidad. Al pedir una propuesta se envían al modelo el nombre, la descripción y la valoración del activo, o el texto de la medida y su declaración. Ninguna propuesta se guarda sin confirmación. Solo disponible en la versión publicada en línea.': 'A language model suggests MAGERIT catalogue threats for an asset and draft applicability justifications. Each request sends the model the asset name, description and valuation, or the measure text and its declaration. No suggestion is saved without confirmation. Only available in the online version.',
   'Mostrar los casos en Inicio': 'Show cases on Home',
-  'Desactívalo cuando trabajes solo con tus proyectos.': 'Turn it off when you work only with your own projects.',
+  'Muestra u oculta la sección «Casos de ejemplo» en Inicio.': 'Shows or hides the “Sample cases” section on Home.',
   'Cerrar los casos abiertos': 'Close open cases',
   'Elimina las copias de los casos de ejemplo; tus proyectos no se tocan.': 'Removes the copies of the sample cases; your projects are left untouched.',
-  'Todo se guarda en este navegador. Nada se envía a ningún servidor. Haz copias de seguridad con regularidad.': 'Everything is stored in this browser. Nothing is sent to any server. Back up regularly.',
+  'Los proyectos, el perfil y los ajustes se guardan solo en el almacenamiento local de este navegador; si se borran los datos del sitio, se pierden. El asistente de análisis, si está activado, envía al modelo los datos de cada petición.': 'Projects, profile and settings are stored only in this browser’s local storage and are lost if site data is cleared. When enabled, the analysis assistant sends the data of each request to the model.',
   'Copia de seguridad': 'Backup', 'Perfil, ajustes y todos los proyectos en un único fichero JSON.': 'Profile, settings and every project in a single JSON file.',
   'Descargar': 'Download', 'Restaurar': 'Restore', 'Borrar todos los datos': 'Erase all data',
   'Elimina perfil, ajustes y proyectos de este navegador.': 'Erases profile, settings and projects from this browser.',
   'Sí, borrar todo': 'Yes, erase everything', 'Borrar…': 'Erase…',
   'Centro de ayuda': 'Help centre',
-  'Todo lo que necesitas para sacar partido a la herramienta, desde el primer proyecto hasta la auditoría.': 'Everything you need to get value from the tool, from the first project through to the audit.',
+  'Flujo de trabajo, método de cálculo, reglas de preauditoría, glosario y atajos de teclado.': 'Workflow, calculation method, pre-audit rules, glossary and keyboard shortcuts.',
   'Primeros pasos': 'First steps', 'Cómo funciona': 'How it works', 'Glosario': 'Glossary',
-  'Reglas del auditor': 'Auditor rules', 'Atajos de teclado': 'Keyboard shortcuts', 'Preguntas frecuentes': 'FAQ', 'Acerca de': 'About',
+  'Reglas de preauditoría': 'Pre-audit rules', 'Atajos de teclado': 'Keyboard shortcuts', 'Preguntas frecuentes': 'FAQ', 'Acerca de': 'About',
   'Buscar un término…': 'Search a term…', 'Regla': 'Rule', 'Severidad': 'Severity', 'Qué comprueba': 'What it checks',
   'En este proyecto': 'In this project', 'Ir': 'Go',
   'Categorización del sistema': 'System categorisation', 'Panel de conformidad': 'Compliance dashboard',
   'Declaración en curso': 'Statement in progress', 'Evolución': 'Trend', 'No conformidades abiertas': 'Open nonconformities',
-  'Próximas acciones': 'Upcoming actions', 'Plan completo': 'Full plan', 'abiertas': 'open', 'vencidas': 'overdue', 'hechas': 'done',
+  'Acciones abiertas': 'Open actions', 'Plan completo': 'Full plan', 'abiertas': 'open', 'vencidas': 'overdue', 'hechas': 'done',
   'Sin acciones abiertas.': 'No open actions.', 'Riesgo inherente': 'Inherent risk', 'Residual declarado': 'Declared residual',
-  'AR aprobado': 'Approved RA', 'Residual real': 'Actual residual', 'con evidencia técnica': 'with technical evidence',
+  'AR aprobado': 'Approved RA', 'Residual con evidencia técnica': 'Residual with technical evidence', 'con evidencia técnica': 'with technical evidence',
   'Implantación por familia': 'Implementation by family', 'de menor a mayor': 'lowest to highest',
-  'Lo que ha encontrado el auditor': 'What the auditor found', 'Sin incidencias': 'No findings',
-  'El auditor no encuentra nada que objetar.': 'The auditor has nothing to object to.',
-  'La evolución aparecerá aquí': 'The trend will appear here',
+  'Incidencias de preauditoría': 'Pre-audit findings', 'Sin incidencias': 'No findings',
+  'Ninguna regla de preauditoría activa genera incidencias.': 'No active pre-audit rule raises a finding.',
+  'Sin historial suficiente': 'Not enough history',
   'Cada día que trabajes en el proyecto se guarda una instantánea de las no conformidades.': 'Each day you work on the project, a snapshot of the nonconformities is stored.',
-  'Implantación declarada': 'Declared implementation', 'Implantadas sin objeción': 'Implemented without objection',
+  'Implantación declarada': 'Declared implementation', 'Implantadas sin NC mayor': 'Implemented with no major NC',
   'Riesgos fuera de apetito': 'Risks outside appetite', 'No conformidades': 'Nonconformities',
   'Informe': 'Report', 'SoA en Excel': 'SoA in Excel', 'Qué exige esta categorización': 'What this categorisation requires',
   'Sin activos esenciales': 'No essential assets', 'Añade la información y los servicios que maneja el sistema.': 'Add the information and services the system handles.',
   'Registro de riesgos': 'Risk register', 'Inherente': 'Inherent', 'Residual': 'Residual', 'tras salvaguardas': 'after safeguards',
-  'Aún no hay amenazas': 'No threats yet', 'Sin activos': 'No assets', 'Sin amenazas': 'No threats', 'Sin salvaguardas': 'No safeguards',
+  'Sin riesgos': 'No risks', 'Sin activos': 'No assets', 'Sin amenazas': 'No threats', 'Sin salvaguardas': 'No safeguards',
   'Medidas compensatorias': 'Compensating measures', 'Sin medidas compensatorias': 'No compensating measures',
-  'Nueva medida compensatoria': 'New compensating measure', 'Sin hallazgos': 'No findings', 'Cómo se traduce un hallazgo': 'How a finding is translated',
+  'Nueva medida compensatoria': 'New compensating measure', 'Sin hallazgos': 'No findings', 'Conversión de hallazgo a riesgo': 'Finding-to-risk conversion',
   'Formato de importación': 'Import format', 'Abiertas': 'Open', 'Vencidas': 'Overdue', 'Esta semana': 'This week', 'Cerradas': 'Closed',
   'Pendientes o en curso': 'Pending or in progress', 'Fecha límite superada': 'Past the due date', 'Vencen en 7 días': 'Due within 7 days',
-  'Hechas o verificadas': 'Done or verified', 'Todos los orígenes': 'All sources', 'Nada por aquí': 'Nothing here',
+  'Hechas o verificadas': 'Done or verified', 'Todos los orígenes': 'All sources', 'Sin acciones': 'No actions',
   'No hay acciones con este filtro.': 'No actions match this filter.', 'Verificada': 'Verified', 'En curso': 'In progress', 'Hecha': 'Done',
   'Exportar e importar': 'Export and import', 'Entrega': 'Delivery', 'Seguimiento': 'Follow-up', 'Preauditoría': 'Pre-audit',
   'Generando…': 'Generating…', 'Descargar .xlsx': 'Download .xlsx', 'Descargar .md': 'Download .md', 'Descargar .csv': 'Download .csv',
-  'Nada coincide': 'Nothing matches', 'Prueba con otro filtro o término de búsqueda.': 'Try another filter or search term.',
+  'Nada coincide': 'Nothing matches', 'Ninguna medida cumple el filtro y la búsqueda actuales.': 'No measure matches the current filter and search.',
   'Todas las medidas': 'All measures', 'Exigidas': 'Required', 'Con incidencias': 'With findings', 'Parciales o compensadas': 'Partial or compensated', 'No exigidas': 'Not required',
-  'Todas las áreas': 'All areas', 'No hay hallazgos del auditor con este filtro.': 'No auditor findings match this filter.',
+  'Todas las áreas': 'All areas', 'Ninguna incidencia cumple este filtro.': 'No finding matches this filter.',
   'Abierto': 'Open', 'Cerrado (retest OK)': 'Closed (retest OK)',
   'no exigida': 'not required', 'Mapa de calor: impacto por probabilidad': 'Heat map: impact by likelihood',
   '↑ Impacto': '↑ Impact', 'Probabilidad →': 'Likelihood →', 'incluye historial de ejemplo': 'includes sample history',
   'Aún no hay medidas declaradas.': 'No measures declared yet.',
   'Caso de ejemplo con datos ficticios.': 'Sample case with fictional data.',
-  'Puedes editarlo libremente: los cambios solo afectan a esta copia.': 'You can edit it freely: changes affect only this copy.',
+  'Los cambios se guardan en una copia local; «Restablecer» recupera el estado original.': 'Changes are saved to a local copy; “Reset” restores the original state.',
   'Restablecer': 'Reset',
   'Perfil guardado': 'Profile saved', 'Casos de ejemplo cerrados': 'Sample cases closed', 'Proyecto eliminado': 'Project deleted',
   'Datos borrados': 'Data erased', 'Descarga cancelada': 'Download cancelled',
@@ -1368,6 +1388,19 @@ const EN = {
   'Medida compensatoria añadida': 'Compensating measure added', 'Medida compensatoria eliminada': 'Compensating measure removed',
   'Hallazgo añadido': 'Finding added', 'Hallazgo eliminado': 'Finding removed', 'Justificación actualizada': 'Justification updated',
   'Acción completada': 'Action completed',
+  'Ver pendientes': 'View pending',
+  'Valora cada activo esencial en las cinco dimensiones. El nivel del sistema en cada dimensión es el máximo de sus activos, y la categoría, el nivel más alto de las cinco dimensiones (art. 40). Al cambiar un valor se recalculan el nivel exigido de cada medida y las reglas de preauditoría.': 'Rate each essential asset on the five dimensions. The system level in each dimension is the highest of its assets, and the category is the highest level across the five dimensions (art. 40). Changing a value recalculates the level required of each measure and the pre-audit rules.',
+  'El nivel exigido, la exigencia y los refuerzos se calculan desde la categorización. La aplicabilidad, el estado y las evidencias son lo que declaras. Al desplegar una medida se muestran los riesgos que trata y sus incidencias de preauditoría.': 'Required level, requirement and reinforcements are calculated from the categorisation. Applicability, status and evidence are what you declare. Expanding a measure shows the risks it addresses and its pre-audit findings.',
+  'Incidencias': 'Findings',
+  'Sin incidencias de preauditoría': 'No pre-audit findings',
+  'Añadir medida compensatoria': 'Add compensating measure',
+  'Pentest, escaneos y phishing': 'Pentests, scans and phishing',
+  'Una acción por cada no conformidad de preauditoría, riesgo por encima del apetito y hallazgo técnico abierto. Cuando la condición de origen deja de cumplirse, la acción pasa a «Verificada».': 'One action for each pre-audit nonconformity, risk above appetite and open technical finding. When the source condition no longer holds, the action becomes “Verified”.',
+  'No se encuentra ninguna hoja de SoA con las columnas «Código» y «¿Aplica?».': 'No SoA sheet with the columns “Código” and “¿Aplica?” was found.',
+  'El libro tiene más de 40 hojas y no se reconoce como SoA.': 'The workbook has more than 40 sheets and is not recognised as an SoA.',
+  'medidas exigidas': 'required measures',
+  'Revisa las incidencias': 'Review the findings',
+  'Las reglas de preauditoría señalan las incoherencias y el plan de acción las convierte en tareas con responsable y fecha.': 'The pre-audit rules flag the inconsistencies and the action plan turns them into tasks with an owner and a date.',
   'Responsable de Seguridad (CISO)': 'Security Officer (CISO)', 'Responsable del Sistema': 'System Owner',
   'Responsable de la Información': 'Information Owner', 'Auditor/a de seguridad': 'Security auditor',
   'Consultor/a GRC': 'GRC consultant', 'Delegado/a de Protección de Datos': 'Data Protection Officer',
@@ -1395,9 +1428,9 @@ const EN = {
   'Menú en espera': 'Menu on hold',
   'Panel, categorización y el resto se activan al crear o abrir un proyecto. El nombre y el rol no los bloquean.': 'Dashboard, categorisation and the rest turn on when you create or open a project. Your name and role do not block them.',
   'Abre o crea un proyecto. El rol no bloquea esta sección.': 'Open or create a project. Your role does not block this section.',
-  'Abre o crea un proyecto para entrar aquí. El rol no bloquea el menú.': 'Open or create a project to enter here. Your role does not block the menu.',
-  'El nombre y el rol solo aparecen como autor en los informes. No hace falta rellenarlos: el menú de la izquierda se activa al crear o abrir un proyecto.': 'Your name and role only appear as the author of reports. You do not need to fill them in: the left menu turns on when you create or open a project.',
-  'Este color es el del círculo de tu perfil. Verde agua, azul, verde, amarillo y rojo cambian también el acento de botones y tarjetas. La pizarra solo cambia el avatar.': 'This colour is the circle on your profile. Teal, blue, green, yellow and red also change the accent of buttons and cards. Slate only changes the avatar.',
+  'Esta sección requiere un proyecto abierto.': 'This section requires an open project.',
+  'El nombre y el rol figuran como autor en el informe de preauditoría y en la portada del Excel de la SoA. No condicionan el acceso a ninguna sección.': 'Name and role appear as the author of the pre-audit report and of the SoA Excel cover sheet. They do not restrict access to any section.',
+  'Color del avatar. Verde agua, azul, verde, ámbar y rojo cambian también el color de acento de la interfaz; pizarra solo cambia el avatar.': 'Avatar colour. Teal, blue, green, amber and red also change the interface accent colour; slate only changes the avatar.',
   'Amarillo': 'Yellow',
   'Valor de categorización no válido (BAJO, MEDIO, ALTO o las abreviaturas B, M y ALT).': 'Invalid categorisation value (LOW, MEDIUM, HIGH, or the abbreviations B, M and ALT).',
   'Activo esencial sin valorar.': 'Essential asset not rated.',
@@ -1463,10 +1496,8 @@ const EN = {
 };
 
 const EN_RE = [
-  [/^Hola, (.+)$/, 'Hello, $1'],
-  [/^Tema: (.+)$/, 'Theme: $1'],
-  [/^Encantado, (.+)$/, 'Nice to meet you, $1'],
-  [/^Guardado: (.+)$/, 'Saved: $1'],
+    [/^Tema: (.+)$/, 'Theme: $1'],
+    [/^Guardado: (.+)$/, 'Saved: $1'],
   [/^Descargado: (.+)$/, 'Downloaded: $1'],
   [/^Caso de ejemplo: (.+)$/, 'Sample case: $1'],
   [/^Copia restaurada: (\d+) proyectos$/, 'Backup restored: $1 projects'],
@@ -1477,10 +1508,11 @@ const EN_RE = [
   [/^(.+) demasiado grande \(máximo (\d+) MB\)$/, '$1 is too large (maximum $2 MB)'],
   [/^Abrir (.+)$/, 'Open $1'],
   [/^Eliminar (.+)$/, 'Delete $1'],
-  [/^Media de las (\d+) medidas exigidas$/, 'Average of the $1 required measures'],
+  [/^Media del % declarado en las (\d+) medidas exigidas$/, 'Average declared % across the $1 required measures'],
+  [/^· AR aprobado: (\d+)$/, '· approved RA: $1'],
   [/^(\d+) mayores · (\d+) menores$/, '$1 major · $2 minor'],
   [/^mayores · (\d+) menores$/, 'major · $1 minor'],
-  [/^Implantadas al 100 % sin NC mayor$/, 'Implemented at 100% with no major NC'],
+  [/^Declaradas implantadas al 100 % sin ninguna NC mayor asociada$/, 'Declared 100% implemented with no linked major NC'],
   [/^Con la evidencia técnica · apetito (.+)$/, 'With technical evidence · appetite $1'],
   [/^(\d+) observación$/, '$1 observation'],
   [/^(\d+) observaciones$/, '$1 observations'],
@@ -1941,8 +1973,14 @@ function go(view) {
   render(); window.scrollTo({ top: 0 });
   const h = $('#main h1'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
 }
+/* Tras redibujar, el foco vuelve al mismo control: por su id o, si no tiene, por sus data-* */
+const FOCUS_KEYS = ['act', 'view', 'tab', 'v', 'k', 'code', 'id', 'case', 'i', 'what', 'menu', 'sev', 'f'];
+function focusKey(el) {
+  if (!el || !el.dataset || !el.dataset.act) return null;
+  return FOCUS_KEYS.filter((k) => el.dataset[k] !== undefined).map((k) => `[data-${k}="${CSS.escape(el.dataset[k])}"]`).join('');
+}
 function render() {
-  const ae = document.activeElement; const active = ae && ae.id;
+  const ae = document.activeElement; const active = ae && ae.id; const fkey = !active && ae !== document.body ? focusKey(ae) : null;
   let sel = null; try { if (ae && typeof ae.selectionStart === 'number') sel = [ae.selectionStart, ae.selectionEnd]; } catch (e) { sel = null; }
   applyRail(); $('#side').innerHTML = renderSide(); $('#side').classList.toggle('menu-open', ui.menu === 'proyectos');
   moveGlow(null, true);
@@ -1952,7 +1990,18 @@ function render() {
   document.body.classList.toggle('drawer-open', ui.drawer);
   renderPalette();
   localize();
+  // Los datos que solo están en el tooltip también se alcanzan con el teclado y llegan al lector de pantalla
+  document.querySelectorAll('#view .bar-g[data-tip], #view .bar-row[data-tip], #view .cell.has[data-tip]').forEach((el) => {
+    const t = lang() === 'en' ? tr(el.getAttribute('data-tip')) : el.getAttribute('data-tip');
+    el.setAttribute('tabindex', '0'); el.setAttribute('role', 'img'); el.setAttribute('aria-label', t);
+  });
+  document.querySelectorAll('#view .table-wrap, #view .norma, #view pre.code').forEach((el) => {
+    if (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) { el.setAttribute('tabindex', '0'); if (!el.hasAttribute('aria-label')) { el.setAttribute('role', 'region'); el.setAttribute('aria-label', lang() === 'en' ? 'Scrollable table' : 'Tabla desplazable'); } }
+  });
+  const sk = document.querySelector('.skip'); if (sk) sk.textContent = lang() === 'en' ? 'Skip to content' : 'Ir al contenido';
   if (active) { const el = document.getElementById(active); if (el) { el.focus({ preventScroll: true }); if (sel) { try { el.setSelectionRange(sel[0], sel[1]); } catch (e) { /* n/a */ } } } }
+  else if (fkey) { const el = document.querySelector('#side ' + fkey + ', #top ' + fkey + ', #view ' + fkey + ', #palette ' + fkey); if (el) el.focus({ preventScroll: true }); }
+  if (ui.confirm) { const c = document.querySelector('#view [data-act="del-project"], #view [data-act="wipe"]'); if (c && fkey && /data-act="ask"/.test(fkey)) c.focus({ preventScroll: true }); }
 }
 /* Barra lateral: completa (264 px) o compacta (76 px). Compacta entre 901 y 1240 px o si el usuario la pliega
  * (botón o tecla «[»); en compacta se despliega por encima del contenido al pasar el ratón, con el teclado o
@@ -2021,14 +2070,14 @@ function renderSide() {
 }
 function projectMenu() {
   const own = ws.projects.filter((p) => p.kind === 'own'); const demos = ws.projects.filter((p) => p.kind === 'demo');
-  const row = (p) => `<button type="button" class="menu-item${p.id === ws.activeId ? ' on' : ''}" data-act="open-project" data-id="${esc(p.id)}">${icon(p.kind === 'demo' ? caseIcon(p.caseId) : 'building', 16)}<span>${esc(p.nombre)}</span>${p.id === ws.activeId ? icon('check', 16, 'accent') : ''}</button>`;
+  const row = (p) => `<button type="button" role="menuitem" class="menu-item${p.id === ws.activeId ? ' on' : ''}" data-act="open-project" data-id="${esc(p.id)}">${icon(p.kind === 'demo' ? caseIcon(p.caseId) : 'building', 16)}<span>${esc(p.nombre)}</span>${p.id === ws.activeId ? icon('check', 16, 'accent') : ''}</button>`;
   return `<div class="menu" role="menu">
-    ${own.length ? `<div class="menu-label">Mis proyectos</div>${own.map(row).join('')}` : ''}
-    ${demos.length ? `<div class="menu-label">Casos de ejemplo abiertos</div>${demos.map(row).join('')}` : ''}
-    <div class="menu-sep"></div>
-    <button type="button" class="menu-item" data-act="nav" data-view="nuevo">${icon('plus', 16)}<span>Nuevo proyecto</span></button>
-    <button type="button" class="menu-item" data-act="import-xlsx">${icon('upload', 16)}<span>Importar SoA desde Excel</span></button>
-    <button type="button" class="menu-item" data-act="nav" data-view="inicio">${icon('home', 16)}<span>Todos los proyectos y casos</span></button>
+    ${own.length ? `<div class="menu-label" role="presentation">Mis proyectos</div>${own.map(row).join('')}` : ''}
+    ${demos.length ? `<div class="menu-label" role="presentation">Casos de ejemplo abiertos</div>${demos.map(row).join('')}` : ''}
+    <div class="menu-sep" role="separator"></div>
+    <button type="button" role="menuitem" class="menu-item" data-act="nav" data-view="nuevo">${icon('plus', 16)}<span>Nuevo proyecto</span></button>
+    <button type="button" role="menuitem" class="menu-item" data-act="import-xlsx">${icon('upload', 16)}<span>Importar SoA desde Excel</span></button>
+    <button type="button" role="menuitem" class="menu-item" data-act="nav" data-view="inicio">${icon('home', 16)}<span>Todos los proyectos y casos</span></button>
   </div>`;
 }
 const TITLES = { inicio: 'Inicio', nuevo: 'Nuevo proyecto', perfil: 'Perfil', ajustes: 'Ajustes', ayuda: 'Ayuda', panel: 'Panel', categorizacion: 'Categorización', riesgos: 'Análisis de riesgos', soa: 'Declaración de Aplicabilidad', compensatorias: 'Medidas compensatorias', hallazgos: 'Evidencia técnica', plan: 'Plan de acción', auditoria: 'Auditoría', exportar: 'Exportar' };
@@ -2046,9 +2095,9 @@ function renderTop() {
 }
 function demoBanner() {
   const p = activeMeta();
-  return `<div class="demo-banner">${icon('info', 18)}<p><b>Caso de ejemplo con datos ficticios.</b> Puedes editarlo libremente: los cambios solo afectan a esta copia.</p>
+  return `<div class="demo-banner">${icon('info', 18)}<p><b>Caso de ejemplo con datos ficticios.</b> Los cambios se guardan en una copia local; «Restablecer» recupera el estado original.</p>
     <div class="row"><button type="button" class="btn sm ghost" data-act="reset-case" data-case="${esc(p.caseId)}">${icon('refresh', 15)}Restablecer</button>
-    <button type="button" class="btn sm primary" data-act="nav" data-view="nuevo">Empezar con mis datos${icon('arrowRight', 15)}</button></div></div>`;
+    <button type="button" class="btn sm primary" data-act="nav" data-view="nuevo">Nuevo proyecto${icon('arrowRight', 15)}</button></div></div>`;
 }
 
 /* ---------- Paleta de comandos ---------- */
@@ -2059,7 +2108,7 @@ function paletteItems() {
   for (const [v, l, ic] of V) if (state || !PROJECT_VIEWS.includes(v)) items.push({ grupo: 'Ir a', label: l, ic, act: () => go(v) });
   if (state) {
     items.push({ grupo: 'Acciones', label: 'Descargar la SoA en Excel', ic: 'sheet', act: () => exportXlsx() });
-    items.push({ grupo: 'Acciones', label: 'Descargar el informe de auditoría', ic: 'download', act: () => saveFile(`${slug()}_informe_preauditoria_${today()}.md`, informeMd()) });
+    items.push({ grupo: 'Acciones', label: 'Descargar el informe de preauditoría (.md)', ic: 'download', act: () => saveFile(`${slug()}_informe_preauditoria_${today()}.md`, informeMd()) });
   }
   items.push({ grupo: 'Acciones', label: 'Cambiar entre tema claro y oscuro', ic: 'moon', act: () => { ws.settings.tema = document.documentElement.getAttribute('data-theme') === 'dark' || (ws.settings.tema === 'sistema' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'claro' : 'oscuro'; saveWs(); applyTheme(); render(); } });
   for (const c of D.casos) items.push({ grupo: 'Casos de ejemplo', label: `Abrir ${c.titulo}`, ic: caseIcon(c.id), act: () => openCase(c.id) });
@@ -2073,20 +2122,27 @@ function paletteItems() {
 }
 function renderPalette() {
   const host = $('#palette');
-  if (!ui.palette) { host.hidden = true; host.innerHTML = ''; return; }
+  if (!ui.palette) {
+    const wasOpen = !host.hidden; host.hidden = true; host.innerHTML = '';
+    // Al cerrar, el foco vuelve a quien abrió la paleta
+    if (wasOpen && ui._palReturn && document.contains(ui._palReturn)) ui._palReturn.focus({ preventScroll: true });
+    ui._palReturn = null; return;
+  }
   const items = paletteItems(); ui._pItems = items;
   if (ui.paletteIdx >= items.length) ui.paletteIdx = Math.max(0, items.length - 1);
   let last = ''; let html = '';
   items.forEach((it, i) => {
     if (it.grupo !== last) { html += `<div class="pal-group">${esc(it.grupo)}</div>`; last = it.grupo; }
-    html += `<button type="button" class="pal-item${i === ui.paletteIdx ? ' on' : ''}" data-act="pal-run" data-i="${i}" id="pal-${i}">${icon(it.ic, 16)}<span>${esc(it.label)}</span>${it.hint ? `<small>${esc(it.hint)}</small>` : ''}</button>`;
+    html += `<button type="button" class="pal-item${i === ui.paletteIdx ? ' on' : ''}" data-act="pal-run" data-i="${i}" id="pal-${i}" role="option" aria-selected="${i === ui.paletteIdx}" tabindex="-1">${icon(it.ic, 16)}<span>${esc(it.label)}</span>${it.hint ? `<small>${esc(it.hint)}</small>` : ''}</button>`;
   });
   const wasOpen = !host.hidden;
+  if (host.hidden && !ui._palReturn) ui._palReturn = document.activeElement !== document.body ? document.activeElement : null;
   host.hidden = false;
   if (!wasOpen || !$('#pal-q')) {
-    host.innerHTML = `<div class="overlay" data-act="pal-close"></div><div class="palette" role="dialog" aria-label="Buscar"><div class="pal-in">${icon('search', 18)}<input id="pal-q" type="text" placeholder="Busca una medida (op.acc.6), un riesgo, una sección o una acción…" value="${esc(ui.paletteQ)}" autocomplete="off"><kbd>Esc</kbd></div><div class="pal-list" id="pal-list"></div></div>`;
+    host.innerHTML = `<div class="overlay" data-act="pal-close"></div><div class="palette" role="dialog" aria-modal="true" aria-label="Buscar"><div class="pal-in">${icon('search', 18)}<input id="pal-q" type="text" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-autocomplete="list" aria-label="Buscar" placeholder="Busca una medida (op.acc.6), un riesgo, una sección o una acción…" value="${esc(ui.paletteQ)}" autocomplete="off"><kbd>Esc</kbd></div><div class="pal-list" id="pal-list" role="listbox" aria-label="Resultados"></div></div>`;
   }
-  $('#pal-list').innerHTML = html || '<div class="pal-empty">Sin resultados.</div>';
+  $('#pal-list').innerHTML = html || '<div class="pal-empty" role="status">Sin resultados.</div>';
+  const q = $('#pal-q'); if (q) { if (items.length) q.setAttribute('aria-activedescendant', 'pal-' + ui.paletteIdx); else q.removeAttribute('aria-activedescendant'); }
   localize();
   const on = $('#pal-' + ui.paletteIdx); if (on) on.scrollIntoView({ block: 'nearest' });
   if (!wasOpen) $('#pal-q').focus();
@@ -2106,12 +2162,12 @@ const ROLES = ['Responsable de Seguridad (CISO)', 'Responsable del Sistema', 'Re
 const SECTORES = ['Administración General del Estado', 'Administración autonómica', 'Administración local', 'Universidad', 'Sanidad', 'Proveedor TIC del sector público', 'Proveedor SaaS / nube', 'Otro'];
 const COLORS = ['teal', 'blue', 'green', 'amber', 'rose', 'slate'];
 const COLOR_NAME = { teal: 'Verde agua', blue: 'Azul', green: 'Verde', amber: 'Ámbar', rose: 'Rojo', slate: 'Pizarra' };
-const ACCENTS = [['blue', 'Azul'], ['teal', 'Verde agua'], ['green', 'Verde'], ['amber', 'Amarillo'], ['rose', 'Rojo'], ['graphite', 'Grafito']];
+const ACCENTS = [['blue', 'Azul'], ['teal', 'Verde agua'], ['green', 'Verde'], ['amber', 'Ámbar'], ['rose', 'Rojo'], ['graphite', 'Grafito']];
 
 function vInicio() {
   const own = ws.projects.filter((p) => p.kind === 'own');
   const demos = ws.projects.filter((p) => p.kind === 'demo');
-  const hola = ws.profile.nombre ? `Hola, ${esc(ws.profile.nombre.split(' ')[0])}` : 'Bienvenido a ENS Compliance Studio';
+  const hola = 'Proyectos y casos de ejemplo';
   const projRow = (p) => {
     const del = ui.confirm === 'del:' + p.id;
     return `<div class="proj-row">
@@ -2126,17 +2182,17 @@ function vInicio() {
   <section class="hero">
     <div><div class="eyebrow">RD 311/2022 · MAGERIT v3 · ISO/IEC 27001:2022</div>
       <h1>${hola}</h1>
-      <p class="lead">Categoriza tu sistema, analiza sus riesgos, declara la aplicabilidad de las 73 medidas del Esquema Nacional de Seguridad y comprueba que todo cuadra, incluida la evidencia de tus pruebas de intrusión.</p></div>
+      <p class="lead">Categorización del sistema (Anexo I), análisis de riesgos MAGERIT, Declaración de Aplicabilidad de las 73 medidas del Anexo II y comprobación de coherencia entre la SoA, el análisis de riesgos y los hallazgos de pruebas de intrusión.</p></div>
   </section>
   ${!ws.onboarded && !ws.profileDone ? `<div class="card onboard">
-      <div class="ob-text"><h3>Antes de empezar, ¿quién eres?</h3><p class="muted small">El nombre y el rol solo aparecen como autor en los informes. No hace falta rellenarlos: el menú de la izquierda se activa al crear o abrir un proyecto.</p></div>
+      <div class="ob-text"><h3>Autor de los informes (opcional)</h3><p class="muted small">El nombre y el rol figuran como autor en el informe de preauditoría y en la portada del Excel de la SoA. No condicionan el acceso a ninguna sección.</p></div>
       <div class="ob-form"><label class="fld">Nombre<input type="text" id="ob-nombre" data-ws="profile.nombre" value="${esc(ws.profile.nombre)}" placeholder="Nombre y apellidos"></label>
       <label class="fld">Rol<select id="ob-rol" data-ws="profile.rol">${opt('', 'Elige tu rol', ws.profile.rol)}${ROLES.map((r) => opt(r, r, ws.profile.rol)).join('')}</select></label>
-      <div class="row span2"><button type="button" class="btn primary sm" data-act="ob-save">${icon('check', 15)}Guardar</button><button type="button" class="btn ghost sm" data-act="ob-skip">Ahora no</button></div></div></div>` : ''}
+      <div class="row span2"><button type="button" class="btn primary sm" data-act="ob-save">${icon('check', 15)}Guardar</button><button type="button" class="btn ghost sm" data-act="ob-skip">Omitir</button></div></div></div>` : ''}
   <div class="start-grid">
-    <button type="button" class="start-card primary" data-act="nav" data-view="nuevo"><span class="sc-ic">${icon('plus', 22)}</span><b>Empezar con mis datos</b><span>Asistente en tres pasos: organización, activos esenciales y punto de partida. Sale con la categoría y las medidas exigidas calculadas.</span><em>Crear proyecto ${icon('arrowRight', 16)}</em></button>
-    <button type="button" class="start-card" data-act="import-xlsx"><span class="sc-ic">${icon('sheet', 22)}</span><b>Importar mi SoA</b><span>Trae tu Declaración de Aplicabilidad en Excel (plantilla de 73 medidas) y audítala al momento.</span><em>Elegir fichero .xlsx ${icon('arrowRight', 16)}</em></button>
-    <a class="start-card" href="#casos"><span class="sc-ic">${icon('book', 22)}</span><b>Explorar un caso</b><span>Cinco organizaciones ficticias, de categoría básica a alta, cada una con problemas distintos que descubrir.</span><em>Ver casos ${icon('arrowRight', 16)}</em></a>
+    <button type="button" class="start-card primary" data-act="nav" data-view="nuevo"><span class="sc-ic">${icon('plus', 22)}</span><b>Nuevo proyecto</b><span>Asistente en tres pasos: organización, activos esenciales y estado inicial de la SoA. Al terminar, la categoría y las medidas exigidas están calculadas.</span><em>Crear proyecto ${icon('arrowRight', 16)}</em></button>
+    <button type="button" class="start-card" data-act="import-xlsx"><span class="sc-ic">${icon('sheet', 22)}</span><b>Importar una SoA</b><span>Crea un proyecto a partir de una Declaración de Aplicabilidad en Excel (plantilla de 73 medidas). Las reglas de preauditoría se aplican al importar.</span><em>Elegir fichero .xlsx ${icon('arrowRight', 16)}</em></button>
+    <a class="start-card" href="#casos"><span class="sc-ic">${icon('book', 22)}</span><b>Abrir un caso de ejemplo</b><span>Cinco organizaciones ficticias de categoría BÁSICA, MEDIA y ALTA, cada una con no conformidades distintas.</span><em>Ver casos ${icon('arrowRight', 16)}</em></a>
   </div>
   ${own.length || demos.length ? `<section class="block"><div class="block-head"><h2>Tus proyectos</h2><span class="muted small">${plural(own.length, 'proyecto propio', 'proyectos propios')} · ${plural(demos.length, 'caso abierto', 'casos abiertos')}</span></div>
     <div class="card flush">${[...own, ...demos].map(projRow).join('')}</div></section>` : ''}
@@ -2146,7 +2202,7 @@ function vInicio() {
       <h3>${esc(c.titulo)}</h3><span class="muted small">${esc(c.sector)}</span>
       <p>${esc(c.resumen)}</p>
       <ul class="retos">${c.retos.map((r) => `<li>${icon('flag', 14)}${esc(r)}</li>`).join('')}</ul>
-      <div class="cc-stats"><span><b class="num">${c.meta.aplicables}</b> medidas</span><span><b class="num">${c.meta.riesgos}</b> riesgos</span><span><b class="num crit-t">${c.meta.ncMayor}</b> NC mayores</span></div>
+      <div class="cc-stats"><span><b class="num">${c.meta.aplicables}</b> medidas exigidas</span><span><b class="num">${c.meta.riesgos}</b> riesgos</span><span><b class="num crit-t">${c.meta.ncMayor}</b> NC mayores</span></div>
       <button type="button" class="btn ${ws.activeId === 'demo-' + c.id ? '' : 'primary'} w-full" data-act="open-case" data-case="${esc(c.id)}">${ws.projects.some((p) => p.id === 'demo-' + c.id) ? 'Continuar' : 'Abrir caso'}${icon('arrowRight', 16)}</button>
     </article>`).join('')}</div></section>` : ''}`;
 }
@@ -2180,10 +2236,10 @@ function vNuevo() {
   } else if (w.step === 2) {
     body = `<p class="muted">Los activos esenciales son la información y los servicios que el sistema maneja. Valora el perjuicio que causaría un incidente en cada dimensión (Anexo I).</p>
       <div class="table-wrap"><table class="tbl"><thead><tr><th>Tipo</th><th>ID</th><th>Activo esencial</th><th>Responsable</th>${E.DIMS.map((d) => `<th class="c"><span class="dim ${d}" title="${E.DIM_LABEL[d]}">${d}</span></th>`).join('')}<th></th></tr></thead><tbody>
-      ${w.activos.map((a, i) => `<tr><td><select id="wz-a${i}-t" data-wz="activos.${i}.tipo">${['Servicio', 'Información'].map((t) => opt(t, t, a.tipo)).join('')}</select></td>
-        <td><input type="text" id="wz-a${i}-id" data-wz="activos.${i}.id" value="${esc(a.id)}" class="w-sm mono"></td>
-        <td><input type="text" id="wz-a${i}-n" data-wz="activos.${i}.nombre" value="${esc(a.nombre)}" placeholder="${a.tipo === 'Servicio' ? 'p. ej. Registro electrónico' : 'p. ej. Datos de expedientes'}" class="w-full"></td>
-        <td><input type="text" id="wz-a${i}-r" data-wz="activos.${i}.responsable" value="${esc(a.responsable)}" class="w-full"></td>
+      ${w.activos.map((a, i) => `<tr><td><select id="wz-a${i}-t" aria-label="Tipo" data-wz="activos.${i}.tipo">${['Servicio', 'Información'].map((t) => opt(t, t, a.tipo)).join('')}</select></td>
+        <td><input type="text" id="wz-a${i}-id" aria-label="ID" data-wz="activos.${i}.id" value="${esc(a.id)}" class="w-sm mono"></td>
+        <td><input type="text" id="wz-a${i}-n" aria-label="Nombre del activo esencial" data-wz="activos.${i}.nombre" value="${esc(a.nombre)}" placeholder="${a.tipo === 'Servicio' ? 'p. ej. Registro electrónico' : 'p. ej. Datos de expedientes'}" class="w-full"></td>
+        <td><input type="text" id="wz-a${i}-r" aria-label="Responsable" data-wz="activos.${i}.responsable" value="${esc(a.responsable)}" class="w-full"></td>
         ${E.DIMS.map((d) => `<td class="c"><select id="wz-a${i}-${d}" class="lvl l-${a[d]}" data-wz="activos.${i}.${d}" aria-label="${E.DIM_LABEL[d]}">${E.ENS_LEVELS.map((x) => opt(x, x[0] + x.slice(1).toLowerCase(), a[d])).join('')}</select></td>`).join('')}
         <td><button type="button" class="icon-btn sm" data-act="wz-del" data-i="${i}" aria-label="Quitar"${w.activos.length < 2 ? ' disabled' : ''}>${icon('x', 16)}</button></td></tr>`).join('')}
       </tbody></table></div>
@@ -2194,8 +2250,8 @@ function vNuevo() {
     const req = calc0Preview(w);
     body = `<div class="grid g2">
       <div class="stack">
-        <label class="choice${w.plantilla === 'pendiente' ? ' on' : ''}"><input type="radio" name="wz-pl" data-wz="plantilla" value="pendiente"${w.plantilla === 'pendiente' ? ' checked' : ''}><span><b>Todas las medidas pendientes</b><small>Declararás una a una la aplicabilidad, el estado y las evidencias. Lo más riguroso.</small></span></label>
-        <label class="choice${w.plantilla === 'sugerida' ? ' on' : ''}"><input type="radio" name="wz-pl" data-wz="plantilla" value="sugerida"${w.plantilla === 'sugerida' ? ' checked' : ''}><span><b>Aplicabilidad sugerida</b><small>La herramienta marca como aplicables las medidas que exige tu categoría; tú completas estado y evidencias.</small></span></label>
+        <label class="choice${w.plantilla === 'pendiente' ? ' on' : ''}"><input type="radio" name="wz-pl" data-wz="plantilla" value="pendiente"${w.plantilla === 'pendiente' ? ' checked' : ''}><span><b>Todas las medidas pendientes</b><small>Todas las medidas empiezan sin declarar; la aplicabilidad, el estado y las evidencias se declaran una a una.</small></span></label>
+        <label class="choice${w.plantilla === 'sugerida' ? ' on' : ''}"><input type="radio" name="wz-pl" data-wz="plantilla" value="sugerida"${w.plantilla === 'sugerida' ? ' checked' : ''}><span><b>Aplicabilidad sugerida</b><small>Las medidas exigidas por la categoría se marcan «SÍ» y las no exigidas «NO»; el estado y las evidencias quedan pendientes.</small></span></label>
         <label class="fld">Apetito de riesgo<select id="wz-ap" data-wz="apetito">${E.NIVELES.map((n) => opt(n, `${n} · ${E.NIVEL_LABEL[n]}`, w.apetito)).join('')}</select></label>
       </div>
       <div class="card soft summary">
@@ -2206,7 +2262,7 @@ function vNuevo() {
           <dt>Conformidad</dt><dd>${cat === 'BÁSICA' ? 'Autoevaluación y Declaración de Conformidad' : 'Auditoría formal y Certificación de Conformidad'}</dd></dl>
       </div></div>`;
   }
-  return `${pageHead('Nuevo proyecto', 'Empieza con tus datos', 'Tres pasos y tendrás tu categoría, las medidas que te exige el Anexo II y un auditor revisando tu declaración desde el primer momento.')}
+  return `${pageHead('RD 311/2022 · art. 40 y Anexo I', 'Nuevo proyecto', 'Datos de la organización, valoración de los activos esenciales y estado inicial de la SoA. Con esos datos se calculan la categoría del sistema y las medidas exigidas del Anexo II.')}
   <div class="card wizard">${stepper}${w.error ? `<div class="alert crit">${icon('alert', 16)}${esc(w.error)}</div>` : ''}${body}
     <div class="wz-foot">${w.step > 1 ? `<button type="button" class="btn" data-act="wz-back">${icon('arrowLeft', 16)}Atrás</button>` : `<button type="button" class="btn ghost" data-act="nav" data-view="inicio">Cancelar</button>`}
       ${w.step < 3 ? `<button type="button" class="btn primary" data-act="wz-next">Continuar${icon('arrowRight', 16)}</button>` : `<button type="button" class="btn primary" data-act="wz-create">${icon('check', 16)}Crear proyecto</button>`}</div></div>`;
@@ -2220,11 +2276,11 @@ function calc0Preview(w) {
 /* --- Perfil --- */
 function vPerfil() {
   const p = ws.profile;
-  return `${pageHead('Cuenta', 'Tu perfil', 'Se usa como autor en los informes, en la portada de la SoA exportada y en el plan de acción. Se guarda solo en este navegador.')}
+  return `${pageHead('Cuenta', 'Tu perfil', 'Figura como autor en el informe de preauditoría y en la portada del Excel de la SoA, y como «Elaborada por» por defecto en los proyectos nuevos. Se guarda solo en este navegador.')}
   <div class="grid g-side">
     <div class="card profile-card">${avatar(88)}<h2>${esc(p.nombre || 'Sin nombre')}</h2><p class="muted">${esc(p.rol || 'Sin rol')}</p>${p.organizacion ? `<p class="small">${esc(p.organizacion)}</p>` : ''}
       <div class="swatches" role="group" aria-label="Color del avatar">${COLORS.map((c) => `<button type="button" class="swatch c-${c}${p.color === c ? ' on' : ''}" data-act="set-color" data-c="${c}" aria-label="${COLOR_NAME[c]}" title="${COLOR_NAME[c]}"></button>`).join('')}</div>
-      <p class="muted small">Este color es el del círculo de tu perfil. Verde agua, azul, verde, amarillo y rojo cambian también el acento de botones y tarjetas. La pizarra solo cambia el avatar.</p>
+      <p class="muted small">Color del avatar. Verde agua, azul, verde, ámbar y rojo cambian también el color de acento de la interfaz; pizarra solo cambia el avatar.</p>
       <div class="pf-stats"><div><b class="num">${ws.projects.filter((x) => x.kind === 'own').length}</b><span>proyectos</span></div><div><b class="num">${ws.projects.filter((x) => x.kind === 'demo').length}</b><span>casos abiertos</span></div></div></div>
     <div class="card"><h3>Datos</h3><div class="form-grid" style="margin-top:14px">
       <label class="fld span2">Nombre y apellidos<input type="text" id="pf-n" data-ws="profile.nombre" value="${esc(p.nombre)}"></label>
@@ -2241,35 +2297,36 @@ function setRow(title, desc, control) { return `<div class="set-row"><div><b>${t
 function vAjustes() {
   const s = ws.settings;
   const seg = (key, opts) => `<div class="seg" role="group">${opts.map(([v, l, ic]) => `<button type="button" data-act="set" data-k="${key}" data-v="${v}" aria-pressed="${s[key] === v}">${ic ? icon(ic, 15) : ''}${l}</button>`).join('')}</div>`;
-  const sw = (key, id) => `<label class="switch"><input type="checkbox" id="${id}" data-ws="settings.${key}" data-type="bool"${s[key] ? ' checked' : ''}><span></span></label>`;
+  const sw = (key, id, label) => `<label class="switch"><input type="checkbox" id="${id}"${label ? ` aria-label="${label}"` : ''} data-ws="settings.${key}" data-type="bool"${s[key] ? ' checked' : ''}><span></span></label>`;
   const conf = ui.confirm === 'wipe';
-  return `${pageHead('Preferencias', 'Ajustes', 'Personaliza la apariencia y los criterios de análisis y auditoría. Los cambios se aplican al instante a todos los proyectos.')}
+  return `${pageHead('Preferencias', 'Ajustes', 'Apariencia, criterios del análisis de riesgos y reglas de preauditoría. Salvo el apetito por defecto, que solo afecta a proyectos nuevos, los cambios se aplican a todos los proyectos de este navegador.')}
   <div class="settings">
     <section class="card"><h3>Apariencia</h3>
-      ${setRow('Idioma', 'Español o inglés para menús, ajustes y ayuda. El texto del Anexo II y los hallazgos del auditor siguen en español, que es el de la norma.', `<div class="seg" role="group" aria-label="Idioma">${[['es', 'Español'], ['en', 'English']].map(([v, l]) => `<button type="button" data-act="set" data-k="idioma" data-v="${v}" aria-pressed="${(s.idioma || 'es') === v}">${l}</button>`).join('')}</div>`)}
+      ${setRow('Idioma', 'Idioma de menús, ajustes y ayuda. El texto del Anexo II, las incidencias de preauditoría y los datos de los proyectos se muestran en español.', `<div class="seg" role="group" aria-label="Idioma">${[['es', 'Español'], ['en', 'English']].map(([v, l]) => `<button type="button" data-act="set" data-k="idioma" data-v="${v}" aria-pressed="${(s.idioma || 'es') === v}">${l}</button>`).join('')}</div>`)}
       ${setRow('Tema', 'Sistema sigue la configuración de tu equipo.', seg('tema', [['sistema', 'Sistema', 'monitor'], ['claro', 'Claro', 'sun'], ['oscuro', 'Oscuro', 'moon']]))}
       ${setRow('Color de acento', 'Se aplica a botones, la navegación, las tarjetas activas y los resaltes.', `<div class="swatches" role="group" aria-label="Color de acento">${ACCENTS.map(([c, name]) => `<button type="button" class="swatch a-${c}${s.acento === c ? ' on' : ''}" data-act="set" data-k="acento" data-v="${c}" aria-label="${name}" title="${name}"></button>`).join('')}</div>`)}
       ${setRow('Densidad', 'Compacta muestra más filas en tablas y listas.', seg('densidad', [['comoda', 'Cómoda'], ['compacta', 'Compacta']]))}
     </section>
     <section class="card"><h3>Análisis de riesgos</h3>
-      ${setRow('Apetito de riesgo por defecto', 'Se aplica a los proyectos nuevos.', `<select id="st-ap" data-ws="settings.apetito">${E.NIVELES.map((n) => opt(n, `${n} · ${E.NIVEL_LABEL[n]}`, s.apetito)).join('')}</select>`)}
+      ${setRow('Apetito de riesgo por defecto', 'Se aplica a los proyectos nuevos.', `<select id="st-ap" aria-label="Apetito de riesgo por defecto" data-ws="settings.apetito">${E.NIVELES.map((n) => opt(n, `${n} · ${E.NIVEL_LABEL[n]}`, s.apetito)).join('')}</select>`)}
       ${setRow('Del CVSS a la probabilidad', 'Umbrales a partir de los cuales un hallazgo abierto se considera de probabilidad Muy alta, Alta o Media.', `<div class="row cvss">${[['ma', 'MA'], ['a', 'A'], ['m', 'M']].map(([k, l]) => `<label class="mini">${l} ≥<input type="number" min="0" max="10" step="0.1" id="st-cv-${k}" data-ws="settings.cvss.${k}" data-type="num" value="${s.cvss[k]}"></label>`).join('')}</div>`)}
-      ${setRow('Incluir la evidencia técnica por defecto', 'El registro de riesgos se abre con los hallazgos abiertos aplicados.', sw('conHallazgos', 'st-ch'))}
+      ${setRow('Incluir la evidencia técnica por defecto', 'El registro de riesgos se abre con los hallazgos abiertos aplicados.', sw('conHallazgos', 'st-ch', 'Incluir la evidencia técnica por defecto'))}
     </section>
     <section class="card"><h3>Auditoría</h3>
-      ${setRow('Madurez mínima coherente con «Implantada»', 'Una medida declarada implantada al 100 % cuya salvaguarda esté en este nivel o por debajo genera la no conformidad AR-01.', `<select id="st-mad" data-ws="settings.madurezMin">${['L1', 'L2', 'L3'].map((l) => opt(l, `${l} · ${E.MADUREZ[l].label}`, s.madurezMin)).join('')}</select>`)}
+      ${setRow('Madurez mínima coherente con «Implantada»', 'Una medida declarada implantada al 100 % cuya salvaguarda esté en este nivel o por debajo genera la no conformidad AR-01.', `<select id="st-mad" aria-label="Madurez mínima" data-ws="settings.madurezMin">${['L1', 'L2', 'L3'].map((l) => opt(l, `${l} · ${E.MADUREZ[l].label}`, s.madurezMin)).join('')}</select>`)}
       <details class="rules-box" data-keep="rulesOpen"${ui.rulesOpen ? ' open' : ''}><summary>Reglas activas <span class="muted small">${RULES.length - s.reglasOff.length} de ${RULES.length}</span></summary>
         <div class="rules-list">${RULES.map(([id, sev, t]) => `<label class="rule-row"><span class="switch"><input type="checkbox" data-rule="${id}"${s.reglasOff.includes(id) ? '' : ' checked'}><span></span></span><code>${id}</code>${sevBadge(sev)}<span>${esc(t)}</span></label>`).join('')}</div></details>
     </section>
     <section class="card"><h3>Asistente de análisis</h3>
-      ${setRow('Sugerencias en el análisis y en la SoA', 'Propone amenazas del catálogo MAGERIT para un activo y borradores de justificación de aplicabilidad. Siempre requieren tu revisión. Solo disponible en la versión publicada en línea.', sw('asistente', 'st-as'))}
+      ${setRow('Sugerencias en el análisis y en la SoA', 'Un modelo de lenguaje propone amenazas del catálogo MAGERIT para un activo y borradores de justificación de aplicabilidad. Al pedir una propuesta se envían al modelo el nombre, la descripción y la valoración del activo, o el texto de la medida y su declaración. Ninguna propuesta se guarda sin confirmación. Solo disponible en la versión publicada en línea.', sw('asistente', 'st-as', 'Sugerencias en el análisis y en la SoA'))}
     </section>
     <section class="card"><h3>Casos de ejemplo</h3>
-      ${setRow('Mostrar los casos en Inicio', 'Desactívalo cuando trabajes solo con tus proyectos.', sw('mostrarCasos', 'st-mc'))}
+      ${setRow('Mostrar los casos en Inicio', 'Muestra u oculta la sección «Casos de ejemplo» en Inicio.', sw('mostrarCasos', 'st-mc', 'Mostrar los casos en Inicio'))}
       ${setRow('Cerrar los casos abiertos', 'Elimina las copias de los casos de ejemplo; tus proyectos no se tocan.', `<button type="button" class="btn sm" data-act="close-demos">${icon('x', 15)}Cerrar ${plural(ws.projects.filter((p) => p.kind === 'demo').length, 'caso', 'casos')}</button>`)}
     </section>
     <section class="card"><h3>Datos y privacidad</h3>
-      <p class="muted small" style="margin:4px 0 8px">Todo se guarda en este navegador. Nada se envía a ningún servidor. Haz copias de seguridad con regularidad.</p>
+      <p class="muted small" style="margin:4px 0 8px">Los proyectos, el perfil y los ajustes se guardan solo en el almacenamiento local de este navegador; si se borran los datos del sitio, se pierden. El asistente de análisis, si está activado, envía al modelo los datos de cada petición.</p>
+      <p class="muted small" style="margin:0 0 8px">Se guardan sin cifrar. Cualquier página del mismo origen puede leerlos: todos los HTML abiertos desde el disco (file://) y todos los proyectos publicados en heindall92.github.io. Con datos reales de una organización, usa el fichero descargado en un equipo y perfil de navegador propios, y borra los datos al terminar.</p>
       ${setRow('Copia de seguridad', 'Perfil, ajustes y todos los proyectos en un único fichero JSON.', `<div class="row"><button type="button" class="btn sm" data-act="backup">${icon('download', 15)}Descargar</button><button type="button" class="btn sm" data-act="restore">${icon('upload', 15)}Restaurar</button></div>`)}
       ${setRow('Borrar todos los datos', 'Elimina perfil, ajustes y proyectos de este navegador.', conf ? `<div class="row"><button type="button" class="btn sm danger-solid" data-act="wipe">Sí, borrar todo</button><button type="button" class="btn sm" data-act="confirm-no">Cancelar</button></div>` : `<button type="button" class="btn sm danger" data-act="ask" data-what="wipe">${icon('trash', 15)}Borrar…</button>`)}
     </section>
@@ -2298,7 +2355,7 @@ const GLOSARIO = [
   ['SoA · Declaración de Aplicabilidad', 'Documento firmado por el Responsable de Seguridad que relaciona las 73 medidas del Anexo II con su aplicabilidad, justificación, estado y evidencias (art. 28).'],
   ['Categoría del sistema', 'BÁSICA, MEDIA o ALTA. La determina el nivel más alto alcanzado en cualquiera de las cinco dimensiones de seguridad (art. 40 y Anexo I).'],
   ['Dimensiones de seguridad', 'Disponibilidad (D), Integridad (I), Confidencialidad (C), Autenticidad (A) y Trazabilidad (T).'],
-  ['Activo esencial', 'Información o servicio que da razón de ser al sistema. Es lo que se valora para categorizar.'],
+  ['Activo esencial', 'Información que trata o servicio que presta el sistema. Es lo que se valora en las cinco dimensiones para categorizar (Anexo I).'],
   ['Nivel exigido', 'Nivel (BAJO, MEDIO o ALTO) en que se exige una medida: el de la categoría si afecta a «Categoría», o el más alto de sus dimensiones.'],
   ['Refuerzo (Rn)', 'Requisito adicional de una medida que se exige a partir de cierto nivel. «[R1 o R2]» indica que basta con uno del grupo.'],
   ['Medida compensatoria', 'Medida que sustituye a otra del Anexo II cuando no puede implantarse tal cual, siempre que proteja igual o mejor el riesgo y se justifique documentalmente (art. 28.3).'],
@@ -2319,14 +2376,14 @@ const FAQ = [
   ['¿Puedo trabajar con mi SoA actual?', 'Sí: Inicio → Importar mi SoA. Se admite la plantilla de 73 medidas con hojas de categorización, SoA, refuerzos y medidas compensatorias.'],
   ['¿Cómo convierte un hallazgo de pentest en riesgo?', 'Cada categoría de hallazgo apunta a una amenaza MAGERIT. El CVSS fija la probabilidad y la categoría, la degradación. Si la amenaza ya existía en el activo, se endurece; si no, aparece un riesgo nuevo.'],
   ['¿Las correspondencias amenaza → medida son oficiales?', 'Son criterio del autor, razonado a partir de MAGERIT v3 y de la guía CCN-STIC 804. Para un sistema real, revísalas con tu analista.'],
-  ['¿Qué pasa si recategorizo?', 'La herramienta recalcula al momento el nivel, la exigencia y los refuerzos de las 73 medidas, y el auditor señala qué declaraciones han quedado desalineadas.']
+  ['¿Qué ocurre al cambiar la categorización?', 'Se recalculan el nivel exigido, la exigencia y los refuerzos de las 73 medidas. Las reglas SOA-01, SOA-02 y REF-01 a REF-03 señalan las declaraciones que ya no corresponden al nuevo nivel.']
 ];
 function vAyuda() {
-  const tabs = [['inicio', 'Primeros pasos', 'flag'], ['flujo', 'Cómo funciona', 'layers'], ['glosario', 'Glosario', 'book'], ['reglas', 'Reglas del auditor', 'shieldCheck'], ['atajos', 'Atajos de teclado', 'keyboard'], ['faq', 'Preguntas frecuentes', 'help'], ['acerca', 'Acerca de', 'info']];
+  const tabs = [['inicio', 'Primeros pasos', 'flag'], ['flujo', 'Cómo funciona', 'layers'], ['glosario', 'Glosario', 'book'], ['reglas', 'Reglas de preauditoría', 'shieldCheck'], ['atajos', 'Atajos de teclado', 'keyboard'], ['faq', 'Preguntas frecuentes', 'help'], ['acerca', 'Acerca de', 'info']];
   let body = '';
   const t = ui.helpTab;
   if (t === 'inicio') {
-    const pasos = [['Crea o abre un proyecto', 'Empieza con tus datos, importa tu SoA en Excel o abre uno de los cinco casos de ejemplo.', 'inicio'], ['Categoriza el sistema', 'Valora los activos esenciales en las cinco dimensiones. La categoría y el nivel exigido a cada medida se calculan solos.', 'categorizacion'], ['Analiza los riesgos', 'Activos, amenazas y salvaguardas con el método MAGERIT. Cada amenaza se enlaza con las medidas del ENS que la tratan.', 'riesgos'], ['Declara la aplicabilidad', 'Para cada medida: aplica o no, estado, porcentaje, evidencias y responsable. La justificación se puede calcular.', 'soa'], ['Incorpora la evidencia técnica', 'Carga los hallazgos de tus pentest o escaneos: se convierten en riesgo y se cruzan con lo declarado.', 'hallazgos'], ['Revisa y actúa', 'El auditor señala lo que no cuadra y el plan de acción lo convierte en tareas con responsable y fecha.', 'auditoria']];
+    const pasos = [['Crea o abre un proyecto', 'Empieza con tus datos, importa tu SoA en Excel o abre uno de los cinco casos de ejemplo.', 'inicio'], ['Categoriza el sistema', 'Valora los activos esenciales en las cinco dimensiones. La categoría y el nivel exigido a cada medida se calculan solos.', 'categorizacion'], ['Analiza los riesgos', 'Activos, amenazas y salvaguardas con el método MAGERIT. Cada amenaza se enlaza con las medidas del ENS que la tratan.', 'riesgos'], ['Declara la aplicabilidad', 'Para cada medida: aplica o no, estado, porcentaje, evidencias y responsable. La justificación se puede calcular.', 'soa'], ['Incorpora la evidencia técnica', 'Carga los hallazgos de tus pentest o escaneos: se convierten en riesgo y se cruzan con lo declarado.', 'hallazgos'], ['Revisa las incidencias', 'Las reglas de preauditoría señalan las incoherencias y el plan de acción las convierte en tareas con responsable y fecha.', 'auditoria']];
     body = `<ol class="steps">${pasos.map(([h, p, v], i) => `<li><span class="step-n">${i + 1}</span><div><b>${h}</b><p>${p}</p></div>${state || v === 'inicio' ? `<button type="button" class="btn sm ghost" data-act="nav" data-view="${v}">Ir${icon('arrowRight', 15)}</button>` : ''}</li>`).join('')}</ol>`;
   } else if (t === 'flujo') {
     body = `<div class="flow" role="img" aria-label="Flujo de información de la herramienta">
@@ -2334,7 +2391,7 @@ function vAyuda() {
       <div class="flow-arrow">${icon('arrowRight', 22)}</div>
       <div class="flow-col mid"><div class="fnode big">${icon('fileCheck', 22)}<b>Declaración de Aplicabilidad</b><small>73 medidas · nivel, exigencia y refuerzos calculados · trazabilidad con riesgos y hallazgos</small></div></div>
       <div class="flow-arrow">${icon('arrowRight', 22)}</div>
-      <div class="flow-col"><div class="fnode">${icon('shieldCheck', 18)}<b>Auditor</b><small>${RULES.length} reglas</small></div><div class="fnode">${icon('listChecks', 18)}<b>Plan de acción</b><small>Responsable y fecha</small></div><div class="fnode">${icon('sheet', 18)}<b>Exportación</b><small>Excel · informe</small></div></div></div>
+      <div class="flow-col"><div class="fnode">${icon('shieldCheck', 18)}<b>Preauditoría</b><small>${RULES.length} reglas</small></div><div class="fnode">${icon('listChecks', 18)}<b>Plan de acción</b><small>Responsable y fecha</small></div><div class="fnode">${icon('sheet', 18)}<b>Exportación</b><small>Excel · informe</small></div></div></div>
       <div class="grid g3" style="margin-top:18px">
       <div class="card soft"><h4>Nivel exigido</h4><p class="small">Si la medida afecta a «Categoría», se exige en el nivel de la categoría; si afecta a dimensiones concretas, en el nivel más alto de esas dimensiones.</p></div>
       <div class="card soft"><h4>Riesgo</h4><p class="small">Impacto = valor × degradación. Riesgo = matriz 5×5 impacto × probabilidad. Las salvaguardas reducen ambos según su eficacia y su madurez.</p></div>
@@ -2357,7 +2414,7 @@ function vAyuda() {
       <p>Herramienta de apoyo y preauditoría: no sustituye a PILAR ni a la auditoría formal del art. 31. Los casos de ejemplo son ficticios.</p>
       <p class="muted small">Exportación a Excel con xlsx-js-style (Apache-2.0). Código bajo licencia MIT.</p></div>`;
   }
-  return `${pageHead('Centro de ayuda', 'Ayuda', 'Todo lo que necesitas para sacar partido a la herramienta, desde el primer proyecto hasta la auditoría.')}
+  return `${pageHead('Centro de ayuda', 'Ayuda', 'Flujo de trabajo, método de cálculo, reglas de preauditoría, glosario y atajos de teclado.')}
   <div class="help-layout"><nav class="help-nav">${tabs.map(([id, l, ic]) => `<button type="button" data-act="help-tab" data-tab="${id}"${t === id ? ' aria-current="page"' : ''}>${icon(ic, 16)}${l}</button>`).join('')}</nav>
   <div class="card help-body"><h2>${tabs.find((x) => x[0] === t)[1]}</h2>${body}</div></div>`;
 }
@@ -2371,7 +2428,7 @@ function kpiTile(label, value, sub, opts = {}) {
 }
 function evolucion() {
   const h = (state.historial || []).slice(-8);
-  if (h.length < 2) return emptyState('clock', 'La evolución aparecerá aquí', 'Cada día que trabajes en el proyecto se guarda una instantánea de las no conformidades.');
+  if (h.length < 2) return emptyState('clock', 'Sin historial suficiente', 'Cada día en que se modifica el proyecto se guarda una instantánea de las no conformidades y del grado de implantación. El gráfico necesita al menos dos días.');
   const W = 560, H = 190, P = { l: 30, r: 8, t: 12, b: 26 };
   const max = Math.max(4, ...h.map((x) => x.ncMayor + x.ncMenor));
   const step = Math.ceil(max / 4); const top = step * 4;
@@ -2403,29 +2460,29 @@ function vPanel() {
   const p = state.proyecto || {};
   return `${pageHead(esc(p.organizacion || ''), 'Panel de conformidad', `${esc(p.sistema || '')}${p.codigoSoA ? ` · ${esc(p.codigoSoA)}` : ''}${p.codigoAR ? ` · ${esc(p.codigoAR)}` : ''}`,
     `<button type="button" class="btn" data-act="export-md">${icon('download', 16)}Informe</button><button type="button" class="btn primary" data-act="export-xlsx">${icon('sheet', 16)}SoA en Excel</button>`)}
-  ${k.pendientes ? `<div class="progress-card card"><div><b>Declaración en curso</b><p class="muted small">${plural(k.aplicables - k.pendientes, 'medida declarada', 'medidas declaradas')} de ${k.aplicables} exigidas.</p></div><div class="pbar lg"><span class="bar"><i style="width:${((k.aplicables - k.pendientes) / Math.max(1, k.aplicables) * 100).toFixed(1)}%"></i></span><span class="num">${Math.round((k.aplicables - k.pendientes) / Math.max(1, k.aplicables) * 100)} %</span></div><button type="button" class="btn sm primary" data-act="soa-pend">Continuar${icon('arrowRight', 15)}</button></div>` : ''}
+  ${k.pendientes ? `<div class="progress-card card"><div><b>Declaración en curso</b><p class="muted small">${plural(k.aplicables - k.pendientes, 'medida declarada', 'medidas declaradas')} de ${k.aplicables} exigidas.</p></div><div class="pbar lg"><span class="bar"><i style="width:${((k.aplicables - k.pendientes) / Math.max(1, k.aplicables) * 100).toFixed(1)}%"></i></span><span class="num">${Math.round((k.aplicables - k.pendientes) / Math.max(1, k.aplicables) * 100)} %</span></div><button type="button" class="btn sm primary" data-act="soa-pend">Ver pendientes${icon('arrowRight', 15)}</button></div>` : ''}
   <div class="kpi-grid">
-    ${kpiTile('Implantación declarada', pct(k.grado), `Media de las ${k.aplicables} medidas exigidas`, { ic: 'fileCheck', delta: prev ? Math.round((k.grado - prev.grado) * 1000) / 10 : null, fmt: (v) => v.toFixed(1) + ' pp' })}
-    ${kpiTile('Implantadas sin objeción', `${limpias}<small>/${k.implantadas}</small>`, 'Implantadas al 100 % sin NC mayor', { ic: 'shieldCheck', alert: limpias < k.implantadas })}
-    ${kpiTile('Riesgos fuera de apetito', `${k.fueraApetito}<small> antes ${k.fueraApetitoDeclarado}</small>`, `Con la evidencia técnica · apetito ${state.apetito}`, { ic: 'activity', alert: k.fueraApetito > k.fueraApetitoDeclarado })}
+    ${kpiTile('Implantación declarada', pct(k.grado), `Media del % declarado en las ${k.aplicables} medidas exigidas`, { ic: 'fileCheck', delta: prev ? Math.round((k.grado - prev.grado) * 1000) / 10 : null, fmt: (v) => v.toFixed(1) + ' pp' })}
+    ${kpiTile('Implantadas sin NC mayor', `${limpias}<small>/${k.implantadas}</small>`, 'Declaradas implantadas al 100 % sin ninguna NC mayor asociada', { ic: 'shieldCheck', alert: limpias < k.implantadas })}
+    ${kpiTile('Riesgos fuera de apetito', `${k.fueraApetito}<small> · AR aprobado: ${k.fueraApetitoDeclarado}</small>`, `Con la evidencia técnica · apetito ${state.apetito}`, { ic: 'activity', alert: k.fueraApetito > k.fueraApetitoDeclarado })}
     ${kpiTile('No conformidades', `${auditCount('NC mayor')}<small> mayores · ${auditCount('NC menor')} menores</small>`, `${plural(auditCount('Observación'), 'observación', 'observaciones')}`, { ic: 'alert', delta: prev ? auditCount('NC mayor') - prev.ncMayor : null, goodDown: true })}
   </div>
   <div class="grid g-main">
     <div class="card"><div class="card-head"><h3>Evolución</h3><span class="muted small">No conformidades abiertas</span></div>${evolucion()}</div>
-    <div class="card"><div class="card-head"><h3>Próximas acciones</h3><button type="button" class="btn ghost sm" data-act="nav" data-view="plan">Plan completo${icon('arrowRight', 15)}</button></div>
+    <div class="card"><div class="card-head"><h3>Acciones abiertas</h3><button type="button" class="btn ghost sm" data-act="nav" data-view="plan">Plan completo${icon('arrowRight', 15)}</button></div>
       <div class="mini-stats"><span><b class="num">${abiertas.length}</b> abiertas</span><span class="${vencidas ? 'crit-t' : ''}"><b class="num">${vencidas}</b> vencidas</span><span><b class="num">${plan.filter((a) => a.estado === 'Hecha').length}</b> hechas</span></div>
       <ul class="act-list">${abiertas.slice(0, 5).map((a) => `<li><span class="prio ${a.prioridad === 'Alta' ? 'hi' : 'mid'}"></span><div><b>${esc(a.titulo)}</b><small>${esc(a.origen)}${a.fecha ? ` · ${fmtDate(a.fecha)}` : ''}${a.responsable ? ` · ${esc(a.responsable)}` : ''}</small></div></li>`).join('') || '<li class="muted small">Sin acciones abiertas.</li>'}</ul></div>
   </div>
   <div class="grid g3">
     <div class="card"><div class="card-head"><h3>Riesgo inherente</h3><span class="muted small">${plural(k.riesgos, 'riesgo', 'riesgos')}</span></div>${heatmap(calc.riesgos, 'impInh', 'probIn')}</div>
     <div class="card"><div class="card-head"><h3>Residual declarado</h3><span class="muted small">AR aprobado</span></div>${heatmap(calc.riesgosDeclarados, 'impRes', 'probRes')}</div>
-    <div class="card"><div class="card-head"><h3>Residual real</h3><span class="muted small">con evidencia técnica</span></div>${heatmap(calc.riesgos, 'impRes', 'probRes')}</div>
+    <div class="card"><div class="card-head"><h3>Residual con evidencia técnica</h3><span class="muted small">hallazgos abiertos aplicados</span></div>${heatmap(calc.riesgos, 'impRes', 'probRes')}</div>
   </div>
   <div class="grid g2">
     <div class="card"><div class="card-head"><h3>Implantación por familia</h3><span class="muted small">de menor a mayor</span></div>
       <div class="bars">${fam.map((f) => `<div class="bar-row" data-tip="${esc(f.familia)}: ${plural(f.n, 'medida exigida', 'medidas exigidas')}"><span class="nm"><code>${esc(f.prefijo)}</code> ${esc(f.familia)}</span><span class="bar"><i class="${f.grado < 1 ? 'part' : ''}" style="width:${(f.grado * 100).toFixed(1)}%"></i></span><span class="pc num">${Math.round(f.grado * 100)} %</span></div>`).join('') || '<p class="muted small">Aún no hay medidas declaradas.</p>'}</div></div>
-    <div class="card"><div class="card-head"><h3>Lo que ha encontrado el auditor</h3><button type="button" class="btn ghost sm" data-act="nav" data-view="auditoria">Ver ${audit.length}${icon('arrowRight', 15)}</button></div>
-      <div class="findings compact">${audit.slice(0, 5).map((f) => findingCard(f, true)).join('') || emptyState('check', 'Sin incidencias', 'El auditor no encuentra nada que objetar.')}</div></div>
+    <div class="card"><div class="card-head"><h3>Incidencias de preauditoría</h3><button type="button" class="btn ghost sm" data-act="nav" data-view="auditoria">Ver ${audit.length}${icon('arrowRight', 15)}</button></div>
+      <div class="findings compact">${audit.slice(0, 5).map((f) => findingCard(f, true)).join('') || emptyState('check', 'Sin incidencias', 'Ninguna regla de preauditoría activa genera incidencias.')}</div></div>
   </div>`;
 }
 function findingCard(f, compact = false) {
@@ -2442,7 +2499,7 @@ function vCat() {
       return `<td class="c"><select id="cat-${i}-${d}" class="lvl${bad ? ' bad' : ` l-${l || 'none'}`}" data-set="categorizacion.${i}.${d}" aria-label="${esc(a.id)} ${E.DIM_LABEL[d]}">
         ${bad ? `<option value="${esc(v)}" selected>'${esc(v)}' ⚠</option>` : ''}${opt('', '—', l === null ? '' : '#')}${E.ENS_LEVELS.map((x) => opt(x, x[0] + x.slice(1).toLowerCase(), l || '')).join('')}</select></td>`;
     };
-    return `<tr><td><select id="cat-${i}-tipo" data-set="categorizacion.${i}.tipo">${['Servicio', 'Información'].map((t) => opt(t, t, a.tipo)).join('')}</select></td>
+    return `<tr><td><select id="cat-${i}-tipo" aria-label="Tipo de activo esencial" data-set="categorizacion.${i}.tipo">${['Servicio', 'Información'].map((t) => opt(t, t, a.tipo)).join('')}</select></td>
       <td><code>${esc(a.id)}</code></td>
       <td><input type="text" id="cat-${i}-n" class="w-full" data-set="categorizacion.${i}.nombre" value="${esc(a.nombre)}" aria-label="Nombre del activo esencial"></td>
       <td><input type="text" id="cat-${i}-r" class="w-full" data-set="categorizacion.${i}.responsable" value="${esc(a.responsable || '')}" aria-label="Responsable"></td>
@@ -2451,9 +2508,9 @@ function vCat() {
   }).join('');
   const refs = calc.filas.filter((f) => f.aplicaNorma).reduce((a, f) => ({ o: a.o + f.refuerzos.obligatorios.length, g: a.g + f.refuerzos.grupos.flat().length }), { o: 0, g: 0 });
   const conseq = { 'ALTA': 'Auditoría formal bienal y Certificación de Conformidad por entidad acreditada (arts. 31 y 38).', 'MEDIA': 'Auditoría formal bienal y Certificación de Conformidad (arts. 31 y 38).', 'BÁSICA': 'Autoevaluación bienal y Declaración de Conformidad (arts. 31 y 38).' }[calc.categoria];
-  return `${pageHead('RD 311/2022 · art. 40 y Anexo I', 'Categorización del sistema', 'Valora cada activo esencial en las cinco dimensiones. El nivel del sistema en cada dimensión es el máximo de sus activos, y la categoría es el nivel más alto. Todo lo demás se recalcula al instante.',
+  return `${pageHead('RD 311/2022 · art. 40 y Anexo I', 'Categorización del sistema', 'Valora cada activo esencial en las cinco dimensiones. El nivel del sistema en cada dimensión es el máximo de sus activos, y la categoría, el nivel más alto de las cinco dimensiones (art. 40). Al cambiar un valor se recalculan el nivel exigido de cada medida y las reglas de preauditoría.',
     `<button type="button" class="btn" data-act="add-cat">${icon('plus', 16)}Añadir activo esencial</button>`)}
-  ${calc.invalidos.length ? `<div class="alert warn">${icon('alert', 18)}<div><b>${plural(calc.invalidos.length, 'valor no válido', 'valores no válidos')}</b> (${calc.invalidos.map((x) => `${x.activo}·${x.dim} = '${esc(x.valor)}'`).join(', ')}). Se ignoran en el cálculo y el auditor los reporta como CAT-01. Corrígelos eligiendo un nivel.</div></div>` : ''}
+  ${calc.invalidos.length ? `<div class="alert warn">${icon('alert', 18)}<div><b>${plural(calc.invalidos.length, 'valor no válido', 'valores no válidos')}</b> (${calc.invalidos.map((x) => `${x.activo}·${x.dim} = '${esc(x.valor)}'`).join(', ')}). Se ignoran en el cálculo y generan la no conformidad CAT-01. Selecciona un nivel válido en la tabla.</div></div>` : ''}
   <div class="grid g-cat">
     <div class="cat-result card"><div class="seal ${calc.categoria === 'BÁSICA' ? 'BASICA' : calc.categoria}"><small>Categoría</small><b>${calc.categoria}</b></div>
       <div class="dim-levels">${E.DIMS.map((d) => `<div><span class="dim ${d}">${d}</span><span class="lvl-tag l-${calc.niveles[d] || 'none'}">${calc.niveles[d] ? calc.niveles[d][0] + calc.niveles[d].slice(1).toLowerCase() : '—'}</span><small>${E.DIM_LABEL[d]}</small></div>`).join('')}</div>
@@ -2472,7 +2529,7 @@ function vRiesgos() {
   const tabs = [['registro', 'Registro de riesgos'], ['activos', `Activos · ${state.activos.length}`], ['amenazas', `Amenazas · ${state.amenazas.length}`], ['salvaguardas', `Salvaguardas · ${state.salvaguardas.length}`]];
   const body = ({ registro: rRegistro, activos: rActivos, amenazas: rAmenazas, salvaguardas: rSalvs })[ui.riesgosTab]();
   return `${pageHead(`MAGERIT v3 · ${esc(state.proyecto?.codigoAR || '')}`, 'Análisis de riesgos', 'Impacto = valor × degradación; riesgo según la matriz 5×5; eficacia de cada salvaguarda modulada por su madurez (L0–L5). Cada amenaza queda enlazada con las medidas del ENS que la tratan.')}
-  <div class="tabs" role="tablist">${tabs.map(([id, l]) => `<button type="button" role="tab" data-act="riesgos-tab" data-tab="${id}" aria-selected="${ui.riesgosTab === id}">${l}</button>`).join('')}</div>${body}`;
+  <div class="tabs" role="tablist">${tabs.map(([id, l]) => `<button type="button" role="tab" data-act="riesgos-tab" data-tab="${id}" aria-selected="${ui.riesgosTab === id}" tabindex="${ui.riesgosTab === id ? 0 : -1}">${l}</button>`).join('')}</div>${body}`;
 }
 function rRegistro() {
   const rows = E.registroRiesgos(state, CTX, ui.conHallazgos, { cvss: ws.settings.cvss });
@@ -2500,15 +2557,15 @@ function rRegistro() {
     <div class="grid g2"><div class="card"><div class="card-head"><h3>Inherente</h3></div>${heatmap(rows, 'impInh', 'probIn')}</div><div class="card"><div class="card-head"><h3>Residual</h3><span class="muted small">tras salvaguardas</span></div>${heatmap(rows, 'impRes', 'probRes')}</div></div>
     <div class="table-wrap"><table class="tbl wide">
       <thead><tr><th>ID</th><th>Activo</th><th>Amenaza</th><th class="c">Prob.</th><th class="c">Inherente</th><th>Salvaguardas</th><th class="c">Residual</th><th>Medidas ENS</th><th>Tratamiento</th></tr></thead>
-      <tbody>${tr || `<tr><td colspan="9">${emptyState('activity', 'Aún no hay amenazas', 'Da de alta activos y amenazas en las pestañas de al lado.')}</td></tr>`}</tbody></table></div>
-    <p class="muted small">Las filas resaltadas son riesgos que no estaban en el análisis aprobado y han aparecido por un hallazgo técnico abierto.</p>`;
+      <tbody>${tr || `<tr><td colspan="9">${emptyState('activity', 'Sin riesgos', 'Registra activos en la pestaña «Activos» y amenazas en «Amenazas».')}</td></tr>`}</tbody></table></div>
+    <p class="muted small">Las filas resaltadas son riesgos que no figuran en el análisis aprobado y se generan a partir de un hallazgo técnico abierto (identificador R-H-xx).</p>`;
 }
 function rActivos() {
   const aiOn = ui.ai.available && ws.settings.asistente;
   const rows = state.activos.map((a, i) => `<tr>
     <td><code>${esc(a.id)}</code></td>
     <td><input type="text" id="ac-${i}-n" class="w-full" data-set="activos.${i}.nombre" value="${esc(a.nombre)}" aria-label="Nombre"><input type="text" id="ac-${i}-d" class="w-full sub" data-set="activos.${i}.descripcion" value="${esc(a.descripcion || '')}" placeholder="Descripción" aria-label="Descripción"></td>
-    <td><select id="ac-${i}-t" data-set="activos.${i}.tipo">${TIPOS.map((t) => opt(t.code, `${t.code} ${t.label}`, a.tipo)).join('')}</select></td>
+    <td><select id="ac-${i}-t" aria-label="Tipo de activo" data-set="activos.${i}.tipo">${TIPOS.map((t) => opt(t.code, `${t.code} ${t.label}`, a.tipo)).join('')}</select></td>
     <td><input type="text" id="ac-${i}-s" data-set="activos.${i}.soporta" data-type="list" value="${esc((a.soporta || []).join(', '))}" placeholder="S-01, I-01" class="w-md" aria-label="Activos esenciales que soporta"></td>
     ${E.DIMS.map((d) => `<td class="c"><input type="number" min="0" max="10" id="ac-${i}-${d}" data-set="activos.${i}.valoracion.${d}" data-type="num" value="${a.valoracion?.[d] ?? 0}" class="num-in" aria-label="${E.DIM_LABEL[d]}"></td>`).join('')}
     <td class="c nowrap">${aiOn ? `<button type="button" class="btn sm" data-act="ai-amenazas" data-id="${esc(a.id)}"${ui.ai.busy ? ' disabled' : ''}>${icon('lightbulb', 15)}Sugerir</button>` : ''}<button type="button" class="icon-btn sm" data-act="del-activo" data-i="${i}" aria-label="Eliminar ${esc(a.id)}">${icon('trash', 16)}</button></td></tr>`).join('');
@@ -2520,11 +2577,11 @@ function aiBox() {
   const a = ui.ai;
   if (!a.available || !ws.settings.asistente || !a.activo) return '';
   const act = state.activos.find((x) => x.id === a.activo); if (!act) return '';
-  if (a.busy === 'amenazas') return `<div class="assist">${icon('lightbulb', 18)}<div><b>Analizando ${esc(act.nombre)}…</b><p class="small muted">Revisando el catálogo MAGERIT para este tipo de activo.</p></div></div>`;
+  if (a.busy === 'amenazas') return `<div class="assist">${icon('lightbulb', 18)}<div><b>Generando propuesta para ${esc(act.nombre)}…</b><p class="small muted">Consulta al modelo de lenguaje con el catálogo MAGERIT filtrado por el tipo del activo.</p></div></div>`;
   if (a.error) return `<div class="assist">${icon('alert', 18)}<div><b>No se pudo generar la propuesta</b><p class="small">${esc(a.error)}</p></div></div>`;
   if (!a.props.length) return '';
   return `<div class="assist col"><div class="row spread"><b>${icon('lightbulb', 16)} Amenazas sugeridas para ${esc(act.nombre)}</b><button type="button" class="icon-btn sm" data-act="ai-close" aria-label="Cerrar">${icon('x', 16)}</button></div>
-    <p class="small muted">Propuesta basada en el catálogo MAGERIT. Revísala antes de incorporarla.</p>
+    <p class="small muted">Propuesta generada por un modelo de lenguaje a partir del catálogo MAGERIT. Comprueba la probabilidad y la degradación antes de añadirla.</p>
     ${a.props.map((p, i) => `<div class="proposal"><div><code class="muted">${esc(p.codigo)}</code> <b>${esc(p.nombre)}</b> · prob. <code>${esc(p.prob)}</code> · ${E.DIMS.filter((d) => p.deg[d]).map((d) => `${d} ${p.deg[d]} %`).join(', ') || '—'}<div class="small muted">${esc(p.motivo || '')}</div></div>
       <button type="button" class="btn sm" data-act="ai-add" data-i="${i}"${p.added ? ' disabled' : ''}>${p.added ? icon('check', 15) + 'Añadida' : icon('plus', 15) + 'Añadir'}</button></div>`).join('')}</div>`;
 }
@@ -2534,9 +2591,9 @@ function rAmenazas() {
     const tipo = act ? act.tipo.replace(/[[\]]/g, '').replace('essential.service', 'S').replace('essential.info', 'D') : '';
     const cands = CAT_AM.filter((c) => !tipo || c.tipos.includes(tipo) || c.code === am.codigo);
     return `<tr><td><code>${esc(am.id)}</code></td>
-      <td><select id="am-${i}-a" data-set="amenazas.${i}.activoId">${state.activos.map((a) => opt(a.id, `${a.id} · ${a.nombre}`, am.activoId)).join('')}</select></td>
-      <td><select id="am-${i}-c" data-set="amenazas.${i}.codigo" data-sync-name="${i}">${cands.map((c) => opt(c.code, `${c.code} ${c.nombre}`, am.codigo)).join('')}</select></td>
-      <td class="c"><select id="am-${i}-p" class="lvl" data-set="amenazas.${i}.prob">${E.NIVELES.map((n) => opt(n, n, am.prob)).join('')}</select></td>
+      <td><select id="am-${i}-a" aria-label="Activo" data-set="amenazas.${i}.activoId">${state.activos.map((a) => opt(a.id, `${a.id} · ${a.nombre}`, am.activoId)).join('')}</select></td>
+      <td><select id="am-${i}-c" aria-label="Amenaza" data-set="amenazas.${i}.codigo" data-sync-name="${i}">${cands.map((c) => opt(c.code, `${c.code} ${c.nombre}`, am.codigo)).join('')}</select></td>
+      <td class="c"><select id="am-${i}-p" aria-label="Probabilidad" class="lvl" data-set="amenazas.${i}.prob">${E.NIVELES.map((n) => opt(n, n, am.prob)).join('')}</select></td>
       ${E.DIMS.map((d) => `<td class="c"><input type="number" min="0" max="100" step="10" id="am-${i}-${d}" data-set="amenazas.${i}.deg.${d}" data-type="num" value="${am.deg?.[d] ?? 0}" class="num-in" aria-label="Degradación ${E.DIM_LABEL[d]}"></td>`).join('')}
       <td><div class="chips">${(D.mapping.amenaza_ens[am.codigo] || []).map(codeChip).join('')}</div></td>
       <td class="c"><button type="button" class="icon-btn sm" data-act="del-amenaza" data-i="${i}" aria-label="Eliminar ${esc(am.id)}">${icon('trash', 16)}</button></td></tr>`;
@@ -2547,8 +2604,8 @@ function rAmenazas() {
 function rSalvs() {
   const rows = state.salvaguardas.map((s, i) => `<tr>
     <td><code>${esc(s.id)}</code></td>
-    <td><select id="sa-${i}-c" data-set="salvaguardas.${i}.codigo">${CAT_SAL.map((c) => opt(c.code, `${c.code} · ${c.nombre}`, s.codigo)).join('')}</select><input type="text" id="sa-${i}-n" class="w-full sub" data-set="salvaguardas.${i}.nombre" value="${esc(s.nombre)}" aria-label="Descripción de la salvaguarda"></td>
-    <td><select id="sa-${i}-m" data-set="salvaguardas.${i}.madurez">${Object.entries(E.MADUREZ).map(([k, v]) => opt(k, `${k} · ${v.label}`, s.madurez)).join('')}</select></td>
+    <td><select id="sa-${i}-c" aria-label="Salvaguarda" data-set="salvaguardas.${i}.codigo">${CAT_SAL.map((c) => opt(c.code, `${c.code} · ${c.nombre}`, s.codigo)).join('')}</select><input type="text" id="sa-${i}-n" class="w-full sub" data-set="salvaguardas.${i}.nombre" value="${esc(s.nombre)}" aria-label="Descripción de la salvaguarda"></td>
+    <td><select id="sa-${i}-m" aria-label="Madurez" data-set="salvaguardas.${i}.madurez">${Object.entries(E.MADUREZ).map(([k, v]) => opt(k, `${k} · ${v.label}`, s.madurez)).join('')}</select></td>
     <td class="c"><input type="number" min="0" max="100" step="10" id="sa-${i}-rp" data-set="salvaguardas.${i}.reduceProb" data-type="num" value="${s.reduceProb}" class="num-in" aria-label="Reducción de probabilidad"></td>
     <td class="c"><input type="number" min="0" max="100" step="10" id="sa-${i}-ri" data-set="salvaguardas.${i}.reduceImp" data-type="num" value="${s.reduceImp}" class="num-in" aria-label="Reducción de impacto"></td>
     <td><div class="cover">${state.amenazas.map((am) => `<label title="${esc(am.nombre)} · ${esc(activoNombre(am.activoId))}"><input type="checkbox" data-cover="${i}" value="${esc(am.id)}"${(s.cubre || []).includes(am.id) ? ' checked' : ''}>${esc(am.id)}</label>`).join('')}</div></td>
@@ -2595,7 +2652,7 @@ function vSoa() {
     if (open) html += soaDetail(f, fs);
   }
   const pend = calc.filas.filter((f) => f.aplicaNorma && E.esPendiente(f.decl)).length;
-  return `${pageHead('RD 311/2022 · art. 28 y Anexo II', 'Declaración de Aplicabilidad', 'El nivel exigido, la exigencia y los refuerzos se calculan desde la categorización. La aplicabilidad, el estado y las evidencias son lo que declaras. Cada medida muestra qué riesgos trata y qué objeta el auditor.',
+  return `${pageHead('RD 311/2022 · art. 28 y Anexo II', 'Declaración de Aplicabilidad', 'El nivel exigido, la exigencia y los refuerzos se calculan desde la categorización. La aplicabilidad, el estado y las evidencias son lo que declaras. Al desplegar una medida se muestran los riesgos que trata y sus incidencias de preauditoría.',
     `<button type="button" class="btn" data-act="export-xlsx">${icon('sheet', 16)}Exportar</button>`)}
   <div class="toolbar sticky">
     <div class="search-in">${icon('search', 16)}<input type="search" id="soa-q" data-uiq="soaQ" value="${esc(ui.soaQ)}" placeholder="Código, medida, responsable o control ISO…" aria-label="Buscar en la SoA"></div>
@@ -2603,8 +2660,8 @@ function vSoa() {
     <select id="soa-estado" data-ui="soaEstado" aria-label="Filtro">${[['todos', 'Todas las medidas'], ['aplicables', 'Exigidas'], ['incidencias', 'Con incidencias'], ['pendientes', `Pendientes (${pend})`], ['parciales', 'Parciales o compensadas'], ['noaplica', 'No exigidas']].map(([v, l]) => opt(v, l, ui.soaEstado)).join('')}</select>
     <span class="muted small">${list.length} de 73</span></div>
   <div class="soa-list">
-    <div class="soa-row soa-head"><span>Código</span><span>Medida</span><span>Dimensión · nivel</span><span class="s-exig">Exigencia</span><span class="s-state">Estado</span><span class="s-risk">Riesgo</span><span class="s-flags">Auditor</span><span></span></div>
-    ${html || emptyState('search', 'Nada coincide', 'Prueba con otro filtro o término de búsqueda.')}</div>`;
+    <div class="soa-row soa-head"><span>Código</span><span>Medida</span><span>Dimensión · nivel</span><span class="s-exig">Exigencia</span><span class="s-state">Estado</span><span class="s-risk">Riesgo</span><span class="s-flags">Incidencias</span><span></span></div>
+    ${html || emptyState('search', 'Sin resultados', 'Ninguna medida cumple el filtro y la búsqueda actuales.')}</div>`;
 }
 function soaDetail(f, fs) {
   const d = f.decl || {}; const ax = D.anexo[f.codigo]; const c = f.codigo;
@@ -2614,8 +2671,8 @@ function soaDetail(f, fs) {
   const aiJ = ui.ai.justCode === c ? ui.ai : null; const aiOn = ui.ai.available && ws.settings.asistente;
   return `<div class="detail">
     <div class="d-left">
-      <div class="d-sec"><h4>Anexo II · ${esc(ax.nombre)}</h4><div class="norma">${esc(ax.texto)}</div>
-        ${ax.refuerzosTexto ? `<details class="refs"><summary>Refuerzos (texto normativo)</summary><div class="norma">${esc(ax.refuerzosTexto)}</div></details>` : ''}</div>
+      <div class="d-sec"><h4>Anexo II · ${esc(ax.nombre)}</h4><div class="norma" tabindex="0" role="region" aria-label="Texto del Anexo II">${esc(ax.texto)}</div>
+        ${ax.refuerzosTexto ? `<details class="refs"><summary>Refuerzos (texto normativo)</summary><div class="norma" tabindex="0" role="region" aria-label="Texto de los refuerzos">${esc(ax.refuerzosTexto)}</div></details>` : ''}</div>
       <dl class="kv">
         <dt>Dimensiones</dt><dd>${dimsChips(f.dims)}</dd>
         <dt>Nivel exigido</dt><dd><b>${f.nivel}</b> <span class="muted small">${esc(f.regla)}</span></dd>
@@ -2645,7 +2702,7 @@ function soaDetail(f, fs) {
       <p class="small muted calc-just"><b>Calculada:</b> ${esc(f.justAuto)}</p>
       ${aiJ && aiJ.just ? `<div class="assist col"><b>${icon('lightbulb', 16)} Propuesta de redacción</b><p class="small">${esc(aiJ.just)}</p><div class="row"><button type="button" class="btn sm primary" data-act="ai-just-use" data-code="${esc(c)}">Usar este texto</button><span class="small muted">Revísala antes de firmar la SoA.</span></div></div>` : ''}
       ${aiJ && aiJ.error ? `<div class="assist"><span class="small">${esc(aiJ.error)}</span></div>` : ''}
-      ${fs.length ? `<div class="d-sec"><h4>Lo que objeta el auditor</h4><div class="findings">${fs.map((x) => findingCard(x)).join('')}</div></div>` : `<div class="ok-box">${icon('shieldCheck', 18)}Sin incidencias del auditor</div>`}
+      ${fs.length ? `<div class="d-sec"><h4>Incidencias de preauditoría</h4><div class="findings">${fs.map((x) => findingCard(x)).join('')}</div></div>` : `<div class="ok-box">${icon('shieldCheck', 18)}Sin incidencias de preauditoría</div>`}
     </div></div>`;
 }
 
@@ -2663,7 +2720,7 @@ function vMC() {
       ${fs.length ? `<div class="findings" style="margin-top:14px">${fs.map((x) => findingCard(x)).join('')}</div>` : ''}</article>`;
   }).join('');
   return `${pageHead('RD 311/2022 · art. 28.3', 'Medidas compensatorias', 'Cuando una medida no puede implantarse como describe el Anexo II, se sustituye por otras que protejan igual o mejor, justificadas documentalmente. Los riesgos citados se enlazan con el análisis y muestran su residual actual.',
-    `<button type="button" class="btn" data-act="add-mc">${icon('plus', 16)}Añadir</button>`)}
+    `<button type="button" class="btn" data-act="add-mc">${icon('plus', 16)}Añadir medida compensatoria</button>`)}
   ${cards || `<div class="card">${emptyState('scale', 'Sin medidas compensatorias', 'Si alguna medida no puede implantarse tal cual, documenta aquí cómo se compensa.')}</div>`}`;
 }
 
@@ -2674,26 +2731,26 @@ function vHall() {
     const cat = HALL[h.categoria] || {}; const r = reg.find((x) => (x.amenaza.hallazgos || []).includes(h.id));
     return `<tr class="${h.estado === 'cerrado' ? 'dim-row' : ''}"><td><code>${esc(h.id)}</code></td>
       <td><input type="text" id="h-${i}-t" class="w-full" data-set="hallazgos.${i}.titulo" value="${esc(h.titulo)}" aria-label="Título"><div class="muted small sub-t">${esc(h.fuente || '')}</div></td>
-      <td><select id="h-${i}-c" data-set="hallazgos.${i}.categoria">${Object.entries(HALL).map(([k, v]) => opt(k, `${v.label} (${v.cwe})`, h.categoria)).join('')}</select></td>
+      <td><select id="h-${i}-c" aria-label="Categoría" data-set="hallazgos.${i}.categoria">${Object.entries(HALL).map(([k, v]) => opt(k, `${v.label} (${v.cwe})`, h.categoria)).join('')}</select></td>
       <td class="c"><input type="number" min="0" max="10" step="0.1" id="h-${i}-cv" data-set="hallazgos.${i}.cvss" data-type="num" value="${esc(h.cvss)}" class="num-in" aria-label="CVSS"><div class="sub-t">${cvssBadge(h.cvss)}</div></td>
-      <td><select id="h-${i}-a" data-set="hallazgos.${i}.activoId">${state.activos.map((a) => opt(a.id, `${a.id} · ${a.nombre}`, h.activoId)).join('')}</select></td>
-      <td><select id="h-${i}-e" data-set="hallazgos.${i}.estado">${opt('abierto', 'Abierto', h.estado)}${opt('cerrado', 'Cerrado (retest OK)', h.estado)}</select></td>
+      <td><select id="h-${i}-a" aria-label="Activo" data-set="hallazgos.${i}.activoId">${state.activos.map((a) => opt(a.id, `${a.id} · ${a.nombre}`, h.activoId)).join('')}</select></td>
+      <td><select id="h-${i}-e" aria-label="Estado" data-set="hallazgos.${i}.estado">${opt('abierto', 'Abierto', h.estado)}${opt('cerrado', 'Cerrado (retest OK)', h.estado)}</select></td>
       <td>${h.estado === 'abierto' && r ? `<code class="muted">${esc(r.amenaza.id)}</code> ${riskChip(r.resMax)}` : '<span class="muted small">—</span>'}</td>
       <td><div class="chips">${(cat.ens || []).map(codeChip).join('')}</div></td>
       <td class="c"><button type="button" class="icon-btn sm" data-act="del-hall" data-i="${i}" aria-label="Eliminar ${esc(h.id)}">${icon('trash', 16)}</button></td></tr>`;
   }).join('');
-  return `${pageHead('Del pentest al riesgo', 'Evidencia técnica', 'Los hallazgos de pruebas de intrusión, escaneos o campañas de phishing se convierten en riesgo MAGERIT y se contrastan con la SoA. Un hallazgo abierto contra una medida declarada implantada es una no conformidad.',
+  return `${pageHead('Pentest, escaneos y phishing', 'Evidencia técnica', 'Los hallazgos de pruebas de intrusión, escaneos o campañas de phishing se convierten en riesgo MAGERIT y se contrastan con la SoA. Un hallazgo abierto contra una medida declarada implantada es una no conformidad.',
     `<button type="button" class="btn" data-act="import-hall">${icon('upload', 16)}Importar CSV o JSON</button><button type="button" class="btn primary" data-act="add-hall"${state.activos.length ? '' : ' disabled'}>${icon('plus', 16)}Añadir hallazgo</button>`)}
   <div class="table-wrap"><table class="tbl wide"><thead><tr><th>ID</th><th>Hallazgo</th><th>Categoría</th><th class="c">CVSS</th><th>Activo</th><th>Estado</th><th>Riesgo</th><th>Medidas ENS</th><th></th></tr></thead>
     <tbody>${rows || `<tr><td colspan="9">${emptyState('target', 'Sin hallazgos', 'Importa los resultados de tu último pentest o escaneo, o añádelos a mano.')}</td></tr>`}</tbody></table></div>
   <div class="grid g2">
-    <div class="card"><h3>Cómo se traduce un hallazgo</h3><dl class="kv">
+    <div class="card"><h3>Conversión de hallazgo a riesgo</h3><dl class="kv">
       <dt>Probabilidad</dt><dd class="small">CVSS ≥ ${ws.settings.cvss.ma} → MA · ≥ ${ws.settings.cvss.a} → A · ≥ ${ws.settings.cvss.m} → M · resto → B (configurable en Ajustes).</dd>
       <dt>Amenaza</dt><dd class="small">Cada categoría apunta a una amenaza MAGERIT. Si ya existe en el activo, se endurecen su probabilidad y degradación; si no, aparece un riesgo nuevo «R-H-xx».</dd>
       <dt>SoA</dt><dd class="small">CVSS ≥ 7 contra medida «Implantada 100 %» → NC mayor (PT-01); de 4 a 6,9 → NC menor (PT-02).</dd></dl></div>
     <div class="card"><h3>Formato de importación</h3><p class="small muted">CSV con cabecera o JSON (array de objetos). Categorías admitidas:</p>
       <div class="chips" style="margin:10px 0">${Object.entries(HALL).map(([k, v]) => `<span class="chip" title="${esc(v.label)} → ${esc(v.amenaza)}">${k}</span>`).join('')}</div>
-      <pre class="code">id,titulo,categoria,cvss,activoId,estado,fuente
+      <pre class="code" tabindex="0" aria-label="Ejemplo de CSV">id,titulo,categoria,cvss,activoId,estado,fuente
 H-08,XSS en el buzón,XSS,6.1,ACT-002,abierto,Pentest 2027</pre>
       <button type="button" class="btn sm" data-act="export-tpl">${icon('download', 15)}Descargar plantilla</button></div>
   </div>`;
@@ -2715,12 +2772,12 @@ function vPlan() {
       <input type="date" data-plan="${k}" data-f="fecha" id="pl-${k}-f" value="${esc(a.fecha)}" class="${late ? 'late' : ''}" aria-label="Fecha límite"${a.verificada ? ' disabled' : ''}>
       ${a.verificada ? '<span class="badge ok">Verificada</span>' : `<select data-plan="${k}" data-f="estado" id="pl-${k}-e" aria-label="Estado">${['Pendiente', 'En curso', 'Hecha'].map((s) => opt(s, s, a.estado)).join('')}</select>`}</div>`;
   };
-  return `${pageHead('Seguimiento', 'Plan de acción', 'Las no conformidades del auditor, los riesgos por encima del apetito y los hallazgos técnicos abiertos, convertidos en tareas con responsable y fecha. Cuando el origen desaparece, la acción se marca como verificada.',
+  return `${pageHead('Seguimiento', 'Plan de acción', 'Una acción por cada no conformidad de preauditoría, riesgo por encima del apetito y hallazgo técnico abierto. Cuando la condición de origen deja de cumplirse, la acción pasa a «Verificada».',
     `<button type="button" class="btn" data-act="export-plan">${icon('download', 16)}Exportar CSV</button>`)}
   <div class="kpi-grid">${kpiTile('Abiertas', abiertas.length, 'Pendientes o en curso', { ic: 'listChecks' })}${kpiTile('Vencidas', venc, 'Fecha límite superada', { ic: 'clock', alert: venc > 0 })}${kpiTile('Esta semana', sem, 'Vencen en 7 días', { ic: 'calendar' })}${kpiTile('Cerradas', plan.length - abiertas.length, 'Hechas o verificadas', { ic: 'check' })}</div>
   <div class="toolbar"><div class="seg" role="group">${[['abiertas', 'Abiertas'], ['vencidas', 'Vencidas'], ['cerradas', 'Cerradas'], ['todas', 'Todas']].map(([v, l]) => `<button type="button" data-act="plan-f" data-v="${v}" aria-pressed="${ui.planFiltro === v}">${l}</button>`).join('')}</div>
     <select id="plan-o" data-ui="planOrigen" aria-label="Origen">${opt('todos', 'Todos los orígenes', ui.planOrigen)}${origenes.map((o) => opt(o, o, ui.planOrigen)).join('')}</select><span class="muted small">${plural(list.length, 'acción', 'acciones')}</span></div>
-  <div class="card flush act-table">${list.map(row).join('') || emptyState('check', 'Nada por aquí', 'No hay acciones con este filtro.')}</div>`;
+  <div class="card flush act-table">${list.map(row).join('') || emptyState('check', 'Sin acciones', 'Ninguna acción cumple este filtro.')}</div>`;
 }
 
 /* --- Auditoría --- */
@@ -2728,12 +2785,12 @@ function vAudit() {
   const fams = [...new Set(audit.map((f) => f.id.split('-')[0]))];
   const list = audit.filter((f) => (ui.auditSev === 'todas' || f.sev === ui.auditSev) && (ui.auditFam === 'todas' || f.id.startsWith(ui.auditFam + '-')));
   const famLabel = { CAT: 'Categorización', SOA: 'SoA', REF: 'Refuerzos', MC: 'Compensatorias', AR: 'Análisis de riesgos', PT: 'Evidencia técnica', DOC: 'Documento' };
-  return `${pageHead('Preauditoría · CCN-STIC 802 y 808', 'Auditoría', `${RULES.length - ws.settings.reglasOff.length} reglas revisan la coherencia de la SoA con la categorización, el análisis de riesgos y la evidencia técnica. Prepara la auditoría formal; no la sustituye.`,
+  return `${pageHead('Preauditoría · CCN-STIC 802 y 808', 'Auditoría', `${RULES.length - ws.settings.reglasOff.length} reglas revisan la coherencia de la SoA con la categorización, el análisis de riesgos y la evidencia técnica. Sirve para preparar la auditoría formal del art. 31; no la sustituye.`,
     `<button type="button" class="btn primary" data-act="export-md">${icon('download', 16)}Descargar informe</button>`)}
   <div class="sev-cards">${[['NC mayor', 'crit'], ['NC menor', 'warn'], ['Observación', 'accent']].map(([s, c]) => `<button type="button" class="sev-card ${c}${ui.auditSev === s ? ' on' : ''}" data-act="audit-sev" data-v="${ui.auditSev === s ? 'todas' : s}"><b class="num">${auditCount(s)}</b><span>${s === 'Observación' ? 'Observaciones' : s === 'NC mayor' ? 'NC mayores' : 'NC menores'}</span></button>`).join('')}</div>
   <div class="toolbar"><select id="audit-fam" data-ui="auditFam" aria-label="Área">${opt('todas', 'Todas las áreas', ui.auditFam)}${fams.map((f) => opt(f, famLabel[f] || f, ui.auditFam)).join('')}</select>
     ${ui.auditSev !== 'todas' ? `<button type="button" class="btn sm ghost" data-act="audit-sev" data-v="todas">${icon('x', 15)}Quitar filtro: ${esc(ui.auditSev)}</button>` : ''}<span class="spacer"></span><span class="muted small">${plural(list.length, 'resultado', 'resultados')}</span></div>
-  <div class="findings">${list.map((f) => findingCard(f)).join('') || `<div class="card">${emptyState('shieldCheck', 'Sin incidencias', 'No hay hallazgos del auditor con este filtro.')}</div>`}</div>`;
+  <div class="findings">${list.map((f) => findingCard(f)).join('') || `<div class="card">${emptyState('shieldCheck', 'Sin incidencias', 'Ninguna incidencia cumple este filtro.')}</div>`}</div>`;
 }
 
 /* --- Exportar --- */
@@ -2888,13 +2945,13 @@ async function importXlsx(file) {
   try {
     const X = await loadXLSX('leer');
     const wb = X.read(await file.arrayBuffer(), { type: 'array', cellFormula: false, cellHTML: false, sheetStubs: false });
-    if (wb.SheetNames.length > 40) throw new Error('El libro tiene demasiadas hojas para ser una SoA.');
+    if (wb.SheetNames.length > 40) throw new Error('El libro tiene más de 40 hojas y no se reconoce como SoA.');
     const rowsOf = (name) => X.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: null, raw: true }).slice(0, 5000).map((r) => (r || []).slice(0, 60).map((c) => (c === null || typeof c === 'number' ? c : s(c))));
     const findHdr = (rows, must) => { for (let i = 0; i < Math.min(10, rows.length); i++) { const v = (rows[i] || []).map(normH); if (must.every((m) => v.includes(m))) return i; } return -1; };
     let soaName = null, soaRows = null, soaH = -1;
     for (const n of wb.SheetNames) { const r = rowsOf(n); const h = findHdr(r, ['codigo', '?aplica?'.replace(/^\?/, '')]); const h2 = h < 0 ? findHdr(r, ['codigo', 'aplica?']) : h; if (h2 >= 0) { soaName = n; soaRows = r; soaH = h2; break; } }
     if (!soaName) { for (const n of wb.SheetNames) { const r = rowsOf(n); const h = r.findIndex((row) => (row || []).some((c) => normH(c) === 'codigo') && (row || []).some((c) => /aplica/.test(normH(c)))); if (h >= 0 && h < 10) { soaName = n; soaRows = r; soaH = h; break; } } }
-    if (!soaName) throw new Error('No encuentro una hoja de SoA con las columnas «Código» y «¿Aplica?».');
+    if (!soaName) throw new Error('No se encuentra ninguna hoja de SoA con las columnas «Código» y «¿Aplica?».');
     const hdr = soaRows[soaH].map(normH);
     const col = (...keys) => hdr.findIndex((h) => keys.some((k) => h === normH(k) || h.startsWith(normH(k))));
     const cols = { codigo: col('Código'), aplica: col('¿Aplica?', 'Aplica'), just: col('Justificación'), org: col('Medidas ORGANIZATIVAS'), tec: col('Medidas TÉCNICAS'), mc: col('Medida compensatoria'), estado: col('Estado de implantación', 'Estado'), pct: col('% implantación'), ev: col('Evidencias'), resp: col('Responsable'), obs: col('Observaciones'), refs: col('Refuerzos / alternativa') };
@@ -3002,7 +3059,7 @@ Responde SOLO con JSON: {"propuestas":[{"codigo":"[A.11]","prob":"MB|B|M|A|MA","
       return { codigo: c.code, nombre: c.nombre, prob: E.NIVELES.includes(p.prob) ? p.prob : 'M', deg, motivo: String(p.motivo || '').slice(0, 240) };
     }).filter(Boolean).slice(0, 5);
     ui.ai = { ...ui.ai, busy: null, props, error: props.length ? '' : 'La respuesta no contenía amenazas válidas del catálogo.' };
-  } catch (e) { ui.ai = { ...ui.ai, busy: null, error: e && e.code === 'rate_limited' ? 'Demasiadas peticiones seguidas; espera un momento.' : e && e.code === 'not_granted' ? 'Permiso no concedido.' : 'No se pudo completar la petición.' }; }
+  } catch (e) { ui.ai = { ...ui.ai, busy: null, error: e && e.code === 'rate_limited' ? 'Límite de peticiones alcanzado. Vuelve a intentarlo en unos segundos.' : e && e.code === 'not_granted' ? 'Permiso no concedido.' : 'No se pudo completar la petición.' }; }
   render();
 }
 async function aiJust(code) {
@@ -3084,12 +3141,28 @@ document.addEventListener('keydown', (ev) => {
   if (ui.palette) {
     const items = ui._pItems || [];
     if (ev.key === 'Escape') { ui.palette = false; renderPalette(); return; }
+    if (ev.key === 'Tab') { ev.preventDefault(); $('#pal-q').focus(); return; }
     if (ev.key === 'ArrowDown') { ev.preventDefault(); ui.paletteIdx = Math.min(items.length - 1, ui.paletteIdx + 1); renderPalette(); return; }
     if (ev.key === 'ArrowUp') { ev.preventDefault(); ui.paletteIdx = Math.max(0, ui.paletteIdx - 1); renderPalette(); return; }
     if (ev.key === 'Enter') { ev.preventDefault(); const it = items[ui.paletteIdx]; ui.palette = false; renderPalette(); if (it) it.act(); return; }
     return;
   }
-  if (ev.key === 'Escape') { if (ui.menu || ui.drawer || ui.confirm) { ui.menu = null; ui.drawer = false; ui.confirm = null; render(); } return; }
+  if (ev.key === 'Escape') {
+    if (ui.menu || ui.drawer || ui.confirm) {
+      const back = ui.menu ? '.proj-switch' : ui.drawer ? '.top [data-act="drawer"]' : null;
+      ui.menu = null; ui.drawer = false; ui.confirm = null; render();
+      const b = back && document.querySelector(back); if (b) b.focus({ preventScroll: true });
+    }
+    return;
+  }
+  // Flechas: pestañas (role="tab") y elementos de menú (role="menuitem")
+  if (/^Arrow(Left|Right|Up|Down)$/.test(ev.key) && t.matches && (t.matches('[role="tab"]') || t.matches('[role="menuitem"]'))) {
+    const tab = t.matches('[role="tab"]'); if (tab && /Up|Down/.test(ev.key)) return;
+    const list = [...t.parentElement.closest(tab ? '[role="tablist"]' : '[role="menu"]').querySelectorAll(tab ? '[role="tab"]' : '[role="menuitem"]')];
+    const d = /Right|Down/.test(ev.key) ? 1 : -1; const n = list[(list.indexOf(t) + d + list.length) % list.length];
+    if (n) { ev.preventDefault(); n.focus(); if (tab) n.click(); }
+    return;
+  }
   if ((ev.key === 'Enter' || ev.key === ' ') && t.classList && t.classList.contains('soa-row') && t.dataset.act) { ev.preventDefault(); t.click(); return; }
   if (typing || ev.ctrlKey || ev.metaKey || ev.altKey) return;
   if (ev.key === '/') { const s = $('#soa-q') || $('#glo-q'); if (s) { ev.preventDefault(); s.focus(); } else { ev.preventDefault(); ui.palette = true; ui.paletteQ = ''; renderPalette(); } return; }
@@ -3112,6 +3185,15 @@ document.addEventListener('mouseover', (ev) => {
   t.style.left = Math.max(8, Math.min(window.innerWidth - tw - 8, r.left + r.width / 2 - tw / 2)) + 'px';
   t.style.top = Math.max(8, r.top - t.offsetHeight - 8) + 'px';
 });
+document.addEventListener('focusin', (ev) => {
+  const el = ev.target.closest && ev.target.closest('[data-tip]'); const t = tip();
+  if (!el || !el.matches(':focus-visible')) { t.hidden = true; return; }
+  t.textContent = lang() === 'en' ? tr(el.getAttribute('data-tip')) : el.getAttribute('data-tip'); t.hidden = false;
+  const r = el.getBoundingClientRect(); const tw = t.offsetWidth;
+  t.style.left = Math.max(8, Math.min(window.innerWidth - tw - 8, r.left + r.width / 2 - tw / 2)) + 'px';
+  t.style.top = Math.max(8, r.top - t.offsetHeight - 8) + 'px';
+});
+document.addEventListener('focusout', () => { tip().hidden = true; });
 document.addEventListener('scroll', () => { tip().hidden = true; }, true);
 
 document.addEventListener('click', (ev) => {
@@ -3121,10 +3203,10 @@ document.addEventListener('click', (ev) => {
   const act = el.dataset.act; const i = el.dataset.i !== undefined ? +el.dataset.i : null;
   switch (act) {
     case 'nav': {
-      if (el.dataset.locked === '1') { toast('Abre o crea un proyecto para entrar aquí. El rol no bloquea el menú.'); break; }
+      if (el.dataset.locked === '1') { toast('Esta sección requiere un proyecto abierto.'); break; }
       if (el.dataset.view === 'nuevo' && ui.view !== 'nuevo') ui.wizard = null; go(el.dataset.view); break;
     }
-    case 'menu': ui.menu = ui.menu === el.dataset.menu ? null : el.dataset.menu; render(); break;
+    case 'menu': ui.menu = ui.menu === el.dataset.menu ? null : el.dataset.menu; render(); if (ui.menu) { const f = document.querySelector('.menu .menu-item, .menu [role="menuitem"]'); if (f) f.focus(); } break;
     case 'drawer': ui.drawer = !ui.drawer; render(); break;
     case 'rail-toggle': toggleRail(); break;
     case 'palette': ui.palette = true; ui.paletteQ = ''; ui.paletteIdx = 0; renderPalette(); break;
@@ -3144,10 +3226,10 @@ document.addEventListener('click', (ev) => {
     case 'reset-case': resetCase(el.dataset.case); break;
     case 'close-demos': for (const p of ws.projects.filter((x) => x.kind === 'demo')) deleteProject(p.id); render(); toast('Casos de ejemplo cerrados'); break;
     case 'ask': ui.confirm = el.dataset.what; render(); break;
-    case 'confirm-no': ui.confirm = null; render(); break;
+    case 'confirm-no': { const w = ui.confirm; ui.confirm = null; render(); const b = w && document.querySelector(`[data-act="ask"][data-what="${CSS.escape(w)}"]`); if (b) b.focus({ preventScroll: true }); break; }
     case 'del-project': deleteProject(el.dataset.id); ui.confirm = null; render(); toast('Proyecto eliminado'); break;
     case 'wipe': for (const p of ws.projects) store.del(PKEY(p.id)); store.del(WS_KEY); ws = sanitizeWs(null); state = null; recompute(); applyTheme(); ui.confirm = null; go('inicio'); toast('Datos borrados'); break;
-    case 'ob-save': ws.profileDone = true; saveWs(); render(); toast(ws.profile.nombre ? `Encantado, ${ws.profile.nombre.split(' ')[0]}` : 'Perfil guardado'); break;
+    case 'ob-save': ws.profileDone = true; saveWs(); render(); toast('Perfil guardado'); break;
     case 'ob-skip': ws.profileDone = true; saveWs(); render(); break;
     case 'backup': backup(); break;
     case 'restore': pickFile('.json,application/json', (f) => checkSize(f, LIM.fileJson, 'El fichero es') && readText(f, importProyecto)); break;

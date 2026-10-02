@@ -137,7 +137,7 @@ const html = src('index.html')
   .replace('/*__STYLES__*/', () => src('styles.css'))
   .replace('/*__DATA__*/', () => DATA_JS)
   .replace('/*__ENGINE__*/', () => src('engine.js'))
-  .replace('/*__APP__*/', () => '(function () {\n\'use strict\';\ntry { Object.freeze(Object.prototype); } catch (e) { /* entorno que no lo permite */ }\n' + fs.readdirSync(path.join(ROOT, 'src', 'ui')).filter((f) => f.endsWith('.js')).sort().map((f) => `/* ===== ${f} ===== */\n` + src('ui/' + f)).join('\n') + '\n})();');
+  .replace('/*__APP__*/', () => '(function () {\n\'use strict\';\ntry { Object.freeze(Object.prototype); Object.freeze(Array.prototype); } catch (e) { /* entorno que no lo permite */ }\n' + fs.readdirSync(path.join(ROOT, 'src', 'ui')).filter((f) => f.endsWith('.js')).sort().map((f) => `/* ===== ${f} ===== */\n` + src('ui/' + f)).join('\n') + '\n})();');
 // 1) Página para publicar como web alojada (el esqueleto <html><head> lo añade la plataforma; xlsx-js-style se carga bajo demanda desde jsDelivr)
 fs.mkdirSync(path.join(ROOT, 'dist', 'artifact'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'dist', 'artifact', 'ens-compliance-studio.html'), html.replace('<!--__XLSX__-->', ''));

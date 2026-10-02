@@ -8,13 +8,16 @@ ENS Compliance Studio maneja información sensible: el estado de cumplimiento de
 |---|---|---|
 | XSS almacenado o reflejado | Un proyecto JSON o una SoA en Excel con `"><img onerror=…>` en un nombre | Todo texto se escapa al renderizar (`esc`). Los valores que acaban en clases o atributos pasan por listas blancas. No se inserta HTML procedente de datos. El tooltip usa `textContent`. |
 | Prototype pollution | Claves `__proto__`, `constructor` o `prototype` en JSON o en rutas de edición | Se eliminan al parsear (`safeParse`). Las rutas de escritura se bloquean (`setPath`). `Object.prototype` se congela al arrancar. |
-| CVE-2023-30533 (SheetJS CE ≤ 0.19.2) | Libro .xlsx manipulado para contaminar prototipos al leerlo | `Object.prototype` congelado. Lectura sin fórmulas ni HTML. Límites de hojas, filas y columnas. Todo lo leído se revalida con `sanitizeState`. |
+| CVE-2023-30533 y CVE-2024-22363 (SheetJS CE) | Libro .xlsx manipulado para contaminar prototipos o bloquear el navegador (ReDoS) | Los ficheros ajenos se leen con SheetJS CE **0.20.3**, que corrige ambas. `xlsx-js-style` (SheetJS 0.18.5) solo escribe el Excel propio. Además: `Object.prototype` y `Array.prototype` congelados al arrancar, lectura sin fórmulas ni HTML, límites de hojas, filas y columnas, y revalidación con `sanitizeState`. |
 | Datos fuera de esquema | Probabilidad `x" onmouseover=…`, CVSS 99, madurez inexistente, referencias rotas | `sanitizeState` normaliza cada campo: tipos, rangos, enumeraciones, identificadores (`^[A-Za-z0-9][A-Za-z0-9._-]{0,39}$`) e integridad referencial. |
-| CSV/Formula injection | Un hallazgo o activo llamado `=HYPERLINK(...)` que se exporta a CSV | Toda celda que empieza por `= + - @`, tabulador o retorno de carro se prefija con `'`. En Excel las celdas se escriben como texto, nunca como fórmula. |
-| HTML en informes | Texto con `<script>` en el informe Markdown | `<` y `>` se escapan y los saltos de línea y las barras de tabla se neutralizan. |
+| CSV/Formula injection | Un hallazgo o activo llamado `=HYPERLINK(...)` que se exporta a CSV | Toda celda que empieza por `= + - @` (también tras espacios, NBSP, U+3000 o caracteres invisibles, y en sus variantes de ancho completo `＝ ＋ － ＠`), tabulador o salto de línea se prefija con `'`. En Excel las celdas se escriben como texto, nunca como fórmula. |
+| HTML y Markdown en informes | Texto con `<script>`, `![](https://…)` (baliza) o `\n## falso` en el informe Markdown de la app o del auditor CLI | `<` y `>` se escapan; enlaces, imágenes, énfasis, encabezados, saltos de línea y barras de tabla se neutralizan. El auditor CLI quita además los caracteres de control de la salida por consola. |
 | `localStorage` manipulado | Otra extensión o script altera la configuración guardada | El espacio de trabajo y los proyectos se revalidan en cada carga (`sanitizeWs`, `sanitizeState`). |
 | Denegación de servicio | Ficheros enormes o con millones de filas | Límites: JSON 25 MB, Excel 15 MB, CSV 5 MB; máximo 5.000 filas × 60 columnas por hoja, 40 hojas; longitud máxima por campo. |
-| Exfiltración | Código inyectado que intenta enviar datos fuera | Versión autónoma con CSP `default-src 'none'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'`, y referrer desactivado. |
+| Ejecución de código inyectado | Un fallo de escapado que deje pasar `<img onerror=…>` | CSP por hashes generada en el build: solo se ejecutan los `<script>` y el `<style>` que salen de `build.js` (y las dos librerías de Excel incrustadas, también por hash). Sin `'unsafe-inline'` ni `'unsafe-eval'` para código. `style-src-attr 'unsafe-inline'` queda por los atributos `style=""` de las plantillas y no permite ejecutar nada. |
+| Exfiltración | Código inyectado que intenta enviar datos fuera | `default-src 'none'; connect-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'`, y referrer desactivado. La versión autónoma no hace ninguna petición de red. |
+| Cadena de suministro | Una copia alterada de la librería de Excel en el CDN | La versión autónoma lleva las librerías dentro. La versión alojada las pide a jsDelivr con integridad SRI (`sha384`), igual al fichero de `app/vendor/`. |
+| Acceso al estado desde la página | Una extensión o un script que lee `window` | El estado solo se expone en `window.__ENS_STUDIO__` cuando la URL lleva `?test` (pruebas automáticas). |
 | Salidas del asistente | Respuesta manipulada por un texto malicioso en la descripción de un activo (prompt injection) | La respuesta se valida contra el catálogo MAGERIT (códigos, escalas y rangos), se escapa al mostrarse y nunca entra en el proyecto sin una acción explícita del usuario. |
 
 ## Verificación automática
@@ -25,32 +28,30 @@ ENS Compliance Studio maneja información sensible: el estado de cumplimiento de
 - la normalización de cada tipo de dato;
 - la exportación de una fórmula maliciosa y su neutralización en el CSV;
 - la manipulación de `localStorage` y su saneamiento al recargar;
-- el rechazo de ficheros por encima del límite.
+- el rechazo de ficheros por encima del límite;
+- una fecha manipulada en el almacenamiento que intentaba inyectar HTML en Inicio;
+- la CSP: que esté por hashes, que no registre ninguna violación en el uso normal y que bloquee manejadores en línea, scripts nuevos y `fetch`;
+- que las librerías de Excel no queden en el objeto global.
+
+`tests/a11y_app.py` pasa axe-core (WCAG 2.2 A/AA) por todas las vistas en claro y oscuro, a 1440 y 390 px, y falla con una sola infracción. `tests/test_auditor.py` comprueba el escapado del informe Markdown del auditor CLI y su límite de tamaño.
+
+Las auditorías completas, con pruebas de concepto, están en [docs/auditoria/](docs/auditoria/) y su estado en [docs/AUDITORIA_PRODUCCION.md](docs/AUDITORIA_PRODUCCION.md).
 
 ## Privacidad
 
-Sin servidor, sin cuentas, sin analítica ni telemetría. Los datos viven en el `localStorage` del navegador y salen de él solo mediante las exportaciones que el usuario pide. Las fuentes tipográficas se cargan de Google Fonts; si se prefiere no hacerlo, la aplicación funciona igual con las fuentes del sistema.
+Sin servidor, sin cuentas, sin analítica ni telemetría. La versión autónoma no hace ninguna petición de red: usa la fuente del sistema y lleva dentro las librerías de Excel. Los datos viven en el `localStorage` del navegador y salen de él solo mediante las exportaciones que el usuario pide o, si se activa el asistente en Ajustes, en cada petición al modelo de lenguaje.
 
-## Riesgo residual aceptado
+## Riesgo residual
 
-`app/vendor/xlsx.bundle.js` empaqueta `xlsx-js-style` 1.2.0, construido sobre SheetJS Community Edition 0.18.5. Esa base es la afectada por **CVE-2023-30533** (prototype pollution al leer un `.xlsx` manipulado) y no tiene una versión parcheada de SheetJS CE que sustituirla sin romper el fork de estilos del que depende la exportación con formato.
-
-Mitigación aplicada, no eliminación de la causa:
-
-- `Object.prototype` se congela (`Object.freeze`) antes de leer cualquier fichero, así que una contaminación de prototipo no puede escribir en él.
-- La lectura se hace sin fórmulas ni HTML incrustado.
-- Se aplican límites de tamaño y de filas/columnas/hojas antes de parsear.
-- Todo lo que sale del parser pasa por `sanitizeState` antes de entrar en el estado de la aplicación.
-- `tests/e2e_app.py` verifica en cada pasada que `Object.prototype` no queda contaminado tras importar un Excel hostil.
-
-Este riesgo se acepta explícitamente para la versión actual porque no hay upstream parcheado que integrar. Se revisará en cada actualización de `xlsx-js-style` y queda registrado en el [CHANGELOG](CHANGELOG.md) cuando cambie.
+- **Almacenamiento sin cifrar y origen compartido.** `localStorage` guarda los proyectos en claro. Al abrir el HTML desde el disco, Chromium comparte el origen `file://` con cualquier otro HTML local; en GitHub Pages, `heindall92.github.io` lo comparte con los demás proyectos del mismo usuario. Ajustes y el README lo advierten. Para datos reales: fichero descargado, perfil de navegador propio y borrado al terminar. El cifrado en reposo (AES-GCM con clave derivada de contraseña) queda como mejora futura.
+- **`style-src-attr 'unsafe-inline'`.** Lo exigen los anchos y colores calculados en las plantillas. No permite ejecutar código; eliminarlo requiere pasar esos valores a propiedades CSS asignadas desde JavaScript.
 
 ## Versiones soportadas
 
 | Versión | Soporte |
 |---|---|
-| 2.0.x | Sí — versión actual |
-| < 2.0 | No — actualizar a 2.0.1 |
+| 2.1.x | Sí — versión actual |
+| < 2.1 | No — actualizar a 2.1.0 |
 
 ## Informar de una vulnerabilidad
 

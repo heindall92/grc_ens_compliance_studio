@@ -6,7 +6,7 @@ function kpiTile(label, value, sub, opts = {}) {
 }
 function evolucion() {
   const h = (state.historial || []).slice(-8);
-  if (h.length < 2) return emptyState('clock', 'La evolución aparecerá aquí', 'Cada día que trabajes en el proyecto se guarda una instantánea de las no conformidades.');
+  if (h.length < 2) return emptyState('clock', 'Sin historial suficiente', 'Cada día en que se modifica el proyecto se guarda una instantánea de las no conformidades y del grado de implantación. El gráfico necesita al menos dos días.');
   const W = 560, H = 190, P = { l: 30, r: 8, t: 12, b: 26 };
   const max = Math.max(4, ...h.map((x) => x.ncMayor + x.ncMenor));
   const step = Math.ceil(max / 4); const top = step * 4;
@@ -38,29 +38,29 @@ function vPanel() {
   const p = state.proyecto || {};
   return `${pageHead(esc(p.organizacion || ''), 'Panel de conformidad', `${esc(p.sistema || '')}${p.codigoSoA ? ` · ${esc(p.codigoSoA)}` : ''}${p.codigoAR ? ` · ${esc(p.codigoAR)}` : ''}`,
     `<button type="button" class="btn" data-act="export-md">${icon('download', 16)}Informe</button><button type="button" class="btn primary" data-act="export-xlsx">${icon('sheet', 16)}SoA en Excel</button>`)}
-  ${k.pendientes ? `<div class="progress-card card"><div><b>Declaración en curso</b><p class="muted small">${plural(k.aplicables - k.pendientes, 'medida declarada', 'medidas declaradas')} de ${k.aplicables} exigidas.</p></div><div class="pbar lg"><span class="bar"><i style="width:${((k.aplicables - k.pendientes) / Math.max(1, k.aplicables) * 100).toFixed(1)}%"></i></span><span class="num">${Math.round((k.aplicables - k.pendientes) / Math.max(1, k.aplicables) * 100)} %</span></div><button type="button" class="btn sm primary" data-act="soa-pend">Continuar${icon('arrowRight', 15)}</button></div>` : ''}
+  ${k.pendientes ? `<div class="progress-card card"><div><b>Declaración en curso</b><p class="muted small">${plural(k.aplicables - k.pendientes, 'medida declarada', 'medidas declaradas')} de ${k.aplicables} exigidas.</p></div><div class="pbar lg"><span class="bar"><i style="width:${((k.aplicables - k.pendientes) / Math.max(1, k.aplicables) * 100).toFixed(1)}%"></i></span><span class="num">${Math.round((k.aplicables - k.pendientes) / Math.max(1, k.aplicables) * 100)} %</span></div><button type="button" class="btn sm primary" data-act="soa-pend">Ver pendientes${icon('arrowRight', 15)}</button></div>` : ''}
   <div class="kpi-grid">
-    ${kpiTile('Implantación declarada', pct(k.grado), `Media de las ${k.aplicables} medidas exigidas`, { ic: 'fileCheck', delta: prev ? Math.round((k.grado - prev.grado) * 1000) / 10 : null, fmt: (v) => v.toFixed(1) + ' pp' })}
-    ${kpiTile('Implantadas sin objeción', `${limpias}<small>/${k.implantadas}</small>`, 'Implantadas al 100 % sin NC mayor', { ic: 'shieldCheck', alert: limpias < k.implantadas })}
-    ${kpiTile('Riesgos fuera de apetito', `${k.fueraApetito}<small> antes ${k.fueraApetitoDeclarado}</small>`, `Con la evidencia técnica · apetito ${state.apetito}`, { ic: 'activity', alert: k.fueraApetito > k.fueraApetitoDeclarado })}
+    ${kpiTile('Implantación declarada', pct(k.grado), `Media del % declarado en las ${k.aplicables} medidas exigidas`, { ic: 'fileCheck', delta: prev ? Math.round((k.grado - prev.grado) * 1000) / 10 : null, fmt: (v) => v.toFixed(1) + ' pp' })}
+    ${kpiTile('Implantadas sin NC mayor', `${limpias}<small>/${k.implantadas}</small>`, 'Declaradas implantadas al 100 % sin ninguna NC mayor asociada', { ic: 'shieldCheck', alert: limpias < k.implantadas })}
+    ${kpiTile('Riesgos fuera de apetito', `${k.fueraApetito}<small> · AR aprobado: ${k.fueraApetitoDeclarado}</small>`, `Con la evidencia técnica · apetito ${state.apetito}`, { ic: 'activity', alert: k.fueraApetito > k.fueraApetitoDeclarado })}
     ${kpiTile('No conformidades', `${auditCount('NC mayor')}<small> mayores · ${auditCount('NC menor')} menores</small>`, `${plural(auditCount('Observación'), 'observación', 'observaciones')}`, { ic: 'alert', delta: prev ? auditCount('NC mayor') - prev.ncMayor : null, goodDown: true })}
   </div>
   <div class="grid g-main">
     <div class="card"><div class="card-head"><h3>Evolución</h3><span class="muted small">No conformidades abiertas</span></div>${evolucion()}</div>
-    <div class="card"><div class="card-head"><h3>Próximas acciones</h3><button type="button" class="btn ghost sm" data-act="nav" data-view="plan">Plan completo${icon('arrowRight', 15)}</button></div>
+    <div class="card"><div class="card-head"><h3>Acciones abiertas</h3><button type="button" class="btn ghost sm" data-act="nav" data-view="plan">Plan completo${icon('arrowRight', 15)}</button></div>
       <div class="mini-stats"><span><b class="num">${abiertas.length}</b> abiertas</span><span class="${vencidas ? 'crit-t' : ''}"><b class="num">${vencidas}</b> vencidas</span><span><b class="num">${plan.filter((a) => a.estado === 'Hecha').length}</b> hechas</span></div>
       <ul class="act-list">${abiertas.slice(0, 5).map((a) => `<li><span class="prio ${a.prioridad === 'Alta' ? 'hi' : 'mid'}"></span><div><b>${esc(a.titulo)}</b><small>${esc(a.origen)}${a.fecha ? ` · ${fmtDate(a.fecha)}` : ''}${a.responsable ? ` · ${esc(a.responsable)}` : ''}</small></div></li>`).join('') || '<li class="muted small">Sin acciones abiertas.</li>'}</ul></div>
   </div>
   <div class="grid g3">
     <div class="card"><div class="card-head"><h3>Riesgo inherente</h3><span class="muted small">${plural(k.riesgos, 'riesgo', 'riesgos')}</span></div>${heatmap(calc.riesgos, 'impInh', 'probIn')}</div>
     <div class="card"><div class="card-head"><h3>Residual declarado</h3><span class="muted small">AR aprobado</span></div>${heatmap(calc.riesgosDeclarados, 'impRes', 'probRes')}</div>
-    <div class="card"><div class="card-head"><h3>Residual real</h3><span class="muted small">con evidencia técnica</span></div>${heatmap(calc.riesgos, 'impRes', 'probRes')}</div>
+    <div class="card"><div class="card-head"><h3>Residual con evidencia técnica</h3><span class="muted small">hallazgos abiertos aplicados</span></div>${heatmap(calc.riesgos, 'impRes', 'probRes')}</div>
   </div>
   <div class="grid g2">
     <div class="card"><div class="card-head"><h3>Implantación por familia</h3><span class="muted small">de menor a mayor</span></div>
       <div class="bars">${fam.map((f) => `<div class="bar-row" data-tip="${esc(f.familia)}: ${plural(f.n, 'medida exigida', 'medidas exigidas')}"><span class="nm"><code>${esc(f.prefijo)}</code> ${esc(f.familia)}</span><span class="bar"><i class="${f.grado < 1 ? 'part' : ''}" style="width:${(f.grado * 100).toFixed(1)}%"></i></span><span class="pc num">${Math.round(f.grado * 100)} %</span></div>`).join('') || '<p class="muted small">Aún no hay medidas declaradas.</p>'}</div></div>
-    <div class="card"><div class="card-head"><h3>Lo que ha encontrado el auditor</h3><button type="button" class="btn ghost sm" data-act="nav" data-view="auditoria">Ver ${audit.length}${icon('arrowRight', 15)}</button></div>
-      <div class="findings compact">${audit.slice(0, 5).map((f) => findingCard(f, true)).join('') || emptyState('check', 'Sin incidencias', 'El auditor no encuentra nada que objetar.')}</div></div>
+    <div class="card"><div class="card-head"><h3>Incidencias de preauditoría</h3><button type="button" class="btn ghost sm" data-act="nav" data-view="auditoria">Ver ${audit.length}${icon('arrowRight', 15)}</button></div>
+      <div class="findings compact">${audit.slice(0, 5).map((f) => findingCard(f, true)).join('') || emptyState('check', 'Sin incidencias', 'Ninguna regla de preauditoría activa genera incidencias.')}</div></div>
   </div>`;
 }
 function findingCard(f, compact = false) {
@@ -77,7 +77,7 @@ function vCat() {
       return `<td class="c"><select id="cat-${i}-${d}" class="lvl${bad ? ' bad' : ` l-${l || 'none'}`}" data-set="categorizacion.${i}.${d}" aria-label="${esc(a.id)} ${E.DIM_LABEL[d]}">
         ${bad ? `<option value="${esc(v)}" selected>'${esc(v)}' ⚠</option>` : ''}${opt('', '—', l === null ? '' : '#')}${E.ENS_LEVELS.map((x) => opt(x, x[0] + x.slice(1).toLowerCase(), l || '')).join('')}</select></td>`;
     };
-    return `<tr><td><select id="cat-${i}-tipo" data-set="categorizacion.${i}.tipo">${['Servicio', 'Información'].map((t) => opt(t, t, a.tipo)).join('')}</select></td>
+    return `<tr><td><select id="cat-${i}-tipo" aria-label="Tipo de activo esencial" data-set="categorizacion.${i}.tipo">${['Servicio', 'Información'].map((t) => opt(t, t, a.tipo)).join('')}</select></td>
       <td><code>${esc(a.id)}</code></td>
       <td><input type="text" id="cat-${i}-n" class="w-full" data-set="categorizacion.${i}.nombre" value="${esc(a.nombre)}" aria-label="Nombre del activo esencial"></td>
       <td><input type="text" id="cat-${i}-r" class="w-full" data-set="categorizacion.${i}.responsable" value="${esc(a.responsable || '')}" aria-label="Responsable"></td>
@@ -86,9 +86,9 @@ function vCat() {
   }).join('');
   const refs = calc.filas.filter((f) => f.aplicaNorma).reduce((a, f) => ({ o: a.o + f.refuerzos.obligatorios.length, g: a.g + f.refuerzos.grupos.flat().length }), { o: 0, g: 0 });
   const conseq = { 'ALTA': 'Auditoría formal bienal y Certificación de Conformidad por entidad acreditada (arts. 31 y 38).', 'MEDIA': 'Auditoría formal bienal y Certificación de Conformidad (arts. 31 y 38).', 'BÁSICA': 'Autoevaluación bienal y Declaración de Conformidad (arts. 31 y 38).' }[calc.categoria];
-  return `${pageHead('RD 311/2022 · art. 40 y Anexo I', 'Categorización del sistema', 'Valora cada activo esencial en las cinco dimensiones. El nivel del sistema en cada dimensión es el máximo de sus activos, y la categoría es el nivel más alto. Todo lo demás se recalcula al instante.',
+  return `${pageHead('RD 311/2022 · art. 40 y Anexo I', 'Categorización del sistema', 'Valora cada activo esencial en las cinco dimensiones. El nivel del sistema en cada dimensión es el máximo de sus activos, y la categoría, el nivel más alto de las cinco dimensiones (art. 40). Al cambiar un valor se recalculan el nivel exigido de cada medida y las reglas de preauditoría.',
     `<button type="button" class="btn" data-act="add-cat">${icon('plus', 16)}Añadir activo esencial</button>`)}
-  ${calc.invalidos.length ? `<div class="alert warn">${icon('alert', 18)}<div><b>${plural(calc.invalidos.length, 'valor no válido', 'valores no válidos')}</b> (${calc.invalidos.map((x) => `${x.activo}·${x.dim} = '${esc(x.valor)}'`).join(', ')}). Se ignoran en el cálculo y el auditor los reporta como CAT-01. Corrígelos eligiendo un nivel.</div></div>` : ''}
+  ${calc.invalidos.length ? `<div class="alert warn">${icon('alert', 18)}<div><b>${plural(calc.invalidos.length, 'valor no válido', 'valores no válidos')}</b> (${calc.invalidos.map((x) => `${x.activo}·${x.dim} = '${esc(x.valor)}'`).join(', ')}). Se ignoran en el cálculo y generan la no conformidad CAT-01. Selecciona un nivel válido en la tabla.</div></div>` : ''}
   <div class="grid g-cat">
     <div class="cat-result card"><div class="seal ${calc.categoria === 'BÁSICA' ? 'BASICA' : calc.categoria}"><small>Categoría</small><b>${calc.categoria}</b></div>
       <div class="dim-levels">${E.DIMS.map((d) => `<div><span class="dim ${d}">${d}</span><span class="lvl-tag l-${calc.niveles[d] || 'none'}">${calc.niveles[d] ? calc.niveles[d][0] + calc.niveles[d].slice(1).toLowerCase() : '—'}</span><small>${E.DIM_LABEL[d]}</small></div>`).join('')}</div>
@@ -107,7 +107,7 @@ function vRiesgos() {
   const tabs = [['registro', 'Registro de riesgos'], ['activos', `Activos · ${state.activos.length}`], ['amenazas', `Amenazas · ${state.amenazas.length}`], ['salvaguardas', `Salvaguardas · ${state.salvaguardas.length}`]];
   const body = ({ registro: rRegistro, activos: rActivos, amenazas: rAmenazas, salvaguardas: rSalvs })[ui.riesgosTab]();
   return `${pageHead(`MAGERIT v3 · ${esc(state.proyecto?.codigoAR || '')}`, 'Análisis de riesgos', 'Impacto = valor × degradación; riesgo según la matriz 5×5; eficacia de cada salvaguarda modulada por su madurez (L0–L5). Cada amenaza queda enlazada con las medidas del ENS que la tratan.')}
-  <div class="tabs" role="tablist">${tabs.map(([id, l]) => `<button type="button" role="tab" data-act="riesgos-tab" data-tab="${id}" aria-selected="${ui.riesgosTab === id}">${l}</button>`).join('')}</div>${body}`;
+  <div class="tabs" role="tablist">${tabs.map(([id, l]) => `<button type="button" role="tab" data-act="riesgos-tab" data-tab="${id}" aria-selected="${ui.riesgosTab === id}" tabindex="${ui.riesgosTab === id ? 0 : -1}">${l}</button>`).join('')}</div>${body}`;
 }
 function rRegistro() {
   const rows = E.registroRiesgos(state, CTX, ui.conHallazgos, { cvss: ws.settings.cvss });
@@ -135,15 +135,15 @@ function rRegistro() {
     <div class="grid g2"><div class="card"><div class="card-head"><h3>Inherente</h3></div>${heatmap(rows, 'impInh', 'probIn')}</div><div class="card"><div class="card-head"><h3>Residual</h3><span class="muted small">tras salvaguardas</span></div>${heatmap(rows, 'impRes', 'probRes')}</div></div>
     <div class="table-wrap"><table class="tbl wide">
       <thead><tr><th>ID</th><th>Activo</th><th>Amenaza</th><th class="c">Prob.</th><th class="c">Inherente</th><th>Salvaguardas</th><th class="c">Residual</th><th>Medidas ENS</th><th>Tratamiento</th></tr></thead>
-      <tbody>${tr || `<tr><td colspan="9">${emptyState('activity', 'Aún no hay amenazas', 'Da de alta activos y amenazas en las pestañas de al lado.')}</td></tr>`}</tbody></table></div>
-    <p class="muted small">Las filas resaltadas son riesgos que no estaban en el análisis aprobado y han aparecido por un hallazgo técnico abierto.</p>`;
+      <tbody>${tr || `<tr><td colspan="9">${emptyState('activity', 'Sin riesgos', 'Registra activos en la pestaña «Activos» y amenazas en «Amenazas».')}</td></tr>`}</tbody></table></div>
+    <p class="muted small">Las filas resaltadas son riesgos que no figuran en el análisis aprobado y se generan a partir de un hallazgo técnico abierto (identificador R-H-xx).</p>`;
 }
 function rActivos() {
   const aiOn = ui.ai.available && ws.settings.asistente;
   const rows = state.activos.map((a, i) => `<tr>
     <td><code>${esc(a.id)}</code></td>
     <td><input type="text" id="ac-${i}-n" class="w-full" data-set="activos.${i}.nombre" value="${esc(a.nombre)}" aria-label="Nombre"><input type="text" id="ac-${i}-d" class="w-full sub" data-set="activos.${i}.descripcion" value="${esc(a.descripcion || '')}" placeholder="Descripción" aria-label="Descripción"></td>
-    <td><select id="ac-${i}-t" data-set="activos.${i}.tipo">${TIPOS.map((t) => opt(t.code, `${t.code} ${t.label}`, a.tipo)).join('')}</select></td>
+    <td><select id="ac-${i}-t" aria-label="Tipo de activo" data-set="activos.${i}.tipo">${TIPOS.map((t) => opt(t.code, `${t.code} ${t.label}`, a.tipo)).join('')}</select></td>
     <td><input type="text" id="ac-${i}-s" data-set="activos.${i}.soporta" data-type="list" value="${esc((a.soporta || []).join(', '))}" placeholder="S-01, I-01" class="w-md" aria-label="Activos esenciales que soporta"></td>
     ${E.DIMS.map((d) => `<td class="c"><input type="number" min="0" max="10" id="ac-${i}-${d}" data-set="activos.${i}.valoracion.${d}" data-type="num" value="${a.valoracion?.[d] ?? 0}" class="num-in" aria-label="${E.DIM_LABEL[d]}"></td>`).join('')}
     <td class="c nowrap">${aiOn ? `<button type="button" class="btn sm" data-act="ai-amenazas" data-id="${esc(a.id)}"${ui.ai.busy ? ' disabled' : ''}>${icon('lightbulb', 15)}Sugerir</button>` : ''}<button type="button" class="icon-btn sm" data-act="del-activo" data-i="${i}" aria-label="Eliminar ${esc(a.id)}">${icon('trash', 16)}</button></td></tr>`).join('');
@@ -155,11 +155,11 @@ function aiBox() {
   const a = ui.ai;
   if (!a.available || !ws.settings.asistente || !a.activo) return '';
   const act = state.activos.find((x) => x.id === a.activo); if (!act) return '';
-  if (a.busy === 'amenazas') return `<div class="assist">${icon('lightbulb', 18)}<div><b>Analizando ${esc(act.nombre)}…</b><p class="small muted">Revisando el catálogo MAGERIT para este tipo de activo.</p></div></div>`;
+  if (a.busy === 'amenazas') return `<div class="assist">${icon('lightbulb', 18)}<div><b>Generando propuesta para ${esc(act.nombre)}…</b><p class="small muted">Consulta al modelo de lenguaje con el catálogo MAGERIT filtrado por el tipo del activo.</p></div></div>`;
   if (a.error) return `<div class="assist">${icon('alert', 18)}<div><b>No se pudo generar la propuesta</b><p class="small">${esc(a.error)}</p></div></div>`;
   if (!a.props.length) return '';
   return `<div class="assist col"><div class="row spread"><b>${icon('lightbulb', 16)} Amenazas sugeridas para ${esc(act.nombre)}</b><button type="button" class="icon-btn sm" data-act="ai-close" aria-label="Cerrar">${icon('x', 16)}</button></div>
-    <p class="small muted">Propuesta basada en el catálogo MAGERIT. Revísala antes de incorporarla.</p>
+    <p class="small muted">Propuesta generada por un modelo de lenguaje a partir del catálogo MAGERIT. Comprueba la probabilidad y la degradación antes de añadirla.</p>
     ${a.props.map((p, i) => `<div class="proposal"><div><code class="muted">${esc(p.codigo)}</code> <b>${esc(p.nombre)}</b> · prob. <code>${esc(p.prob)}</code> · ${E.DIMS.filter((d) => p.deg[d]).map((d) => `${d} ${p.deg[d]} %`).join(', ') || '—'}<div class="small muted">${esc(p.motivo || '')}</div></div>
       <button type="button" class="btn sm" data-act="ai-add" data-i="${i}"${p.added ? ' disabled' : ''}>${p.added ? icon('check', 15) + 'Añadida' : icon('plus', 15) + 'Añadir'}</button></div>`).join('')}</div>`;
 }
@@ -169,9 +169,9 @@ function rAmenazas() {
     const tipo = act ? act.tipo.replace(/[[\]]/g, '').replace('essential.service', 'S').replace('essential.info', 'D') : '';
     const cands = CAT_AM.filter((c) => !tipo || c.tipos.includes(tipo) || c.code === am.codigo);
     return `<tr><td><code>${esc(am.id)}</code></td>
-      <td><select id="am-${i}-a" data-set="amenazas.${i}.activoId">${state.activos.map((a) => opt(a.id, `${a.id} · ${a.nombre}`, am.activoId)).join('')}</select></td>
-      <td><select id="am-${i}-c" data-set="amenazas.${i}.codigo" data-sync-name="${i}">${cands.map((c) => opt(c.code, `${c.code} ${c.nombre}`, am.codigo)).join('')}</select></td>
-      <td class="c"><select id="am-${i}-p" class="lvl" data-set="amenazas.${i}.prob">${E.NIVELES.map((n) => opt(n, n, am.prob)).join('')}</select></td>
+      <td><select id="am-${i}-a" aria-label="Activo" data-set="amenazas.${i}.activoId">${state.activos.map((a) => opt(a.id, `${a.id} · ${a.nombre}`, am.activoId)).join('')}</select></td>
+      <td><select id="am-${i}-c" aria-label="Amenaza" data-set="amenazas.${i}.codigo" data-sync-name="${i}">${cands.map((c) => opt(c.code, `${c.code} ${c.nombre}`, am.codigo)).join('')}</select></td>
+      <td class="c"><select id="am-${i}-p" aria-label="Probabilidad" class="lvl" data-set="amenazas.${i}.prob">${E.NIVELES.map((n) => opt(n, n, am.prob)).join('')}</select></td>
       ${E.DIMS.map((d) => `<td class="c"><input type="number" min="0" max="100" step="10" id="am-${i}-${d}" data-set="amenazas.${i}.deg.${d}" data-type="num" value="${am.deg?.[d] ?? 0}" class="num-in" aria-label="Degradación ${E.DIM_LABEL[d]}"></td>`).join('')}
       <td><div class="chips">${(D.mapping.amenaza_ens[am.codigo] || []).map(codeChip).join('')}</div></td>
       <td class="c"><button type="button" class="icon-btn sm" data-act="del-amenaza" data-i="${i}" aria-label="Eliminar ${esc(am.id)}">${icon('trash', 16)}</button></td></tr>`;
@@ -182,8 +182,8 @@ function rAmenazas() {
 function rSalvs() {
   const rows = state.salvaguardas.map((s, i) => `<tr>
     <td><code>${esc(s.id)}</code></td>
-    <td><select id="sa-${i}-c" data-set="salvaguardas.${i}.codigo">${CAT_SAL.map((c) => opt(c.code, `${c.code} · ${c.nombre}`, s.codigo)).join('')}</select><input type="text" id="sa-${i}-n" class="w-full sub" data-set="salvaguardas.${i}.nombre" value="${esc(s.nombre)}" aria-label="Descripción de la salvaguarda"></td>
-    <td><select id="sa-${i}-m" data-set="salvaguardas.${i}.madurez">${Object.entries(E.MADUREZ).map(([k, v]) => opt(k, `${k} · ${v.label}`, s.madurez)).join('')}</select></td>
+    <td><select id="sa-${i}-c" aria-label="Salvaguarda" data-set="salvaguardas.${i}.codigo">${CAT_SAL.map((c) => opt(c.code, `${c.code} · ${c.nombre}`, s.codigo)).join('')}</select><input type="text" id="sa-${i}-n" class="w-full sub" data-set="salvaguardas.${i}.nombre" value="${esc(s.nombre)}" aria-label="Descripción de la salvaguarda"></td>
+    <td><select id="sa-${i}-m" aria-label="Madurez" data-set="salvaguardas.${i}.madurez">${Object.entries(E.MADUREZ).map(([k, v]) => opt(k, `${k} · ${v.label}`, s.madurez)).join('')}</select></td>
     <td class="c"><input type="number" min="0" max="100" step="10" id="sa-${i}-rp" data-set="salvaguardas.${i}.reduceProb" data-type="num" value="${s.reduceProb}" class="num-in" aria-label="Reducción de probabilidad"></td>
     <td class="c"><input type="number" min="0" max="100" step="10" id="sa-${i}-ri" data-set="salvaguardas.${i}.reduceImp" data-type="num" value="${s.reduceImp}" class="num-in" aria-label="Reducción de impacto"></td>
     <td><div class="cover">${state.amenazas.map((am) => `<label title="${esc(am.nombre)} · ${esc(activoNombre(am.activoId))}"><input type="checkbox" data-cover="${i}" value="${esc(am.id)}"${(s.cubre || []).includes(am.id) ? ' checked' : ''}>${esc(am.id)}</label>`).join('')}</div></td>
@@ -230,7 +230,7 @@ function vSoa() {
     if (open) html += soaDetail(f, fs);
   }
   const pend = calc.filas.filter((f) => f.aplicaNorma && E.esPendiente(f.decl)).length;
-  return `${pageHead('RD 311/2022 · art. 28 y Anexo II', 'Declaración de Aplicabilidad', 'El nivel exigido, la exigencia y los refuerzos se calculan desde la categorización. La aplicabilidad, el estado y las evidencias son lo que declaras. Cada medida muestra qué riesgos trata y qué objeta el auditor.',
+  return `${pageHead('RD 311/2022 · art. 28 y Anexo II', 'Declaración de Aplicabilidad', 'El nivel exigido, la exigencia y los refuerzos se calculan desde la categorización. La aplicabilidad, el estado y las evidencias son lo que declaras. Al desplegar una medida se muestran los riesgos que trata y sus incidencias de preauditoría.',
     `<button type="button" class="btn" data-act="export-xlsx">${icon('sheet', 16)}Exportar</button>`)}
   <div class="toolbar sticky">
     <div class="search-in">${icon('search', 16)}<input type="search" id="soa-q" data-uiq="soaQ" value="${esc(ui.soaQ)}" placeholder="Código, medida, responsable o control ISO…" aria-label="Buscar en la SoA"></div>
@@ -238,8 +238,8 @@ function vSoa() {
     <select id="soa-estado" data-ui="soaEstado" aria-label="Filtro">${[['todos', 'Todas las medidas'], ['aplicables', 'Exigidas'], ['incidencias', 'Con incidencias'], ['pendientes', `Pendientes (${pend})`], ['parciales', 'Parciales o compensadas'], ['noaplica', 'No exigidas']].map(([v, l]) => opt(v, l, ui.soaEstado)).join('')}</select>
     <span class="muted small">${list.length} de 73</span></div>
   <div class="soa-list">
-    <div class="soa-row soa-head"><span>Código</span><span>Medida</span><span>Dimensión · nivel</span><span class="s-exig">Exigencia</span><span class="s-state">Estado</span><span class="s-risk">Riesgo</span><span class="s-flags">Auditor</span><span></span></div>
-    ${html || emptyState('search', 'Nada coincide', 'Prueba con otro filtro o término de búsqueda.')}</div>`;
+    <div class="soa-row soa-head"><span>Código</span><span>Medida</span><span>Dimensión · nivel</span><span class="s-exig">Exigencia</span><span class="s-state">Estado</span><span class="s-risk">Riesgo</span><span class="s-flags">Incidencias</span><span></span></div>
+    ${html || emptyState('search', 'Sin resultados', 'Ninguna medida cumple el filtro y la búsqueda actuales.')}</div>`;
 }
 function soaDetail(f, fs) {
   const d = f.decl || {}; const ax = D.anexo[f.codigo]; const c = f.codigo;
@@ -249,8 +249,8 @@ function soaDetail(f, fs) {
   const aiJ = ui.ai.justCode === c ? ui.ai : null; const aiOn = ui.ai.available && ws.settings.asistente;
   return `<div class="detail">
     <div class="d-left">
-      <div class="d-sec"><h4>Anexo II · ${esc(ax.nombre)}</h4><div class="norma">${esc(ax.texto)}</div>
-        ${ax.refuerzosTexto ? `<details class="refs"><summary>Refuerzos (texto normativo)</summary><div class="norma">${esc(ax.refuerzosTexto)}</div></details>` : ''}</div>
+      <div class="d-sec"><h4>Anexo II · ${esc(ax.nombre)}</h4><div class="norma" tabindex="0" role="region" aria-label="Texto del Anexo II">${esc(ax.texto)}</div>
+        ${ax.refuerzosTexto ? `<details class="refs"><summary>Refuerzos (texto normativo)</summary><div class="norma" tabindex="0" role="region" aria-label="Texto de los refuerzos">${esc(ax.refuerzosTexto)}</div></details>` : ''}</div>
       <dl class="kv">
         <dt>Dimensiones</dt><dd>${dimsChips(f.dims)}</dd>
         <dt>Nivel exigido</dt><dd><b>${f.nivel}</b> <span class="muted small">${esc(f.regla)}</span></dd>
@@ -280,7 +280,7 @@ function soaDetail(f, fs) {
       <p class="small muted calc-just"><b>Calculada:</b> ${esc(f.justAuto)}</p>
       ${aiJ && aiJ.just ? `<div class="assist col"><b>${icon('lightbulb', 16)} Propuesta de redacción</b><p class="small">${esc(aiJ.just)}</p><div class="row"><button type="button" class="btn sm primary" data-act="ai-just-use" data-code="${esc(c)}">Usar este texto</button><span class="small muted">Revísala antes de firmar la SoA.</span></div></div>` : ''}
       ${aiJ && aiJ.error ? `<div class="assist"><span class="small">${esc(aiJ.error)}</span></div>` : ''}
-      ${fs.length ? `<div class="d-sec"><h4>Lo que objeta el auditor</h4><div class="findings">${fs.map((x) => findingCard(x)).join('')}</div></div>` : `<div class="ok-box">${icon('shieldCheck', 18)}Sin incidencias del auditor</div>`}
+      ${fs.length ? `<div class="d-sec"><h4>Incidencias de preauditoría</h4><div class="findings">${fs.map((x) => findingCard(x)).join('')}</div></div>` : `<div class="ok-box">${icon('shieldCheck', 18)}Sin incidencias de preauditoría</div>`}
     </div></div>`;
 }
 
@@ -298,7 +298,7 @@ function vMC() {
       ${fs.length ? `<div class="findings" style="margin-top:14px">${fs.map((x) => findingCard(x)).join('')}</div>` : ''}</article>`;
   }).join('');
   return `${pageHead('RD 311/2022 · art. 28.3', 'Medidas compensatorias', 'Cuando una medida no puede implantarse como describe el Anexo II, se sustituye por otras que protejan igual o mejor, justificadas documentalmente. Los riesgos citados se enlazan con el análisis y muestran su residual actual.',
-    `<button type="button" class="btn" data-act="add-mc">${icon('plus', 16)}Añadir</button>`)}
+    `<button type="button" class="btn" data-act="add-mc">${icon('plus', 16)}Añadir medida compensatoria</button>`)}
   ${cards || `<div class="card">${emptyState('scale', 'Sin medidas compensatorias', 'Si alguna medida no puede implantarse tal cual, documenta aquí cómo se compensa.')}</div>`}`;
 }
 
@@ -309,26 +309,26 @@ function vHall() {
     const cat = HALL[h.categoria] || {}; const r = reg.find((x) => (x.amenaza.hallazgos || []).includes(h.id));
     return `<tr class="${h.estado === 'cerrado' ? 'dim-row' : ''}"><td><code>${esc(h.id)}</code></td>
       <td><input type="text" id="h-${i}-t" class="w-full" data-set="hallazgos.${i}.titulo" value="${esc(h.titulo)}" aria-label="Título"><div class="muted small sub-t">${esc(h.fuente || '')}</div></td>
-      <td><select id="h-${i}-c" data-set="hallazgos.${i}.categoria">${Object.entries(HALL).map(([k, v]) => opt(k, `${v.label} (${v.cwe})`, h.categoria)).join('')}</select></td>
+      <td><select id="h-${i}-c" aria-label="Categoría" data-set="hallazgos.${i}.categoria">${Object.entries(HALL).map(([k, v]) => opt(k, `${v.label} (${v.cwe})`, h.categoria)).join('')}</select></td>
       <td class="c"><input type="number" min="0" max="10" step="0.1" id="h-${i}-cv" data-set="hallazgos.${i}.cvss" data-type="num" value="${esc(h.cvss)}" class="num-in" aria-label="CVSS"><div class="sub-t">${cvssBadge(h.cvss)}</div></td>
-      <td><select id="h-${i}-a" data-set="hallazgos.${i}.activoId">${state.activos.map((a) => opt(a.id, `${a.id} · ${a.nombre}`, h.activoId)).join('')}</select></td>
-      <td><select id="h-${i}-e" data-set="hallazgos.${i}.estado">${opt('abierto', 'Abierto', h.estado)}${opt('cerrado', 'Cerrado (retest OK)', h.estado)}</select></td>
+      <td><select id="h-${i}-a" aria-label="Activo" data-set="hallazgos.${i}.activoId">${state.activos.map((a) => opt(a.id, `${a.id} · ${a.nombre}`, h.activoId)).join('')}</select></td>
+      <td><select id="h-${i}-e" aria-label="Estado" data-set="hallazgos.${i}.estado">${opt('abierto', 'Abierto', h.estado)}${opt('cerrado', 'Cerrado (retest OK)', h.estado)}</select></td>
       <td>${h.estado === 'abierto' && r ? `<code class="muted">${esc(r.amenaza.id)}</code> ${riskChip(r.resMax)}` : '<span class="muted small">—</span>'}</td>
       <td><div class="chips">${(cat.ens || []).map(codeChip).join('')}</div></td>
       <td class="c"><button type="button" class="icon-btn sm" data-act="del-hall" data-i="${i}" aria-label="Eliminar ${esc(h.id)}">${icon('trash', 16)}</button></td></tr>`;
   }).join('');
-  return `${pageHead('Del pentest al riesgo', 'Evidencia técnica', 'Los hallazgos de pruebas de intrusión, escaneos o campañas de phishing se convierten en riesgo MAGERIT y se contrastan con la SoA. Un hallazgo abierto contra una medida declarada implantada es una no conformidad.',
+  return `${pageHead('Pentest, escaneos y phishing', 'Evidencia técnica', 'Los hallazgos de pruebas de intrusión, escaneos o campañas de phishing se convierten en riesgo MAGERIT y se contrastan con la SoA. Un hallazgo abierto contra una medida declarada implantada es una no conformidad.',
     `<button type="button" class="btn" data-act="import-hall">${icon('upload', 16)}Importar CSV o JSON</button><button type="button" class="btn primary" data-act="add-hall"${state.activos.length ? '' : ' disabled'}>${icon('plus', 16)}Añadir hallazgo</button>`)}
   <div class="table-wrap"><table class="tbl wide"><thead><tr><th>ID</th><th>Hallazgo</th><th>Categoría</th><th class="c">CVSS</th><th>Activo</th><th>Estado</th><th>Riesgo</th><th>Medidas ENS</th><th></th></tr></thead>
     <tbody>${rows || `<tr><td colspan="9">${emptyState('target', 'Sin hallazgos', 'Importa los resultados de tu último pentest o escaneo, o añádelos a mano.')}</td></tr>`}</tbody></table></div>
   <div class="grid g2">
-    <div class="card"><h3>Cómo se traduce un hallazgo</h3><dl class="kv">
+    <div class="card"><h3>Conversión de hallazgo a riesgo</h3><dl class="kv">
       <dt>Probabilidad</dt><dd class="small">CVSS ≥ ${ws.settings.cvss.ma} → MA · ≥ ${ws.settings.cvss.a} → A · ≥ ${ws.settings.cvss.m} → M · resto → B (configurable en Ajustes).</dd>
       <dt>Amenaza</dt><dd class="small">Cada categoría apunta a una amenaza MAGERIT. Si ya existe en el activo, se endurecen su probabilidad y degradación; si no, aparece un riesgo nuevo «R-H-xx».</dd>
       <dt>SoA</dt><dd class="small">CVSS ≥ 7 contra medida «Implantada 100 %» → NC mayor (PT-01); de 4 a 6,9 → NC menor (PT-02).</dd></dl></div>
     <div class="card"><h3>Formato de importación</h3><p class="small muted">CSV con cabecera o JSON (array de objetos). Categorías admitidas:</p>
       <div class="chips" style="margin:10px 0">${Object.entries(HALL).map(([k, v]) => `<span class="chip" title="${esc(v.label)} → ${esc(v.amenaza)}">${k}</span>`).join('')}</div>
-      <pre class="code">id,titulo,categoria,cvss,activoId,estado,fuente
+      <pre class="code" tabindex="0" aria-label="Ejemplo de CSV">id,titulo,categoria,cvss,activoId,estado,fuente
 H-08,XSS en el buzón,XSS,6.1,ACT-002,abierto,Pentest 2027</pre>
       <button type="button" class="btn sm" data-act="export-tpl">${icon('download', 15)}Descargar plantilla</button></div>
   </div>`;
@@ -350,12 +350,12 @@ function vPlan() {
       <input type="date" data-plan="${k}" data-f="fecha" id="pl-${k}-f" value="${esc(a.fecha)}" class="${late ? 'late' : ''}" aria-label="Fecha límite"${a.verificada ? ' disabled' : ''}>
       ${a.verificada ? '<span class="badge ok">Verificada</span>' : `<select data-plan="${k}" data-f="estado" id="pl-${k}-e" aria-label="Estado">${['Pendiente', 'En curso', 'Hecha'].map((s) => opt(s, s, a.estado)).join('')}</select>`}</div>`;
   };
-  return `${pageHead('Seguimiento', 'Plan de acción', 'Las no conformidades del auditor, los riesgos por encima del apetito y los hallazgos técnicos abiertos, convertidos en tareas con responsable y fecha. Cuando el origen desaparece, la acción se marca como verificada.',
+  return `${pageHead('Seguimiento', 'Plan de acción', 'Una acción por cada no conformidad de preauditoría, riesgo por encima del apetito y hallazgo técnico abierto. Cuando la condición de origen deja de cumplirse, la acción pasa a «Verificada».',
     `<button type="button" class="btn" data-act="export-plan">${icon('download', 16)}Exportar CSV</button>`)}
   <div class="kpi-grid">${kpiTile('Abiertas', abiertas.length, 'Pendientes o en curso', { ic: 'listChecks' })}${kpiTile('Vencidas', venc, 'Fecha límite superada', { ic: 'clock', alert: venc > 0 })}${kpiTile('Esta semana', sem, 'Vencen en 7 días', { ic: 'calendar' })}${kpiTile('Cerradas', plan.length - abiertas.length, 'Hechas o verificadas', { ic: 'check' })}</div>
   <div class="toolbar"><div class="seg" role="group">${[['abiertas', 'Abiertas'], ['vencidas', 'Vencidas'], ['cerradas', 'Cerradas'], ['todas', 'Todas']].map(([v, l]) => `<button type="button" data-act="plan-f" data-v="${v}" aria-pressed="${ui.planFiltro === v}">${l}</button>`).join('')}</div>
     <select id="plan-o" data-ui="planOrigen" aria-label="Origen">${opt('todos', 'Todos los orígenes', ui.planOrigen)}${origenes.map((o) => opt(o, o, ui.planOrigen)).join('')}</select><span class="muted small">${plural(list.length, 'acción', 'acciones')}</span></div>
-  <div class="card flush act-table">${list.map(row).join('') || emptyState('check', 'Nada por aquí', 'No hay acciones con este filtro.')}</div>`;
+  <div class="card flush act-table">${list.map(row).join('') || emptyState('check', 'Sin acciones', 'Ninguna acción cumple este filtro.')}</div>`;
 }
 
 /* --- Auditoría --- */
@@ -363,12 +363,12 @@ function vAudit() {
   const fams = [...new Set(audit.map((f) => f.id.split('-')[0]))];
   const list = audit.filter((f) => (ui.auditSev === 'todas' || f.sev === ui.auditSev) && (ui.auditFam === 'todas' || f.id.startsWith(ui.auditFam + '-')));
   const famLabel = { CAT: 'Categorización', SOA: 'SoA', REF: 'Refuerzos', MC: 'Compensatorias', AR: 'Análisis de riesgos', PT: 'Evidencia técnica', DOC: 'Documento' };
-  return `${pageHead('Preauditoría · CCN-STIC 802 y 808', 'Auditoría', `${RULES.length - ws.settings.reglasOff.length} reglas revisan la coherencia de la SoA con la categorización, el análisis de riesgos y la evidencia técnica. Prepara la auditoría formal; no la sustituye.`,
+  return `${pageHead('Preauditoría · CCN-STIC 802 y 808', 'Auditoría', `${RULES.length - ws.settings.reglasOff.length} reglas revisan la coherencia de la SoA con la categorización, el análisis de riesgos y la evidencia técnica. Sirve para preparar la auditoría formal del art. 31; no la sustituye.`,
     `<button type="button" class="btn primary" data-act="export-md">${icon('download', 16)}Descargar informe</button>`)}
   <div class="sev-cards">${[['NC mayor', 'crit'], ['NC menor', 'warn'], ['Observación', 'accent']].map(([s, c]) => `<button type="button" class="sev-card ${c}${ui.auditSev === s ? ' on' : ''}" data-act="audit-sev" data-v="${ui.auditSev === s ? 'todas' : s}"><b class="num">${auditCount(s)}</b><span>${s === 'Observación' ? 'Observaciones' : s === 'NC mayor' ? 'NC mayores' : 'NC menores'}</span></button>`).join('')}</div>
   <div class="toolbar"><select id="audit-fam" data-ui="auditFam" aria-label="Área">${opt('todas', 'Todas las áreas', ui.auditFam)}${fams.map((f) => opt(f, famLabel[f] || f, ui.auditFam)).join('')}</select>
     ${ui.auditSev !== 'todas' ? `<button type="button" class="btn sm ghost" data-act="audit-sev" data-v="todas">${icon('x', 15)}Quitar filtro: ${esc(ui.auditSev)}</button>` : ''}<span class="spacer"></span><span class="muted small">${plural(list.length, 'resultado', 'resultados')}</span></div>
-  <div class="findings">${list.map((f) => findingCard(f)).join('') || `<div class="card">${emptyState('shieldCheck', 'Sin incidencias', 'No hay hallazgos del auditor con este filtro.')}</div>`}</div>`;
+  <div class="findings">${list.map((f) => findingCard(f)).join('') || `<div class="card">${emptyState('shieldCheck', 'Sin incidencias', 'Ninguna incidencia cumple este filtro.')}</div>`}</div>`;
 }
 
 /* --- Exportar --- */

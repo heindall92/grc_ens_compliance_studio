@@ -1,8 +1,34 @@
 # Cambios
 
-## Sin publicar
+## 2.1.0 · octubre de 2026
+
+**Interfaz**
+- Barra lateral con dos anchos: completa (264 px) y compacta (76 px). Compacta automática entre 901 y 1240 px o al plegarla con el botón o con «[»; en compacta se despliega por encima del contenido con el ratón o el teclado, sin mover los iconos. El resaltado sigue al puntero.
+- Sin proyecto abierto, las vistas del proyecto aparecen con candado y una nota que explica cómo activarlas.
+- Estilo según las guías de Apple: fuente del sistema, grises y colores del sistema (contraste aumentado en claro), azul por defecto, sin degradados de fondo, material translúcido solo en la barra superior, la lateral, los menús y la paleta, transiciones sin rebote, respuesta al pulsar, `prefers-reduced-transparency` y `prefers-contrast`.
+- Textos revisados: 62 cambios para quitar eslóganes, tono de chat y afirmaciones que el código no sostenía (privacidad del asistente, firma en el plan de acción). El motor de reglas se llama «preauditoría» para no confundirlo con la auditoría formal del art. 31.
+- El aviso inferior ya se oculta (antes quedaba fijo en pantalla).
+- Móvil: plan de acción legible, Ayuda → Reglas sin desplazamiento lateral, cabecera sin solapes y lista de la SoA sin cabecera cortada.
+
+**Accesibilidad (axe-core: 0 infracciones WCAG 2.2 AA en todas las vistas, claro y oscuro, escritorio y móvil)**
+- Nombre accesible en 560 desplegables y 28 campos; contraste corregido en estados, riesgo «muy alto», textos atenuados y acento como texto.
+- El foco vuelve al mismo control tras cada redibujado; la paleta atrapa el foco y lo devuelve al cerrar; flechas en pestañas y en el menú de proyectos; Esc devuelve el foco a quien abrió el menú; enlace «Ir al contenido»; tooltips del panel accesibles con teclado.
+
+**Seguridad** (detalle en [docs/AUDITORIA_PRODUCCION.md](docs/AUDITORIA_PRODUCCION.md))
+- CSP por hashes generada en el build, sin `'unsafe-inline'` para código ni dominios externos.
+- Sin Google Fonts: ninguna petición a terceros.
+- Lectura de Excel ajeno con SheetJS CE 0.20.3 (CVE-2023-30533, CVE-2024-22363); `xlsx-js-style` solo escribe. Librerías incrustadas sin ejecutar y activadas bajo demanda; SRI en la versión alojada.
+- Corregida una inyección de HTML por fecha manipulada en el almacenamiento.
+- Neutralización de fórmulas CSV y escapado Markdown ampliados; importar hallazgos con JSON nulo ya no falla.
+- `window.__ENS_STUDIO__` solo con `?test`; `Object.prototype` y `Array.prototype` congelados al inicio.
+- Auditor CLI: informe Markdown escapado, consola sin caracteres de control, límite de 15 MB y `defusedxml`.
+- CI con acciones fijadas por SHA, permisos de solo lectura y dependencias de `requirements.txt`.
+
+**Pruebas**: 15 del motor, 87 de extremo a extremo, axe-core en 4 combinaciones de tema y ancho, 11 del auditor.
+
+**Mantenimiento**
 - `package.json` (sin dependencias npm, solo `engines`/scripts) y `requirements.txt` (openpyxl, pytest, playwright fijados) para builds y entornos de prueba reproducibles.
-- `SECURITY.md`: proceso de reporte de vulnerabilidades con contacto, plazos y versiones soportadas; riesgo residual de CVE-2023-30533 (SheetJS CE 0.18.5 vía `xlsx-js-style`) documentado explícitamente con su mitigación.
+- `SECURITY.md`: proceso de reporte de vulnerabilidades con contacto, plazos y versiones soportadas.
 - README: instrucciones de entorno virtual para ejecutar la suite completa (`requirements.txt` + `playwright install chromium`).
 
 ## 2.0.1 · septiembre de 2026

@@ -136,13 +136,13 @@ async function importXlsx(file) {
   try {
     const X = await loadXLSX('leer');
     const wb = X.read(await file.arrayBuffer(), { type: 'array', cellFormula: false, cellHTML: false, sheetStubs: false });
-    if (wb.SheetNames.length > 40) throw new Error('El libro tiene demasiadas hojas para ser una SoA.');
+    if (wb.SheetNames.length > 40) throw new Error('El libro tiene más de 40 hojas y no se reconoce como SoA.');
     const rowsOf = (name) => X.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: null, raw: true }).slice(0, 5000).map((r) => (r || []).slice(0, 60).map((c) => (c === null || typeof c === 'number' ? c : s(c))));
     const findHdr = (rows, must) => { for (let i = 0; i < Math.min(10, rows.length); i++) { const v = (rows[i] || []).map(normH); if (must.every((m) => v.includes(m))) return i; } return -1; };
     let soaName = null, soaRows = null, soaH = -1;
     for (const n of wb.SheetNames) { const r = rowsOf(n); const h = findHdr(r, ['codigo', '?aplica?'.replace(/^\?/, '')]); const h2 = h < 0 ? findHdr(r, ['codigo', 'aplica?']) : h; if (h2 >= 0) { soaName = n; soaRows = r; soaH = h2; break; } }
     if (!soaName) { for (const n of wb.SheetNames) { const r = rowsOf(n); const h = r.findIndex((row) => (row || []).some((c) => normH(c) === 'codigo') && (row || []).some((c) => /aplica/.test(normH(c)))); if (h >= 0 && h < 10) { soaName = n; soaRows = r; soaH = h; break; } } }
-    if (!soaName) throw new Error('No encuentro una hoja de SoA con las columnas «Código» y «¿Aplica?».');
+    if (!soaName) throw new Error('No se encuentra ninguna hoja de SoA con las columnas «Código» y «¿Aplica?».');
     const hdr = soaRows[soaH].map(normH);
     const col = (...keys) => hdr.findIndex((h) => keys.some((k) => h === normH(k) || h.startsWith(normH(k))));
     const cols = { codigo: col('Código'), aplica: col('¿Aplica?', 'Aplica'), just: col('Justificación'), org: col('Medidas ORGANIZATIVAS'), tec: col('Medidas TÉCNICAS'), mc: col('Medida compensatoria'), estado: col('Estado de implantación', 'Estado'), pct: col('% implantación'), ev: col('Evidencias'), resp: col('Responsable'), obs: col('Observaciones'), refs: col('Refuerzos / alternativa') };
@@ -250,7 +250,7 @@ Responde SOLO con JSON: {"propuestas":[{"codigo":"[A.11]","prob":"MB|B|M|A|MA","
       return { codigo: c.code, nombre: c.nombre, prob: E.NIVELES.includes(p.prob) ? p.prob : 'M', deg, motivo: String(p.motivo || '').slice(0, 240) };
     }).filter(Boolean).slice(0, 5);
     ui.ai = { ...ui.ai, busy: null, props, error: props.length ? '' : 'La respuesta no contenía amenazas válidas del catálogo.' };
-  } catch (e) { ui.ai = { ...ui.ai, busy: null, error: e && e.code === 'rate_limited' ? 'Demasiadas peticiones seguidas; espera un momento.' : e && e.code === 'not_granted' ? 'Permiso no concedido.' : 'No se pudo completar la petición.' }; }
+  } catch (e) { ui.ai = { ...ui.ai, busy: null, error: e && e.code === 'rate_limited' ? 'Límite de peticiones alcanzado. Vuelve a intentarlo en unos segundos.' : e && e.code === 'not_granted' ? 'Permiso no concedido.' : 'No se pudo completar la petición.' }; }
   render();
 }
 async function aiJust(code) {

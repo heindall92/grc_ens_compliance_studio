@@ -5,5 +5,6 @@ cd "$(dirname "$0")"
 echo "== Construcción de la app"; node app/build.js
 echo "== Motor · node --test"; node --test tests/engine.test.js
 echo "== App en navegador · Playwright"; python3 tests/e2e_app.py
+echo "== Accesibilidad · axe-core (WCAG 2.2 AA)"; python3 tests/a11y_app.py
 echo "== Auditor CLI · pytest"; python3 -m pytest -q tests/test_auditor.py
 echo "== Todo en verde"

@@ -61,12 +61,28 @@ document.addEventListener('keydown', (ev) => {
   if (ui.palette) {
     const items = ui._pItems || [];
     if (ev.key === 'Escape') { ui.palette = false; renderPalette(); return; }
+    if (ev.key === 'Tab') { ev.preventDefault(); $('#pal-q').focus(); return; }
     if (ev.key === 'ArrowDown') { ev.preventDefault(); ui.paletteIdx = Math.min(items.length - 1, ui.paletteIdx + 1); renderPalette(); return; }
     if (ev.key === 'ArrowUp') { ev.preventDefault(); ui.paletteIdx = Math.max(0, ui.paletteIdx - 1); renderPalette(); return; }
     if (ev.key === 'Enter') { ev.preventDefault(); const it = items[ui.paletteIdx]; ui.palette = false; renderPalette(); if (it) it.act(); return; }
     return;
   }
-  if (ev.key === 'Escape') { if (ui.menu || ui.drawer || ui.confirm) { ui.menu = null; ui.drawer = false; ui.confirm = null; render(); } return; }
+  if (ev.key === 'Escape') {
+    if (ui.menu || ui.drawer || ui.confirm) {
+      const back = ui.menu ? '.proj-switch' : ui.drawer ? '.top [data-act="drawer"]' : null;
+      ui.menu = null; ui.drawer = false; ui.confirm = null; render();
+      const b = back && document.querySelector(back); if (b) b.focus({ preventScroll: true });
+    }
+    return;
+  }
+  // Flechas: pestañas (role="tab") y elementos de menú (role="menuitem")
+  if (/^Arrow(Left|Right|Up|Down)$/.test(ev.key) && t.matches && (t.matches('[role="tab"]') || t.matches('[role="menuitem"]'))) {
+    const tab = t.matches('[role="tab"]'); if (tab && /Up|Down/.test(ev.key)) return;
+    const list = [...t.parentElement.closest(tab ? '[role="tablist"]' : '[role="menu"]').querySelectorAll(tab ? '[role="tab"]' : '[role="menuitem"]')];
+    const d = /Right|Down/.test(ev.key) ? 1 : -1; const n = list[(list.indexOf(t) + d + list.length) % list.length];
+    if (n) { ev.preventDefault(); n.focus(); if (tab) n.click(); }
+    return;
+  }
   if ((ev.key === 'Enter' || ev.key === ' ') && t.classList && t.classList.contains('soa-row') && t.dataset.act) { ev.preventDefault(); t.click(); return; }
   if (typing || ev.ctrlKey || ev.metaKey || ev.altKey) return;
   if (ev.key === '/') { const s = $('#soa-q') || $('#glo-q'); if (s) { ev.preventDefault(); s.focus(); } else { ev.preventDefault(); ui.palette = true; ui.paletteQ = ''; renderPalette(); } return; }
@@ -89,6 +105,15 @@ document.addEventListener('mouseover', (ev) => {
   t.style.left = Math.max(8, Math.min(window.innerWidth - tw - 8, r.left + r.width / 2 - tw / 2)) + 'px';
   t.style.top = Math.max(8, r.top - t.offsetHeight - 8) + 'px';
 });
+document.addEventListener('focusin', (ev) => {
+  const el = ev.target.closest && ev.target.closest('[data-tip]'); const t = tip();
+  if (!el || !el.matches(':focus-visible')) { t.hidden = true; return; }
+  t.textContent = lang() === 'en' ? tr(el.getAttribute('data-tip')) : el.getAttribute('data-tip'); t.hidden = false;
+  const r = el.getBoundingClientRect(); const tw = t.offsetWidth;
+  t.style.left = Math.max(8, Math.min(window.innerWidth - tw - 8, r.left + r.width / 2 - tw / 2)) + 'px';
+  t.style.top = Math.max(8, r.top - t.offsetHeight - 8) + 'px';
+});
+document.addEventListener('focusout', () => { tip().hidden = true; });
 document.addEventListener('scroll', () => { tip().hidden = true; }, true);
 
 document.addEventListener('click', (ev) => {
@@ -98,10 +123,10 @@ document.addEventListener('click', (ev) => {
   const act = el.dataset.act; const i = el.dataset.i !== undefined ? +el.dataset.i : null;
   switch (act) {
     case 'nav': {
-      if (el.dataset.locked === '1') { toast('Abre o crea un proyecto para entrar aquí. El rol no bloquea el menú.'); break; }
+      if (el.dataset.locked === '1') { toast('Esta sección requiere un proyecto abierto.'); break; }
       if (el.dataset.view === 'nuevo' && ui.view !== 'nuevo') ui.wizard = null; go(el.dataset.view); break;
     }
-    case 'menu': ui.menu = ui.menu === el.dataset.menu ? null : el.dataset.menu; render(); break;
+    case 'menu': ui.menu = ui.menu === el.dataset.menu ? null : el.dataset.menu; render(); if (ui.menu) { const f = document.querySelector('.menu .menu-item, .menu [role="menuitem"]'); if (f) f.focus(); } break;
     case 'drawer': ui.drawer = !ui.drawer; render(); break;
     case 'rail-toggle': toggleRail(); break;
     case 'palette': ui.palette = true; ui.paletteQ = ''; ui.paletteIdx = 0; renderPalette(); break;
@@ -121,10 +146,10 @@ document.addEventListener('click', (ev) => {
     case 'reset-case': resetCase(el.dataset.case); break;
     case 'close-demos': for (const p of ws.projects.filter((x) => x.kind === 'demo')) deleteProject(p.id); render(); toast('Casos de ejemplo cerrados'); break;
     case 'ask': ui.confirm = el.dataset.what; render(); break;
-    case 'confirm-no': ui.confirm = null; render(); break;
+    case 'confirm-no': { const w = ui.confirm; ui.confirm = null; render(); const b = w && document.querySelector(`[data-act="ask"][data-what="${CSS.escape(w)}"]`); if (b) b.focus({ preventScroll: true }); break; }
     case 'del-project': deleteProject(el.dataset.id); ui.confirm = null; render(); toast('Proyecto eliminado'); break;
     case 'wipe': for (const p of ws.projects) store.del(PKEY(p.id)); store.del(WS_KEY); ws = sanitizeWs(null); state = null; recompute(); applyTheme(); ui.confirm = null; go('inicio'); toast('Datos borrados'); break;
-    case 'ob-save': ws.profileDone = true; saveWs(); render(); toast(ws.profile.nombre ? `Encantado, ${ws.profile.nombre.split(' ')[0]}` : 'Perfil guardado'); break;
+    case 'ob-save': ws.profileDone = true; saveWs(); render(); toast('Perfil guardado'); break;
     case 'ob-skip': ws.profileDone = true; saveWs(); render(); break;
     case 'backup': backup(); break;
     case 'restore': pickFile('.json,application/json', (f) => checkSize(f, LIM.fileJson, 'El fichero es') && readText(f, importProyecto)); break;
