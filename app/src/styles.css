@@ -716,21 +716,24 @@ body { background: var(--bg); }
    Compacta entre 901 y 1240 px o si se pliega (botón o «[»); en compacta se despliega por encima del
    contenido al pasar el ratón, con el foco de teclado o con el botón (táctil). Todo se maqueta al ancho
    completo y la barra recorta: los iconos no se mueven y solo cambian anchos, posiciones y opacidades,
-   controlados por --x (0 plegada, 1 desplegada). */
+   controlados por --x (0 plegada, 1 desplegada). La barra flota separada 12 px de los bordes, como un panel. */
 .rail-tg, .rail-sp, .nav-glow, .nav-item .lk { display: none; }
 @media (min-width: 901px) {
   :root { --rail-full: 280px; --rail-mini: 76px; --rail-w: var(--rail-full); --rail-t: .4s var(--ease); --rail-d: calc(var(--rail-full) - var(--rail-mini)); }
   :root[data-mini] { --rail-w: var(--rail-mini); }
-  .app { display: block; padding-left: var(--rail-w); }
+  .app { display: block; padding-left: calc(var(--rail-w) + 12px); }
   :root.ready .app { transition: padding-left var(--rail-t); }
-  .side { --x: 1; position: fixed; left: 0; top: 0; bottom: 0; height: auto; width: calc(var(--rail-mini) + var(--x) * var(--rail-d));
-    overflow: hidden auto; scrollbar-width: none; gap: 10px; align-items: flex-start; }
+  .side { --x: 1; position: fixed; left: 12px; top: calc(12px + env(safe-area-inset-top, 0px)); bottom: 12px; height: auto; width: calc(var(--rail-mini) + var(--x) * var(--rail-d));
+    overflow: hidden auto; scrollbar-width: none; gap: 10px; align-items: flex-start;
+    border: 1px solid var(--glass-line); border-radius: 22px; box-shadow: var(--glass-inset), var(--sh-2); }
   .side::-webkit-scrollbar { display: none; }
   :root.ready .side { transition: width var(--rail-t), box-shadow .3s; }
   :root[data-mini] .side { --x: 0; }
   :root[data-mini][data-rail-open] .side, :root[data-mini] .side.kb, :root[data-mini] .side.menu-open { --x: 1; }
   @media (hover: hover) { :root[data-mini] .side:hover { --x: 1; } }
-  :root[data-mini] .side:is(:hover, .kb, .menu-open), :root[data-mini][data-rail-open] .side { box-shadow: var(--sh-3); background: var(--surface); }
+  /* Recién plegada con el botón: se queda plegada aunque el ratón siga encima, hasta que salga */
+  :root[data-mini] .side.hold, :root[data-mini] .side.hold:hover { --x: 0; }
+  :root[data-mini] .side:is(:hover, .kb, .menu-open):not(.hold), :root[data-mini][data-rail-open] .side { box-shadow: var(--glass-inset), var(--sh-3); background: var(--surface); }
   .side > * { flex: none; }
   /* Lo que solo se ve desplegada */
   .brand-txt, .proj-txt, .proj-switch > .ic, .nav-item .lbl, .nav-item .lk, .me-txt, .nav-group { opacity: var(--x); transition: opacity .2s ease; white-space: nowrap; }
@@ -757,9 +760,13 @@ body { background: var(--bg); }
   :root[data-mini] .side:not(:hover):not(.kb):not(.menu-open) .nav-note { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; border-width: 0; }
   :root[data-mini][data-rail-open] .side .nav-note { padding: 10px 12px; margin: 8px 4px 2px; border-width: 1px; }
   /* El contador viaja de la esquina del icono al extremo derecho */
-  .nav-item .count { position: absolute; margin: 0; top: calc(1px + var(--x) * 9px); left: calc(28px + var(--x) * (var(--rail-d) + 2px));
-    padding: 2px 6px; font-size: .64rem; transition: top var(--rail-t), left var(--rail-t); box-shadow: 0 0 0 2px var(--surface); }
-  .nav-item .lk { display: block; position: absolute; left: calc(var(--rail-d) + 26px); top: 50%; transform: translateY(-50%); color: var(--muted); opacity: calc(var(--x) * .8); }
+  /* Todos los contadores con el mismo ancho mínimo y alineados al borde derecho: el borde derecho del contador
+     va de la esquina del icono (plegada) a 10 px del final de la opción (desplegada) */
+  .nav-item .count { position: absolute; margin: 0; top: calc(1px + var(--x) * 9px); left: calc(28px + var(--x) * (100% - 38px));
+    transform: translateX(calc(var(--x) * -100%)); min-width: 24px; height: 17px; padding: 0 6px; box-sizing: border-box;
+    display: inline-flex; align-items: center; justify-content: center; font-size: .64rem; line-height: 1; font-variant-numeric: tabular-nums;
+    transition: top var(--rail-t), left var(--rail-t), transform var(--rail-t); box-shadow: 0 0 0 2px var(--surface); }
+  .nav-item .lk { display: block; position: absolute; left: calc(100% - 22px); top: 50%; transform: translate(-50%, -50%); color: var(--muted); opacity: calc(var(--x) * .8); }
   .nav-item[data-locked] .lbl, .nav-item:has(.count) .lbl { padding-right: 34px; }
   /* Pie */
   .side-foot { width: calc(52px + var(--x) * var(--rail-d)); transition: width var(--rail-t); }

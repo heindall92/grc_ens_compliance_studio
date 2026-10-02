@@ -4,6 +4,7 @@
 
 **Interfaz**
 - Barra lateral con dos anchos: completa (280 px) y compacta (76 px). Compacta automática entre 901 y 1240 px o al plegarla con el botón o con «[»; en compacta se despliega por encima del contenido con el ratón o el teclado, sin mover los iconos. El resaltado sigue al puntero.
+- La barra flota separada 12 px de los bordes, con esquinas redondeadas. Al plegarla con el botón se pliega en el acto aunque el ratón siga encima. Los contadores tienen el mismo ancho mínimo y van alineados al borde derecho.
 - Sin proyecto abierto, las vistas del proyecto aparecen con candado y una nota que explica cómo activarlas.
 - Estilo según las guías de Apple: fuente del sistema, grises y colores del sistema (contraste aumentado en claro), azul por defecto, sin degradados de fondo, material translúcido solo en la barra superior, la lateral, los menús y la paleta, transiciones sin rebote, respuesta al pulsar, `prefers-reduced-transparency` y `prefers-contrast`.
 - Textos revisados: 62 cambios para quitar eslóganes, tono de chat y afirmaciones que el código no sostenía (privacidad del asistente, firma en el plan de acción). El motor de reglas se llama «preauditoría» para no confundirlo con la auditoría formal del art. 31.
@@ -25,7 +26,7 @@
 - Auditor CLI: informe Markdown escapado, consola sin caracteres de control, límite de 15 MB y `defusedxml`.
 - CI con acciones fijadas por SHA, permisos de solo lectura y dependencias de `requirements.txt`.
 
-**Pruebas**: 15 del motor, 87 de extremo a extremo, axe-core en 4 combinaciones de tema y ancho, 11 del auditor.
+**Pruebas**: 15 del motor, 91 de extremo a extremo, axe-core en 4 combinaciones de tema y ancho, 11 del auditor.
 
 **Mantenimiento**
 - `package.json` (sin dependencias npm, solo `engines`/scripts) y `requirements.txt` (openpyxl, pytest, playwright fijados) para builds y entornos de prueba reproducibles.

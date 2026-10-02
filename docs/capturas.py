@@ -72,7 +72,7 @@ with sync_playwright() as pw:
     # Barra lateral: completa, compacta y compacta desplegada al pasar el ratón
     ctx, p = page_for(b, 1280, 800, "light")
     go(p, "plan", "techserv")
-    clip = {"x": 0, "y": 0, "width": 306, "height": 640}
+    clip = {"x": 0, "y": 0, "width": 318, "height": 640}
     shot(p, "rail-completa", clip=clip)
     p.evaluate("document.querySelector('[data-act=\"rail-toggle\"]').click()"); p.mouse.move(1000, 700); p.wait_for_timeout(500)
     shot(p, "rail-compacta", clip=clip)

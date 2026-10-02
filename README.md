@@ -86,7 +86,7 @@ Es un único fichero HTML. Funciona sin conexión, no tiene servidor y no hace n
         <img src="docs/assets/stack/playwright.svg" height="52" alt="Playwright">
         <img src="docs/assets/stack/pytest.svg" height="52" alt="pytest">
         <img src="docs/assets/stack/axe.svg" height="52" alt="axe-core"><br>
-        <sub><code>motor 15 · navegador 87 · auditor 11 · axe-core 0 infracciones</code></sub>
+        <sub><code>motor 15 · navegador 91 · auditor 11 · axe-core 0 infracciones</code></sub>
       </td>
     </tr>
     <tr>
@@ -221,7 +221,7 @@ Además: buscador de comandos (`Ctrl + K`), atajos de teclado, perfil del autor 
 </tr>
 </table>
 
-**Barra lateral.** Completa a partir de 1240 px; compacta entre 901 y 1240 px o al plegarla con el botón o con `[`. En compacta se despliega por encima del contenido al pasar el ratón o al llegar con el teclado, sin mover los iconos.
+**Barra lateral.** Completa a partir de 1240 px; compacta entre 901 y 1240 px o al plegarla con el botón o con `[`. Flota separada de los bordes. En compacta se despliega por encima del contenido al pasar el ratón o al llegar con el teclado, sin mover los iconos; al plegarla se pliega en el acto.
 
 <table>
 <tr>
@@ -288,7 +288,7 @@ node docs/assets/generar.js
 | Suite | Herramienta | Comprobaciones | Qué demuestra |
 |---|---|---|---|
 | Motor | `node --test` | 15 | Paridad con el Excel (73 medidas e indicadores) y con **el código original de MAGERIT Lab**; los 5 casos; ajustes; plan de acción. |
-| Aplicación | Playwright | 87 | Flujo completo, importación del Excel del profesor, exportaciones, barra lateral, teclado y foco, ataques (XSS, contaminación de prototipos, fórmulas, almacenamiento manipulado, ficheros enormes), CSP y diseño a 390 y 768 px. |
+| Aplicación | Playwright | 91 | Flujo completo, importación del Excel del profesor, exportaciones, barra lateral, teclado y foco, ataques (XSS, contaminación de prototipos, fórmulas, almacenamiento manipulado, ficheros enormes), CSP y diseño a 390 y 768 px. |
 | Accesibilidad | axe-core | 0 infracciones | WCAG 2.2 A/AA en todas las vistas, pestañas, asistente y paleta, en tema claro y oscuro, a 1440 y 390 px. |
 | Auditor CLI | pytest | 11 | Resultado exacto sobre el Excel original, mutaciones controladas, **paridad Python ↔ JavaScript** e informe Markdown con carga maliciosa. |
 

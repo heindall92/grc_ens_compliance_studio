@@ -99,6 +99,8 @@ function applyRail() {
 function toggleRail() {
   if (railMedium()) ui.railOpen = !ui.railOpen; else { ws.settings.railMin = !ws.settings.railMin; saveWs(); }
   render();
+  // Al plegar, la respuesta es inmediata aunque el ratón siga sobre la barra (se suelta al salir)
+  $('#side').classList.toggle('hold', railCollapsed() && $('#side').matches(':hover'));
 }
 /* Resaltado que se desliza hasta la opción bajo el puntero (o la actual) */
 function moveGlow(el, instant) {

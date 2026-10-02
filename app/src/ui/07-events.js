@@ -233,3 +233,5 @@ document.addEventListener('focusout', (ev) => { const sd = document.getElementBy
 let railRz = null;
 window.addEventListener('resize', () => { clearTimeout(railRz); railRz = setTimeout(() => { const was = document.documentElement.hasAttribute('data-mini'); applyRail(); if (was !== document.documentElement.hasAttribute('data-mini')) render(); }, 120); });
 requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('ready'))); // sin animaciones del raíl al cargar
+
+document.getElementById('side').addEventListener('pointerleave', (ev) => { ev.currentTarget.classList.remove('hold'); });
