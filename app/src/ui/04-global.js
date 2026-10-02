@@ -3,7 +3,7 @@ const ROLES = ['Responsable de Seguridad (CISO)', 'Responsable del Sistema', 'Re
 const SECTORES = ['Administración General del Estado', 'Administración autonómica', 'Administración local', 'Universidad', 'Sanidad', 'Proveedor TIC del sector público', 'Proveedor SaaS / nube', 'Otro'];
 const COLORS = ['teal', 'blue', 'green', 'amber', 'rose', 'slate'];
 const COLOR_NAME = { teal: 'Verde agua', blue: 'Azul', green: 'Verde', amber: 'Ámbar', rose: 'Rojo', slate: 'Pizarra' };
-const ACCENTS = [['teal', 'Verde agua'], ['blue', 'Azul'], ['green', 'Verde'], ['amber', 'Amarillo'], ['rose', 'Rojo'], ['graphite', 'Grafito']];
+const ACCENTS = [['blue', 'Azul'], ['teal', 'Verde agua'], ['green', 'Verde'], ['amber', 'Amarillo'], ['rose', 'Rojo'], ['graphite', 'Grafito']];
 
 function vInicio() {
   const own = ws.projects.filter((p) => p.kind === 'own');
@@ -15,7 +15,7 @@ function vInicio() {
       <span class="proj-ic lg ${p.kind === 'demo' ? 'demo' : ''}">${icon(p.kind === 'demo' ? caseIcon(p.caseId) : 'building', 18)}</span>
       <div class="pr-main"><b>${esc(p.nombre)}</b><small>${esc(p.organizacion || '')}${p.kind === 'demo' ? ' · caso de ejemplo' : ''}</small></div>
       <div class="pr-meta">${catPill(p.categoria)}${p.grado !== undefined && p.grado !== null ? `<span class="muted small num">${pct(p.grado, 0)} implantado</span>` : ''}${p.ncMayor ? `<span class="badge crit">${plural(p.ncMayor, 'NC mayor', 'NC mayores')}</span>` : ''}</div>
-      <span class="muted small pr-date">${icon('clock', 14)} ${fmtDate(p.updated)}</span>
+      <span class="muted small pr-date">${icon('clock', 14)} ${esc(fmtDate(p.updated))}</span>
       <div class="row">${del ? `<span class="small">¿Eliminar?</span><button type="button" class="btn sm danger-solid" data-act="del-project" data-id="${esc(p.id)}">Eliminar</button><button type="button" class="btn sm" data-act="confirm-no">Cancelar</button>`
         : `<button type="button" class="btn sm" data-act="open-project" data-id="${esc(p.id)}">Abrir</button><button type="button" class="icon-btn sm" data-act="ask" data-what="del:${esc(p.id)}" aria-label="Eliminar ${esc(p.nombre)}">${icon('trash', 16)}</button>`}</div></div>`;
   };

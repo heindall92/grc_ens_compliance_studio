@@ -7,6 +7,7 @@
 """
 import datetime as dt
 import pathlib
+import re
 import shutil
 import sys
 
@@ -151,3 +152,30 @@ def test_paridad_python_js_con_hallazgos_documentales(tmp_path):
     js = {x for x in json.loads(out) if x.split("-")[0] in {"CAT", "SOA", "REF", "MC", "DOC"} and not x.startswith("MC-04")}
     py = {f"{f.id}|{f.ambito}" for f in A.audit(dst, HOY).hallazgos if f.id.split("-")[0] in {"CAT", "SOA", "REF", "MC", "DOC"}}
     assert py == js == set()
+
+
+def test_informe_markdown_no_admite_inyeccion(tmp_path):
+    """Una celda con HTML, saltos de línea, barras o sintaxis de enlace no rompe ni inyecta el informe .md."""
+    evil = '<img src=x onerror=alert(1)>\n## falso | ![a](https://evil.example/x.png)'
+
+    def f(wb):
+        ws = wb["Categorización"] if "Categorización" in wb.sheetnames else wb[wb.sheetnames[0]]
+        for row in ws.iter_rows(min_row=1, max_row=12):
+            for c in row:
+                if isinstance(c.value, str) and c.value.strip().upper() in ("ALTO", "MEDIO", "BAJO"):
+                    c.value = evil
+                    return
+
+    out = A.to_markdown(A.audit(mutate(tmp_path, f), HOY))
+    assert not re.search(r"(?<!\\)<img", out), "HTML sin escapar"
+    assert "![a](" not in out and "\n## falso" not in out
+    for line in out.splitlines():
+        if line.startswith("| ") and "CAT-" in line:
+            assert line.count(" | ") == 4, line
+
+
+def test_fichero_demasiado_grande(tmp_path):
+    big = tmp_path / "grande.xlsx"
+    big.write_bytes(b"0" * (A.MAX_BYTES + 1))
+    with pytest.raises(SystemExit):
+        A.load_workbook(big)

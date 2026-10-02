@@ -70,6 +70,7 @@ document.addEventListener('keydown', (ev) => {
   if ((ev.key === 'Enter' || ev.key === ' ') && t.classList && t.classList.contains('soa-row') && t.dataset.act) { ev.preventDefault(); t.click(); return; }
   if (typing || ev.ctrlKey || ev.metaKey || ev.altKey) return;
   if (ev.key === '/') { const s = $('#soa-q') || $('#glo-q'); if (s) { ev.preventDefault(); s.focus(); } else { ev.preventDefault(); ui.palette = true; ui.paletteQ = ''; renderPalette(); } return; }
+  if (ev.key === '[') { ev.preventDefault(); toggleRail(); return; }
   if (ev.key === '?') { go('ayuda'); ui.helpTab = 'atajos'; render(); return; }
   if (ev.key.toLowerCase() === 'g') { gPending = true; setTimeout(() => { gPending = false; }, 900); return; }
   if (gPending) { gPending = false; const m = { p: 'panel', s: 'soa', a: 'auditoria', r: 'riesgos', c: 'categorizacion', h: 'hallazgos', l: 'plan', i: 'inicio' }[ev.key.toLowerCase()]; if (m) go(m); }
@@ -83,7 +84,7 @@ const tip = () => $('#tip');
 document.addEventListener('mouseover', (ev) => {
   const el = ev.target.closest && ev.target.closest('[data-tip]'); const t = tip();
   if (!el) { t.hidden = true; return; }
-  t.textContent = el.getAttribute('data-tip'); t.hidden = false;
+  t.textContent = lang() === 'en' ? tr(el.getAttribute('data-tip')) : el.getAttribute('data-tip'); t.hidden = false;
   const r = el.getBoundingClientRect(); const tw = t.offsetWidth;
   t.style.left = Math.max(8, Math.min(window.innerWidth - tw - 8, r.left + r.width / 2 - tw / 2)) + 'px';
   t.style.top = Math.max(8, r.top - t.offsetHeight - 8) + 'px';
@@ -102,6 +103,7 @@ document.addEventListener('click', (ev) => {
     }
     case 'menu': ui.menu = ui.menu === el.dataset.menu ? null : el.dataset.menu; render(); break;
     case 'drawer': ui.drawer = !ui.drawer; render(); break;
+    case 'rail-toggle': toggleRail(); break;
     case 'palette': ui.palette = true; ui.paletteQ = ''; ui.paletteIdx = 0; renderPalette(); break;
     case 'pal-close': ui.palette = false; renderPalette(); break;
     case 'pal-run': { const it = (ui._pItems || [])[i]; ui.palette = false; renderPalette(); if (it) it.act(); break; }
@@ -188,10 +190,21 @@ ws = sanitizeWs(store.get(WS_KEY));
 const avatarAccent = { teal: 'teal', blue: 'blue', green: 'green', amber: 'amber', rose: 'rose' }[ws.profile.color];
 if (avatarAccent && avatarAccent !== 'teal' && ws.settings.acento === 'teal') { ws.settings.acento = avatarAccent; saveWs(); }
 ui.conHallazgos = ws.settings.conHallazgos;
-try { Object.freeze(Object.prototype); } catch (e) { /* entorno que no lo permite */ }
 applyTheme();
 if (ws.activeId && store.get(PKEY(ws.activeId))) { state = migrate(store.get(PKEY(ws.activeId))); recompute(); }
 ui.view = [...PROJECT_VIEWS, ...GLOBAL_VIEWS].includes(initialView) && (state || !PROJECT_VIEWS.includes(initialView)) ? initialView : (state ? 'panel' : 'inicio');
 render();
 aiNS().then((s) => { if (s) { ui.ai.available = true; if (ws.settings.asistente) render(); } });
-window.__ENS_STUDIO__ = { get state() { return state; }, get calc() { return calc; }, get audit() { return audit; }, get plan() { return plan; }, get ws() { return ws; }, openCase, go };
+// Puerta para las pruebas automáticas: solo existe al abrir la app con ?test
+if (/[?&]test\b/.test(location.search)) window.__ENS_STUDIO__ = { get state() { return state; }, get calc() { return calc; }, get audit() { return audit; }, get plan() { return plan; }, get ws() { return ws; }, openCase, go };
+
+/* Barra lateral: resaltado que sigue al puntero, despliegue con teclado y cambio de ancho de ventana */
+document.addEventListener('pointerover', (ev) => {
+  const it = ev.target.closest && ev.target.closest('#side .nav .nav-item');
+  if (it) moveGlow(it); else if (!(ev.target.closest && ev.target.closest('#side .nav'))) moveGlow(null);
+});
+document.addEventListener('focusin', (ev) => { const sd = document.getElementById('side'); if (sd) sd.classList.toggle('kb', !!(ev.target.closest && ev.target.closest('#side') && ev.target.matches(':focus-visible'))); });
+document.addEventListener('focusout', (ev) => { const sd = document.getElementById('side'); if (sd && !(ev.relatedTarget && ev.relatedTarget.closest && ev.relatedTarget.closest('#side'))) sd.classList.remove('kb'); });
+let railRz = null;
+window.addEventListener('resize', () => { clearTimeout(railRz); railRz = setTimeout(() => { const was = document.documentElement.hasAttribute('data-mini'); applyRail(); if (was !== document.documentElement.hasAttribute('data-mini')) render(); }, 120); });
+requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add('ready'))); // sin animaciones del raíl al cargar

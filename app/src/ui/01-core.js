@@ -2,7 +2,13 @@
 const D = window.ENS_DATA;
 const E = window.ENSEngine;
 const CTX = { anexo: D.anexo, mapping: D.mapping, amenazasCatalogo: D.catalogos.AMENAZAS };
-const XLSX_URL = 'https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';
+/* Librerías de Excel. Leer ficheros de terceros: SheetJS 0.20.3 (corrige CVE-2023-30533 y CVE-2024-22363).
+ * Escribir el Excel propio con formato: xlsx-js-style 1.2.0 (SheetJS 0.18.5), que nunca lee nada ajeno.
+ * La versión autónoma las lleva incrustadas sin ejecutar; la alojada las pide al CDN con integridad (SRI). */
+const XLSX_LIBS = {
+  leer: { id: 'xlsx-leer', cdn: 'https://cdn.jsdelivr.net/npm/@e965/xlsx@0.20.3/dist/xlsx.full.min.js', sri: 'sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT' },
+  escribir: { id: 'xlsx-escribir', cdn: 'https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js', sri: 'sha384-OUW9euuUyxyHcAhTqbhI+Iyb8LMssXt/cpz0yXhs9UWG2/R/uaWdakx/4cfww7Vb' }
+};
 const HALL = D.mapping.hallazgo_categorias;
 const CAT_AM = D.catalogos.AMENAZAS;
 const CAT_SAL = D.catalogos.SALVAGUARDAS;
@@ -15,7 +21,7 @@ const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const blank = E.isBlank;
 const pct = (x, d = 1) => (Number(x) * 100).toLocaleString(locale(), { maximumFractionDigits: d, minimumFractionDigits: d }) + ' %';
 const today = () => new Date().toISOString().slice(0, 10);
-const fmtDate = (iso) => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T00:00:00' : iso); return isNaN(d) ? iso : d.toLocaleDateString(locale(), { day: 'numeric', month: 'short', year: 'numeric' }); };
+const fmtDate = (iso) => { if (!iso) return '—'; const d = new Date(iso.length === 10 ? iso + 'T00:00:00' : iso); return isNaN(d) ? '—' : d.toLocaleDateString(locale(), { day: 'numeric', month: 'short', year: 'numeric' }); };
 const plural = (n, s, p) => `${n} ${n === 1 ? s : p}`;
 const uid = () => Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
 const initials = (name) => String(name || '').trim().split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || '··';
@@ -41,7 +47,7 @@ const ui = {
   view: 'inicio', riesgosTab: 'registro', conHallazgos: true,
   soaQ: '', soaMarco: 'todos', soaEstado: 'todos', soaOpen: null,
   auditSev: 'todas', auditFam: 'todas', planFiltro: 'abiertas', planOrigen: 'todos',
-  confirm: null, menu: null, palette: false, paletteQ: '', paletteIdx: 0, drawer: false, helpTab: 'inicio', glosarioQ: '',
+  confirm: null, menu: null, palette: false, paletteQ: '', paletteIdx: 0, drawer: false, railOpen: false, helpTab: 'inicio', glosarioQ: '',
   wizard: null, busyXlsx: false,
   ai: { available: false, busy: null, activo: null, props: [], just: '', justCode: null, error: '' }
 };

@@ -166,7 +166,19 @@ def header_row(ws, must=("codigo",), search=8):
     return None, None
 
 
+MAX_BYTES = 15 * 1024 * 1024
+_CTRL = re.compile(r"[\x00-\x08\x0b-\x1f\x7f-\x9f]")
+
+
+def md(s) -> str:
+    """Texto de una celda listo para una tabla Markdown: sin controles ni saltos, con la sintaxis escapada."""
+    s = _CTRL.sub("", str(s)).replace("\r", " ").replace("\n", " ")
+    return re.sub(r"[\\`*_\[\]()!#<>|]", lambda m: "\\" + m.group(0), s)
+
+
 def load_workbook(path: Path):
+    if path.stat().st_size > MAX_BYTES:
+        raise SystemExit(f"{path.name}: fichero demasiado grande (> {MAX_BYTES // 1048576} MB)")
     wb_v = openpyxl.load_workbook(path, data_only=True)
     wb_f = openpyxl.load_workbook(path, data_only=False)
     return wb_v, wb_f
@@ -455,7 +467,7 @@ def natural(s):
 
 # ---------------------------------------------------------------- salida
 def to_markdown(res: Result) -> str:
-    L = [f"# Preauditoría de la SoA — {res.fichero}", "",
+    L = [f"# Preauditoría de la SoA — {md(res.fichero)}", "",
          f"**Fecha:** {res.fecha} · **Herramienta:** ens-soa-audit {__version__}", "",
          "## Resumen", "",
          f"- Categoría recalculada: **{res.categoria or 'no determinable'}** ({' · '.join(f'{d}={res.niveles.get(d) or chr(8212)}' for d in DIMS)}).",
@@ -466,7 +478,7 @@ def to_markdown(res: Result) -> str:
         if not fs:
             continue
         L += [f"## {title} ({len(fs)})", "", "| Regla | Ámbito | Hallazgo | Acción recomendada | Referencia |", "|---|---|---|---|---|"]
-        L += [f"| {f.id} | {f.ambito} | **{f.titulo}.** {f.detalle.replace('|', '/')} | {f.recomendacion.replace('|', '/')} | {f.ref} |" for f in fs]
+        L += [f"| {md(f.id)} | {md(f.ambito)} | **{md(f.titulo)}.** {md(f.detalle)} | {md(f.recomendacion)} | {md(f.ref)} |" for f in fs]
         L.append("")
     L.append("_Preauditoría automática: prepara la auditoría formal del art. 31 RD 311/2022, no la sustituye._")
     return "\n".join(L)
@@ -480,8 +492,9 @@ def print_console(res: Result, stream=sys.stdout):
     print(f"Categoría recalculada: {res.categoria} ({' '.join(f'{d}={res.niveles.get(d) or chr(8212)}' for d in DIMS)}) · "
           f"medidas {res.medidas} · exigidas {res.aplicables}" + (f" · implantación {res.grado * 100:.1f} %" if res.grado is not None else ""), file=stream)
     for f in res.hallazgos:
-        print(f"  {col(f.sev.ljust(11), colors[f.sev])} {f.id:<7} {f.ambito:<18} {f.titulo}", file=stream)
-        print(f"  {'':11} {'':7} {'':18} {f.detalle}", file=stream)
+        clean = lambda v: _CTRL.sub("", str(v))
+        print(f"  {col(f.sev.ljust(11), colors[f.sev])} {clean(f.id):<7} {clean(f.ambito):<18} {clean(f.titulo)}", file=stream)
+        print(f"  {'':11} {'':7} {'':18} {clean(f.detalle)}", file=stream)
     print(col(f"\n{res.count(MAYOR)} NC mayores · {res.count(MENOR)} NC menores · {res.count(OBS)} observaciones", "1"), file=stream)
 
 

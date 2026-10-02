@@ -42,22 +42,34 @@ const riesgosCsv = () => toCsv([['ID', 'Activo', 'Tipo', 'Amenaza', 'Nombre', 'O
   ...calc.riesgos.map((r) => [r.amenaza.id, r.activo.nombre, r.activo.tipo, r.amenaza.codigo, r.amenaza.nombre, r.amenaza.origen === 'hallazgo' ? 'Evidencia técnica' : 'AR', r.amenaza.prob, r.inhMax, r.salvs.map((s) => `${s.codigo} (${s.madurez})`).join(' | '), r.probRes, r.resMax, r.fueraApetito ? 'SÍ' : 'NO', r.ens.join(' '), (r.amenaza.hallazgos || []).join(' '), r.tratamiento?.opcion || '', r.tratamiento?.responsable || '', r.tratamiento?.plazo || ''])]);
 const planCsv = () => toCsv([['Prioridad', 'Acción', 'Detalle', 'Origen', 'Referencia', 'Responsable', 'Fecha límite', 'Estado', 'Nota'], ...plan.map((a) => [a.prioridad, a.titulo, a.detalle, a.origen, a.ref, a.responsable, a.fecha, a.estado, a.nota])]);
 
-function loadXLSX() {
-  if (window.XLSX) return Promise.resolve(window.XLSX);
-  return new Promise((res, rej) => {
-    const s = document.createElement('script'); s.src = XLSX_URL; s.async = true;
-    s.onload = () => (window.XLSX ? res(window.XLSX) : rej(new Error('Librería no disponible')));
-    s.onerror = () => rej(new Error('No se pudo cargar la librería de Excel (¿sin conexión?)'));
+/* Carga una librería de Excel bajo demanda y la retira del objeto global para que las dos no se pisen. */
+const xlsxCache = {};
+// Las librerías declaran «var XLSX»: la propiedad global no se puede borrar, así que se vacía.
+const clearX = () => { try { delete window.XLSX; } catch (e) { /* no configurable */ } if (window.XLSX !== undefined) window.XLSX = undefined; };
+function loadXLSX(uso) {
+  if (xlsxCache[uso]) return xlsxCache[uso];
+  const lib = XLSX_LIBS[uso];
+  const p = new Promise((res, rej) => {
+    const prev = window.XLSX; clearX();
+    const done = () => { const X = window.XLSX; clearX(); if (prev) window.XLSX = prev; X && X.read && X.utils ? res(X) : rej(new Error('La librería de Excel no está disponible.')); };
+    const s = document.createElement('script');
+    const inert = document.getElementById(lib.id);
+    if (inert) { s.textContent = inert.textContent; document.head.appendChild(s); s.remove(); done(); return; }
+    s.src = lib.cdn; s.integrity = lib.sri; s.crossOrigin = 'anonymous'; s.referrerPolicy = 'no-referrer'; s.async = true;
+    s.onload = () => { s.remove(); done(); };
+    s.onerror = () => { s.remove(); if (prev) window.XLSX = prev; rej(new Error('No se pudo cargar la librería de Excel: sin conexión o el fichero no supera la comprobación de integridad.')); };
     document.head.appendChild(s);
   });
+  xlsxCache[uso] = p.catch((e) => { delete xlsxCache[uso]; throw e; });
+  return xlsxCache[uso];
 }
 const SOA_HEADERS = ['Marco / familia', 'Código', 'Medida de seguridad', 'Dimensiones afectadas (Anexo II)', 'Nivel BAJO', 'Nivel MEDIO', 'Nivel ALTO', 'Nivel exigido', 'Regla aplicada', 'Exigencia aplicable (Anexo II)', 'Refuerzos exigidos (Rn)', 'Refuerzos / alternativa elegida', '¿Aplica?', 'Justificación de aplicabilidad / exclusión', 'Medidas ORGANIZATIVAS implantadas', 'Medidas TÉCNICAS implantadas', 'Medida compensatoria (ref.)', 'Estado de implantación', '% implantación', 'Evidencias / documentos', 'Responsable', 'Control ISO/IEC 27001:2022 equivalente (CCN-STIC 825)', 'Guías CCN-STIC / verificación', 'Observaciones / PTR', 'Riesgos del AR vinculados', 'Riesgo residual máx.', 'Hallazgos técnicos abiertos', 'Incidencias del auditor'];
 async function exportXlsx() {
   ui.busyXlsx = true; render();
   try {
-    const X = await loadXLSX();
+    const X = await loadXLSX('escribir');
     const wb = X.utils.book_new();
-    const acc = getComputedStyle(document.documentElement).getPropertyValue('--accent-xl').trim().replace('#', '') || '0E7C7B';
+    const acc = getComputedStyle(document.documentElement).getPropertyValue('--accent-xl').trim().replace('#', '') || '0071E3';
     const C = { head: { font: { bold: true, color: { rgb: 'FFFFFF' }, name: 'Calibri', sz: 10 }, fill: { fgColor: { rgb: acc } }, alignment: { wrapText: true, vertical: 'center' } },
       cell: { font: { name: 'Calibri', sz: 10 }, alignment: { wrapText: true, vertical: 'top' } },
       title: { font: { bold: true, sz: 14, name: 'Calibri', color: { rgb: '0F1B22' } } }, sub: { font: { italic: true, sz: 10, name: 'Calibri', color: { rgb: '5B6B74' } } },
@@ -122,7 +134,7 @@ const normH = (s) => String(s ?? '').normalize('NFKD').replace(/[̀-ͯ]/g, '').t
 async function importXlsx(file) {
   if (!checkSize(file, LIM.fileXlsx, 'El Excel es')) return;
   try {
-    const X = await loadXLSX();
+    const X = await loadXLSX('leer');
     const wb = X.read(await file.arrayBuffer(), { type: 'array', cellFormula: false, cellHTML: false, sheetStubs: false });
     if (wb.SheetNames.length > 40) throw new Error('El libro tiene demasiadas hojas para ser una SoA.');
     const rowsOf = (name) => X.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: null, raw: true }).slice(0, 5000).map((r) => (r || []).slice(0, 60).map((c) => (c === null || typeof c === 'number' ? c : s(c))));
@@ -181,7 +193,8 @@ function parseCsv(text) {
 function importHallazgos(text, name) {
   let items;
   try { items = /\.json$/i.test(name) || /^\s*[[{]/.test(text) ? safeParse(text) : parseCsv(text); } catch (e) { toast('El fichero no es un CSV o JSON válido'); return; }
-  if (!Array.isArray(items)) items = items.hallazgos || [];
+  if (!Array.isArray(items)) items = isObj(items) && Array.isArray(items.hallazgos) ? items.hallazgos : [];
+  items = items.filter(isObj).slice(0, LIM.arr);
   let ok = 0, bad = 0;
   for (const it of items) {
     const cat = String(it.categoria || '').toUpperCase(); const act = state.activos.find((a) => a.id === it.activoId || a.id === it.activo);

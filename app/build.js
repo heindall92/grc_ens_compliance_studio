@@ -137,16 +137,25 @@ const html = src('index.html')
   .replace('/*__STYLES__*/', () => src('styles.css'))
   .replace('/*__DATA__*/', () => DATA_JS)
   .replace('/*__ENGINE__*/', () => src('engine.js'))
-  .replace('/*__APP__*/', () => '(function () {\n\'use strict\';\n' + fs.readdirSync(path.join(ROOT, 'src', 'ui')).filter((f) => f.endsWith('.js')).sort().map((f) => `/* ===== ${f} ===== */\n` + src('ui/' + f)).join('\n') + '\n})();');
+  .replace('/*__APP__*/', () => '(function () {\n\'use strict\';\ntry { Object.freeze(Object.prototype); } catch (e) { /* entorno que no lo permite */ }\n' + fs.readdirSync(path.join(ROOT, 'src', 'ui')).filter((f) => f.endsWith('.js')).sort().map((f) => `/* ===== ${f} ===== */\n` + src('ui/' + f)).join('\n') + '\n})();');
 // 1) Página para publicar como web alojada (el esqueleto <html><head> lo añade la plataforma; xlsx-js-style se carga bajo demanda desde jsDelivr)
 fs.mkdirSync(path.join(ROOT, 'dist', 'artifact'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'dist', 'artifact', 'ens-compliance-studio.html'), html.replace('<!--__XLSX__-->', ''));
 // 2) Versión autónoma: un único .html que funciona sin conexión (librería de Excel embebida)
-const xlsx = fs.readFileSync(path.join(ROOT, 'vendor', 'xlsx.bundle.js'), 'utf8').replace(/<\/script/gi, '<\\/script');
-// CSP estricta: sin conexiones salientes (connect-src 'none'), sin plugins ni formularios; solo fuentes de Google y el CDN de la librería de Excel
-const CSP = "default-src 'none'; script-src 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data: blob:; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'";
+// Las librerías de Excel van incrustadas sin ejecutar (type="text/plain"); 06-io.js las activa bajo demanda.
+const lib = (f) => fs.readFileSync(path.join(ROOT, 'vendor', f), 'utf8').replace(/<\/script/gi, '<\\/script');
+const LIBS = [['xlsx-leer', 'sheetjs-0.20.3.full.min.js', 'SheetJS CE 0.20.3 · Apache-2.0 · lectura'], ['xlsx-escribir', 'xlsx.bundle.js', 'xlsx-js-style 1.2.0 · Apache-2.0 · escritura']]
+  .map(([id, f, note]) => ({ id, note, code: lib(f) }));
+// CSP por hashes: solo se ejecutan los <script> y el <style> que salen de este build. Nada de 'unsafe-inline' para
+// código, ninguna conexión saliente, ninguna fuente externa (se usa la del sistema). Los atributos style="" de las
+// plantillas necesitan style-src-attr 'unsafe-inline', que no permite ejecutar código.
+const body = html.replace('<!--__XLSX__-->', () => LIBS.map((l) => `<!-- ${l.note} -->\n<script type="text/plain" id="${l.id}">${l.code}</script>`).join('\n'))
+  .replace('<div class="shell">', '</head>\n<body>\n<div class="shell">');
+const sha = (t) => "'sha256-" + require('crypto').createHash('sha256').update(t, 'utf8').digest('base64') + "'";
+const scriptHashes = [...body.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => sha(m[1])).concat(LIBS.map((l) => sha(l.code)));
+const styleHashes = [...body.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((m) => sha(m[1]));
+const CSP = `default-src 'none'; script-src ${scriptHashes.join(' ')}; style-src ${styleHashes.join(' ')}; style-src-attr 'unsafe-inline'; font-src 'none'; img-src data: blob:; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'`;
 const standalone = '<!doctype html>\n<html lang="es">\n<head>\n<meta charset="utf-8">\n<meta http-equiv="Content-Security-Policy" content="' + CSP + '">\n<meta name="referrer" content="no-referrer">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-  + html.replace('<!--__XLSX__-->', () => '<script>/*! xlsx-js-style 1.2.0 · Apache-2.0 · SheetJS CE */\n' + xlsx + '\n</script>')
-    .replace('<div class="shell">', '</head>\n<body>\n<div class="shell">') + '\n</body>\n</html>\n';
+  + body + '\n</body>\n</html>\n';
 fs.writeFileSync(path.join(ROOT, 'dist', 'ens-compliance-studio.html'), standalone);
 console.log('OK dist/artifact/ens-compliance-studio.html', (html.length / 1024).toFixed(0) + ' KB · dist/ens-compliance-studio.html (autónomo)', (standalone.length / 1024).toFixed(0) + ' KB');

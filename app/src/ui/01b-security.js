@@ -11,6 +11,7 @@ const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 const idOk = (v) => (typeof v === 'string' || typeof v === 'number') && /^[A-Za-z0-9][A-Za-z0-9._-]{0,39}$/.test(String(v)) ? String(v) : null;
 const oneOf = (v, list, def) => (list.includes(v) ? v : def);
 const num = (v, min, max, def = min) => { const n = Number(v); return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : def; };
+const isoTs = (v) => (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}(T[\d:.]+Z?)?$/.test(v) ? v : '');
 const dateOk = (v) => (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : '');
 const arr = (v, max = LIM.arr) => (Array.isArray(v) ? v.slice(0, max) : []);
 function safeEntries(o, max = 500) { return isObj(o) ? Object.keys(o).filter((k) => !BAD_KEYS.has(k)).slice(0, max).map((k) => [k, o[k]]) : []; }
@@ -77,17 +78,17 @@ function sanitizeWs(raw) {
   const pr = isObj(r.profile) ? r.profile : {}; const se = isObj(r.settings) ? r.settings : {}; const cv = isObj(se.cvss) ? se.cvss : {};
   return {
     profile: { nombre: s(pr.nombre, 120), rol: s(pr.rol, 80), organizacion: s(pr.organizacion, 160), email: s(pr.email, 160), color: oneOf(pr.color, COLOR_IDS, 'teal') },
-    settings: { tema: oneOf(se.tema, ['sistema', 'claro', 'oscuro'], 'sistema'), acento: oneOf(se.acento, ['teal', 'blue', 'green', 'amber', 'rose', 'graphite'], 'teal'), densidad: oneOf(se.densidad, ['comoda', 'compacta'], 'comoda'),
+    settings: { tema: oneOf(se.tema, ['sistema', 'claro', 'oscuro'], 'sistema'), acento: oneOf(se.acento, ['blue', 'teal', 'green', 'amber', 'rose', 'graphite'], 'blue'), densidad: oneOf(se.densidad, ['comoda', 'compacta'], 'comoda'),
       idioma: oneOf(se.idioma, ['es', 'en'], 'es'),
       apetito: oneOf(se.apetito, E.NIVELES, 'M'), cvss: { ma: num(cv.ma, 0, 10, 9), a: num(cv.a, 0, 10, 7), m: num(cv.m, 0, 10, 4) }, conHallazgos: se.conHallazgos !== false,
-      madurezMin: oneOf(se.madurezMin, ['L1', 'L2', 'L3'], 'L2'), reglasOff: arr(se.reglasOff, 60).filter((x) => /^[A-Z]{2,3}-\d{2}$/.test(String(x))), asistente: se.asistente === true, mostrarCasos: se.mostrarCasos !== false },
-    projects: arr(r.projects, 300).filter((p) => isObj(p) && PROJ_ID.test(String(p.id))).map((p) => ({ id: p.id, kind: oneOf(p.kind, ['own', 'demo'], 'own'), caseId: CASE_IDS.includes(p.caseId) ? p.caseId : undefined, nombre: s(p.nombre, 200), organizacion: s(p.organizacion, 200), created: s(p.created, 40), updated: s(p.updated, 40), categoria: oneOf(p.categoria, ['ALTA', 'MEDIA', 'BÁSICA'], undefined), grado: p.grado === undefined ? undefined : num(p.grado, 0, 1, 0), ncMayor: Math.round(num(p.ncMayor, 0, 9999, 0)) })),
+      madurezMin: oneOf(se.madurezMin, ['L1', 'L2', 'L3'], 'L2'), reglasOff: arr(se.reglasOff, 60).filter((x) => /^[A-Z]{2,3}-\d{2}$/.test(String(x))), asistente: se.asistente === true, mostrarCasos: se.mostrarCasos !== false, railMin: se.railMin === true },
+    projects: arr(r.projects, 300).filter((p) => isObj(p) && PROJ_ID.test(String(p.id))).map((p) => ({ id: p.id, kind: oneOf(p.kind, ['own', 'demo'], 'own'), caseId: CASE_IDS.includes(p.caseId) ? p.caseId : undefined, nombre: s(p.nombre, 200), organizacion: s(p.organizacion, 200), created: isoTs(p.created), updated: isoTs(p.updated), categoria: oneOf(p.categoria, ['ALTA', 'MEDIA', 'BÁSICA'], undefined), grado: p.grado === undefined ? undefined : num(p.grado, 0, 1, 0), ncMayor: Math.round(num(p.ncMayor, 0, 9999, 0)) })),
     activeId: PROJ_ID.test(String(r.activeId)) ? r.activeId : null, onboarded: r.onboarded === true, profileDone: r.profileDone === true
   };
 }
 const COLOR_IDS = ['teal', 'blue', 'green', 'amber', 'rose', 'slate'];
 /* CSV: una celda que empieza por = + - @ (o tab/CR) se ejecutaría como fórmula al abrirla en una hoja de cálculo */
-const noFormula = (v) => { const x = String(v ?? ''); return /^[=+\-@\t\r]/.test(x) ? "'" + x : x; };
+const noFormula = (v) => { const x = String(v ?? ''); return /^[\s\u00A0\u3000\u200B-\u200D\uFEFF]*[=+\-@\uFF1D\uFF0B\uFF0D\uFF20]|^[\t\r\n]/.test(x) ? "'" + x : x; };
 /* Markdown: se neutraliza HTML incrustado y las barras de tabla */
-const mdSafe = (v) => String(v ?? '').replace(/[<>]/g, (c) => (c === '<' ? '&lt;' : '&gt;')).replace(/\|/g, '/').replace(/\r?\n/g, ' ');
+const mdSafe = (v) => String(v ?? '').replace(/[<>]/g, (c) => (c === '<' ? '&lt;' : '&gt;')).replace(/\|/g, '/').replace(/[\\`*_[\]!]/g, '\\$&').replace(/[\r\n]+/g, ' ');
 function checkSize(f, max, label) { if (f.size > max) { toast(`${label} demasiado grande (máximo ${Math.round(max / 1048576)} MB)`); return false; } return true; }

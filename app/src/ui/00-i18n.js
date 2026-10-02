@@ -24,7 +24,7 @@ const EN = {
   'Busca una medida (op.acc.6), un riesgo, una sección o una acción…': 'Search a measure (op.acc.6), a risk, a section or an action…',
   'Cambiar tema': 'Change theme', 'Abrir menú': 'Open menu', 'Sin resultados.': 'No results.', 'Sin resultados': 'No results',
   'Ir a': 'Go to', 'Acciones': 'Actions', 'Casos de ejemplo': 'Sample cases', 'Medidas': 'Measures', 'Riesgos': 'Risks',
-  'Nuevo proyecto': 'New project', 'Sin proyecto abierto': 'No open project', 'Elige o crea uno': 'Choose or create one',
+  'Nuevo proyecto': 'New project', 'Sin proyecto abierto': 'No open project', 'Las vistas del proyecto se activan al crear o abrir uno.': 'Project views unlock when you create or open a project.', 'Plegar menú lateral': 'Collapse sidebar', 'Desplegar menú lateral': 'Expand sidebar', 'Plegar menú lateral · [': 'Collapse sidebar · [', 'Desplegar menú lateral · [': 'Expand sidebar · [', 'Elige o crea uno': 'Choose or create one',
   'Caso de ejemplo': 'Sample case', 'Mi proyecto': 'My project', 'Mis proyectos': 'My projects',
   'Casos de ejemplo abiertos': 'Open sample cases', 'Importar SoA desde Excel': 'Import SoA from Excel',
   'Todos los proyectos y casos': 'All projects and cases',

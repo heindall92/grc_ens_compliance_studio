@@ -58,7 +58,8 @@ function go(view) {
 function render() {
   const ae = document.activeElement; const active = ae && ae.id;
   let sel = null; try { if (ae && typeof ae.selectionStart === 'number') sel = [ae.selectionStart, ae.selectionEnd]; } catch (e) { sel = null; }
-  $('#side').innerHTML = renderSide();
+  applyRail(); $('#side').innerHTML = renderSide(); $('#side').classList.toggle('menu-open', ui.menu === 'proyectos');
+  moveGlow(null, true);
   $('#top').innerHTML = renderTop();
   const V = { inicio: vInicio, nuevo: vNuevo, perfil: vPerfil, ajustes: vAjustes, ayuda: vAyuda, panel: vPanel, categorizacion: vCat, riesgos: vRiesgos, soa: vSoa, compensatorias: vMC, hallazgos: vHall, plan: vPlan, auditoria: vAudit, exportar: vExport };
   $('#view').innerHTML = (state && isDemo() && PROJECT_VIEWS.includes(ui.view) ? demoBanner() : '') + (V[ui.view] || vInicio)();
@@ -67,13 +68,38 @@ function render() {
   localize();
   if (active) { const el = document.getElementById(active); if (el) { el.focus({ preventScroll: true }); if (sel) { try { el.setSelectionRange(sel[0], sel[1]); } catch (e) { /* n/a */ } } } }
 }
+/* Barra lateral: completa (264 px) o compacta (76 px). Compacta entre 901 y 1240 px o si el usuario la pliega
+ * (botón o tecla «[»); en compacta se despliega por encima del contenido al pasar el ratón, con el teclado o
+ * con el botón (pantallas táctiles). El aspecto lo controla la variable --x en styles.css. */
+const railMedium = () => window.innerWidth > 900 && window.innerWidth <= 1240;
+const railCollapsed = () => (railMedium() ? !ui.railOpen : !!ws.settings.railMin);
+function applyRail() {
+  const r = document.documentElement;
+  if (!railMedium()) ui.railOpen = false;
+  r.toggleAttribute('data-mini', railMedium() || !!ws.settings.railMin);
+  r.toggleAttribute('data-rail-open', railMedium() && !!ui.railOpen);
+}
+function toggleRail() {
+  if (railMedium()) ui.railOpen = !ui.railOpen; else { ws.settings.railMin = !ws.settings.railMin; saveWs(); }
+  render();
+}
+/* Resaltado que se desliza hasta la opción bajo el puntero (o la actual) */
+function moveGlow(el, instant) {
+  const nav = document.querySelector('#side .nav'); if (!nav) return;
+  const g = nav.querySelector('.nav-glow'); if (!g) return;
+  if (!el) el = nav.querySelector('.nav-item[aria-current="page"]'); // al salir vuelve a la opción actual
+  if (!el) { nav.classList.remove('hov'); return; }
+  if (instant) g.style.transition = 'none';
+  g.style.top = el.offsetTop + 'px'; g.style.height = el.offsetHeight + 'px'; nav.classList.add('hov');
+  if (instant) { void g.offsetWidth; g.style.transition = ''; }
+}
 function renderSide() {
   const p = activeMeta();
   const may = auditCount('NC mayor');
   const abiertas = plan.filter((a) => a.estado !== 'Hecha' && !a.verificada).length;
   const item = (id, label, ic, badge = '') => {
     const locked = !state && PROJECT_VIEWS.includes(id);
-    return `<button type="button" class="nav-item${locked ? ' locked' : ''}" data-act="nav" data-view="${id}"${ui.view === id ? ' aria-current="page"' : ''}${locked ? ' data-locked="1" title="Abre o crea un proyecto. El rol no bloquea esta sección."' : ''}>${icon(ic)}<span>${label}</span>${badge}</button>`;
+    return `<button type="button" class="nav-item${locked ? ' locked' : ''}" data-act="nav" data-view="${id}"${ui.view === id ? ' aria-current="page"' : ''}${locked ? ' data-locked="1" aria-describedby="nav-note"' : ''}>${icon(ic)}<span class="lbl">${label}</span>${badge}${locked ? icon('lock', 13, 'lk') : ''}</button>`;
   };
   const proj = state ? `<button type="button" class="proj-switch" data-act="menu" data-menu="proyectos" aria-haspopup="true" aria-expanded="${ui.menu === 'proyectos'}">
       <span class="proj-ic ${p?.kind === 'demo' ? 'demo' : ''}">${icon(p?.kind === 'demo' ? caseIcon(p.caseId) : 'building', 16)}</span>
@@ -81,13 +107,15 @@ function renderSide() {
     : `<button type="button" class="proj-switch empty" data-act="nav" data-view="inicio"><span class="proj-ic">${icon('folder', 16)}</span><span class="proj-txt"><b>Sin proyecto abierto</b><small>Elige o crea uno</small></span></button>`;
   return `
     <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M16 6.5c2.6 2.1 5.4 3 8 3v6.3c0 5.2-3.3 8.4-8 9.7-4.7-1.3-8-4.5-8-9.7V9.5c2.6 0 5.4-.9 8-3Z" fill="none" stroke="var(--accent-ink)" stroke-width="1.8" stroke-linejoin="round"/><path d="m12.4 16 2.5 2.5 4.8-5" fill="none" stroke="var(--accent-ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span><b>ENS Compliance</b><small>Studio</small></span></div>
+      <span class="brand-txt"><b>ENS Compliance</b><small>Studio</small></span></div>
+    <button type="button" class="icon-btn rail-tg" data-act="rail-toggle" aria-expanded="${!railCollapsed()}" aria-label="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'}" data-tip="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'} · [">${icon(railCollapsed() ? 'chevronRight' : 'chevronLeft', 17)}</button>
+    <span class="rail-sp" aria-hidden="true"></span>
     ${proj}
     ${ui.menu === 'proyectos' ? projectMenu() : ''}
-    <nav class="nav" aria-label="Secciones">
+    <nav class="nav" aria-label="Secciones"><span class="nav-glow" aria-hidden="true"></span>
       ${item('inicio', 'Inicio', 'home')}
       <div class="nav-group">Proyecto</div>
-      ${state ? '' : `<div class="nav-note" role="status"><b>Menú en espera</b>Panel, categorización y el resto se activan al crear o abrir un proyecto. El nombre y el rol no los bloquean.</div>`}
+      ${state ? '' : `<div class="nav-note" id="nav-note" role="note"><b>Sin proyecto abierto</b>Las vistas del proyecto se activan al crear o abrir uno.</div>`}
       ${item('panel', 'Panel', 'dashboard')}
       ${item('categorizacion', 'Categorización', 'layers')}
       ${item('riesgos', 'Análisis de riesgos', 'activity')}
@@ -102,7 +130,7 @@ function renderSide() {
     <div class="side-foot">
       ${item('ayuda', 'Ayuda', 'help')}
       ${item('ajustes', 'Ajustes', 'sliders')}
-      <button type="button" class="me" data-act="nav" data-view="perfil"${ui.view === 'perfil' ? ' aria-current="page"' : ''}>${avatar(30)}<span><b>${esc(ws.profile.nombre || 'Tu perfil')}</b><small>${esc(ws.profile.rol || 'Completa tu perfil')}</small></span></button>
+      <button type="button" class="me" data-act="nav" data-view="perfil"${ui.view === 'perfil' ? ' aria-current="page"' : ''}>${avatar(30)}<span class="me-txt"><b>${esc(ws.profile.nombre || 'Tu perfil')}</b><small>${esc(ws.profile.rol || 'Completa tu perfil')}</small></span></button>
     </div>`;
 }
 function projectMenu() {
