@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="130" viewBox="0 0 1280 130" role="img" aria-label="Fin">
+  <style>
+    .w1 { animation: flota 22s linear infinite; } .w2 { animation: flota 15s linear infinite reverse; }
+    .t { animation: sube 1.2s cubic-bezier(.32,.72,0,1) both; }
+    @keyframes flota { from { transform: translateX(0); } to { transform: translateX(-640px); } }
+    @keyframes sube { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .w1, .w2, .t { animation: none; } }
+  </style>
+  <g class="w1"><path d="M0 42 C160 26,160 26,320 42 S480 58,640 42 C800 26,800 26,960 42 S1120 58,1280 42 C1440 26,1440 26,1600 42 S1760 58,1920 42 V400 H0 Z" fill="#0A84FF" fill-opacity="0.35"/></g>
+  <g class="w2"><path d="M0 58 C160 46,160 46,320 58 S480 70,640 58 C800 46,800 46,960 58 S1120 70,1280 58 C1440 46,1440 46,1600 58 S1760 70,1920 58 V400 H0 Z" fill="#0A84FF"/></g>
+</svg>

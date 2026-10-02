@@ -94,30 +94,65 @@ const TILES = [
 fs.mkdirSync(path.join(OUT, 'stack'), { recursive: true });
 for (const [id, svg] of TILES) fs.writeFileSync(path.join(OUT, 'stack', id + '.svg'), svg);
 
-/* ---------- Cabecera: clara y oscura ---------- */
-const hero = (dark) => {
-  const k = dark
-    ? { bg: '#000000', ink: '#F5F5F7', sub: '#A1A1A6', faint: '#98989D', blue: '#2997FF', line: '#1D1D1F' }
-    : { bg: '#F5F5F7', ink: '#1D1D1F', sub: '#6E6E73', faint: '#86868B', blue: '#0066CC', line: '#D2D2D7' };
-  const stats = [['73', 'medidas del Anexo II'], ['27', 'reglas de preauditoría'], ['5', 'casos de ejemplo'], ['0', 'peticiones de red']];
-  const colW = 250; const x0 = 640 - (colW * stats.length) / 2;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" role="img" aria-label="ENS Compliance Studio">
+/* ---------- Cabecera y pie con ola flotante (claro y oscuro) ----------
+   Colores planos del sistema, sin degradados: dos capas de ola del mismo azul, la trasera con opacidad.
+   Las olas se desplazan despacio en bucle; con «reducir movimiento» del sistema se quedan quietas. */
+const wavePath = (w, base, amp, len, up) => {
+  // Onda periódica de longitud «len» desde x=0 hasta x=w; «up»: relleno hacia arriba (cabecera) o hacia abajo (pie)
+  let d = `M0 ${base}`;
+  for (let x = 0; x < w; x += len) d += ` C${x + len * 0.25} ${base - amp},${x + len * 0.25} ${base - amp},${x + len * 0.5} ${base} S${x + len * 0.75} ${base + amp},${x + len} ${base}`;
+  return d + (up ? ` V0 H0 Z` : ` V400 H0 Z`);
+};
+const WAVE_CSS = `<style>
+    .w1 { animation: flota 22s linear infinite; } .w2 { animation: flota 15s linear infinite reverse; }
+    .t { animation: sube 1.2s cubic-bezier(.32,.72,0,1) both; }
+    @keyframes flota { from { transform: translateX(0); } to { transform: translateX(-640px); } }
+    @keyframes sube { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .w1, .w2, .t { animation: none; } }
+  </style>`;
+const header = (dark) => {
+  const blue = dark ? '#0A84FF' : '#007AFF';
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="300" viewBox="0 0 1280 300" role="img" aria-label="ENS Compliance Studio">
   <title>ENS Compliance Studio</title>
-  <rect width="1280" height="520" rx="36" fill="${k.bg}"/>
-  <g transform="translate(592 56)">
-    <rect width="96" height="96" rx="22" fill="${dark ? '#0A84FF' : '#007AFF'}"/>
-    <g transform="translate(18 18) scale(2.5)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${glyph('shieldCheck')}</g>
+  ${WAVE_CSS}
+  <g class="w1"><path d="${wavePath(1920, 268, 16, 640, true)}" fill="${blue}" fill-opacity="0.35"/></g>
+  <g class="w2"><path d="${wavePath(1920, 246, 14, 640, true)}" fill="${blue}"/></g>
+  <g class="t">
+    <g transform="translate(608 34)">
+      <rect width="64" height="64" rx="15" fill="#FFFFFF"/>
+      <g transform="translate(12 12) scale(1.6667)" fill="none" stroke="${blue}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${glyph('shieldCheck')}</g>
+    </g>
+    <text x="640" y="152" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="56" letter-spacing="-1.6" fill="#FFFFFF">ENS Compliance Studio</text>
+    <text x="640" y="194" text-anchor="middle" font-family="${FONT}" font-weight="500" font-size="22" letter-spacing="-0.2" fill="#FFFFFF" fill-opacity="0.9">Categorización · Riesgos MAGERIT · Declaración de Aplicabilidad · Preauditoría</text>
   </g>
-  <text x="640" y="234" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="72" letter-spacing="-2" fill="${k.ink}">ENS Compliance Studio</text>
-  <text x="640" y="286" text-anchor="middle" font-family="${FONT}" font-weight="400" font-size="26" letter-spacing="-0.3" fill="${k.sub}">Categorización, riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría.</text>
-  <text x="640" y="322" text-anchor="middle" font-family="${FONT}" font-weight="400" font-size="26" letter-spacing="-0.3" fill="${k.sub}">Un solo fichero HTML. Sin servidor.</text>
-  <line x1="200" y1="372" x2="1080" y2="372" stroke="${k.line}" stroke-width="1"/>
-  ${stats.map(([n, l], i) => `<text x="${x0 + colW * i + colW / 2}" y="434" text-anchor="middle" font-family="${FONT}" font-weight="600" font-size="44" letter-spacing="-1.2" fill="${k.ink}">${n}</text>
-  <text x="${x0 + colW * i + colW / 2}" y="468" text-anchor="middle" font-family="${FONT}" font-weight="400" font-size="17" fill="${k.faint}">${l}</text>`).join('\n  ')}
+</svg>
+`;
+};
+const footer = (dark) => {
+  const blue = dark ? '#0A84FF' : '#007AFF';
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="130" viewBox="0 0 1280 130" role="img" aria-label="Fin">
+  ${WAVE_CSS}
+  <g class="w1"><path d="${wavePath(1920, 42, 16, 640, false)}" fill="${blue}" fill-opacity="0.35"/></g>
+  <g class="w2"><path d="${wavePath(1920, 58, 12, 640, false)}" fill="${blue}"/></g>
+</svg>
+`;
+};
+/* Cifras bajo la cabecera */
+const stats = (dark) => {
+  const k = dark ? { bg: '#1C1C1E', ink: '#F5F5F7', faint: '#98989D' } : { bg: '#F5F5F7', ink: '#1D1D1F', faint: '#6E6E73' };
+  const items = [['73', 'medidas del Anexo II'], ['27', 'reglas de preauditoría'], ['5', 'casos de ejemplo'], ['0', 'peticiones de red']];
+  const colW = 300; const x0 = 640 - (colW * items.length) / 2;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="150" viewBox="0 0 1280 150" role="img" aria-label="73 medidas del Anexo II, 27 reglas de preauditoría, 5 casos de ejemplo, 0 peticiones de red">
+  <rect width="1280" height="150" rx="28" fill="${k.bg}"/>
+  ${items.map(([n, l], i) => `<text x="${x0 + colW * i + colW / 2}" y="74" text-anchor="middle" font-family="${FONT}" font-weight="600" font-size="48" letter-spacing="-1.4" fill="${k.ink}">${n}</text>
+  <text x="${x0 + colW * i + colW / 2}" y="110" text-anchor="middle" font-family="${FONT}" font-weight="400" font-size="19" fill="${k.faint}">${l}</text>`).join('\n  ')}
 </svg>
 `;
 };
 fs.mkdirSync(path.join(OUT, 'readme'), { recursive: true });
-fs.writeFileSync(path.join(OUT, 'readme', 'hero-light.svg'), hero(false));
-fs.writeFileSync(path.join(OUT, 'readme', 'hero-dark.svg'), hero(true));
-console.log(`OK · ${Object.keys(SECTION).length} iconos de sección · ${TILES.length} mosaicos · cabecera clara y oscura`);
+for (const f of ['hero-light.svg', 'hero-dark.svg']) fs.rmSync(path.join(OUT, 'readme', f), { force: true });
+for (const [name, fn] of [['cabecera', header], ['pie', footer], ['cifras', stats]]) {
+  fs.writeFileSync(path.join(OUT, 'readme', `${name}-light.svg`), fn(false));
+  fs.writeFileSync(path.join(OUT, 'readme', `${name}-dark.svg`), fn(true));
+}
+console.log(`OK · ${Object.keys(SECTION).length} iconos de sección · ${TILES.length} mosaicos · cabecera, cifras y pie en claro y oscuro`);

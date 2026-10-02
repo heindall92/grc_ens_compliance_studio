@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="300" viewBox="0 0 1280 300" role="img" aria-label="ENS Compliance Studio">
+  <title>ENS Compliance Studio</title>
+  <style>
+    .w1 { animation: flota 22s linear infinite; } .w2 { animation: flota 15s linear infinite reverse; }
+    .t { animation: sube 1.2s cubic-bezier(.32,.72,0,1) both; }
+    @keyframes flota { from { transform: translateX(0); } to { transform: translateX(-640px); } }
+    @keyframes sube { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .w1, .w2, .t { animation: none; } }
+  </style>
+  <g class="w1"><path d="M0 268 C160 252,160 252,320 268 S480 284,640 268 C800 252,800 252,960 268 S1120 284,1280 268 C1440 252,1440 252,1600 268 S1760 284,1920 268 V0 H0 Z" fill="#007AFF" fill-opacity="0.35"/></g>
+  <g class="w2"><path d="M0 246 C160 232,160 232,320 246 S480 260,640 246 C800 232,800 232,960 246 S1120 260,1280 246 C1440 232,1440 232,1600 246 S1760 260,1920 246 V0 H0 Z" fill="#007AFF"/></g>
+  <g class="t">
+    <g transform="translate(608 34)">
+      <rect width="64" height="64" rx="15" fill="#FFFFFF"/>
+      <g transform="translate(12 12) scale(1.6667)" fill="none" stroke="#007AFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></g>
+    </g>
+    <text x="640" y="152" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="56" letter-spacing="-1.6" fill="#FFFFFF">ENS Compliance Studio</text>
+    <text x="640" y="194" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable Display', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="500" font-size="22" letter-spacing="-0.2" fill="#FFFFFF" fill-opacity="0.9">Categorización · Riesgos MAGERIT · Declaración de Aplicabilidad · Preauditoría</text>
+  </g>
+</svg>

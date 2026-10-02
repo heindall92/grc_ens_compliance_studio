@@ -7,6 +7,7 @@
 - Sin proyecto abierto, las vistas del proyecto aparecen con candado y una nota que explica cómo activarlas.
 - Estilo según las guías de Apple: fuente del sistema, grises y colores del sistema (contraste aumentado en claro), azul por defecto, sin degradados de fondo, material translúcido solo en la barra superior, la lateral, los menús y la paleta, transiciones sin rebote, respuesta al pulsar, `prefers-reduced-transparency` y `prefers-contrast`.
 - Textos revisados: 62 cambios para quitar eslóganes, tono de chat y afirmaciones que el código no sostenía (privacidad del asistente, firma en el plan de acción). El motor de reglas se llama «preauditoría» para no confundirlo con la auditoría formal del art. 31.
+- Gráficas y barras de progreso con el color de acento en dos intensidades, como las gráficas apiladas de Apple: cambian al cambiar el acento.
 - El aviso inferior ya se oculta (antes quedaba fijo en pantalla).
 - Móvil: plan de acción legible, Ayuda → Reglas sin desplazamiento lateral, cabecera sin solapes y lista de la SoA sin cabecera cortada.
 

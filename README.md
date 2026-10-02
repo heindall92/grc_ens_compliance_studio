@@ -1,8 +1,12 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/hero-dark.svg">
-    <img src="docs/assets/readme/hero-light.svg" alt="ENS Compliance Studio: categorización, riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría del ENS en un solo fichero HTML" width="100%">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/cabecera-dark.svg">
+    <img src="docs/assets/readme/cabecera-light.svg" alt="ENS Compliance Studio: categorización, riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría" width="100%">
   </picture>
+</p>
+
+<p align="center">
+  <b>Categorización, análisis de riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría del ENS en un solo fichero HTML, sin servidor.</b>
 </p>
 
 <p align="center">
@@ -17,6 +21,13 @@
   <img alt="axe-core: 0 infracciones" src="https://img.shields.io/badge/axe--core-0_infracciones-34C759?style=flat"/>
   <img alt="CSP por hashes" src="https://img.shields.io/badge/CSP-por_hashes-FF3B30?style=flat"/>
   <img alt="Interfaz ES/EN" src="https://img.shields.io/badge/interfaz-ES_%2F_EN-5856D6?style=flat"/>
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/cifras-dark.svg">
+    <img src="docs/assets/readme/cifras-light.svg" alt="73 medidas del Anexo II, 27 reglas de preauditoría, 5 casos de ejemplo, 0 peticiones de red" width="100%">
+  </picture>
 </p>
 
 <p align="center">
@@ -355,3 +366,10 @@ Proyecto de fin de máster · Máster en Ciberseguridad & IA (Evolve Academy) ·
 </table>
 
 Errores, reglas discutibles o propuestas: abre una *issue* o escribe a <a href="mailto:yoandyramirezdelgado@gmail.com">yoandyramirezdelgado@gmail.com</a>. Vulnerabilidades: por el proceso de [SECURITY.md](SECURITY.md).
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/pie-dark.svg">
+    <img src="docs/assets/readme/pie-light.svg" alt="" width="100%">
+  </picture>
+</p>

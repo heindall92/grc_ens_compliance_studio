@@ -375,12 +375,12 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .chart { width: 100%; height: auto; display: block; }
 .chart .grid-l { stroke: var(--line); stroke-width: 1; }
 .chart .ax-t { fill: var(--muted); font: 500 10px var(--f-mono); }
-.chart .s-mayor { fill: var(--crit); } .chart .s-menor { fill: var(--warn); }
+.chart .s-mayor { fill: var(--chart-1); } .chart .s-menor { fill: var(--chart-2); }
 .chart .hit { fill: transparent; }
 .chart .bar-g:hover .hit { fill: var(--hover); }
 .legend { display: flex; gap: 16px; align-items: center; font-size: .8rem; color: var(--ink-2); margin-top: 8px; flex-wrap: wrap; }
 .legend .lg { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
-.legend .lg.s-mayor { background: var(--crit); } .legend .lg.s-menor { background: var(--warn); }
+.legend .lg.s-mayor { background: var(--chart-1); } .legend .lg.s-menor { background: var(--chart-2); }
 .mini-stats { display: flex; gap: 18px; font-size: .82rem; color: var(--muted); margin-bottom: 10px; }
 .mini-stats b { color: var(--ink); font-size: 1.05rem; margin-right: 3px; }
 .mini-stats .crit-t b { color: var(--crit); }
@@ -400,8 +400,8 @@ select.lvl.bad { border-color: var(--crit); background-color: var(--crit-soft); 
 .bar-row .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bar-row code { color: var(--muted); }
 .bar { display: block; height: 8px; border-radius: 999px; background: var(--sunken); overflow: hidden; }
-.bar i { display: block; height: 100%; background: var(--ok); border-radius: 999px; }
-.bar i.part { background: var(--warn); }
+.bar i { display: block; height: 100%; background: var(--chart-1); border-radius: 999px; }
+.bar i.part { background: var(--chart-2); }
 .bar-row .pc { font: 500 .8rem var(--f-mono); text-align: right; }
 .pbar { display: grid; grid-template-columns: minmax(40px, 1fr) 34px; gap: 6px; align-items: center; font: 500 .72rem var(--f-mono); color: var(--muted); }
 .pbar.lg { grid-template-columns: 1fr 44px; font-size: .85rem; }
@@ -788,6 +788,12 @@ body { background: var(--bg); }
 /* En el cajón móvil la barra es material pesado y opaco: no se apila sobre el contenido translúcido */
 @media (max-width: 900px) { .side { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; } }
 @media (max-width: 560px) { .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ============ Gráficas: color de acento y su tono claro (oscuro en tema oscuro) ============
+   Como en las gráficas apiladas de Apple: un solo tono del acento elegido, en dos intensidades. */
+:root { --chart-1: var(--accent); --chart-2: color-mix(in oklab, var(--accent) 40%, #ffffff); }
+:root[data-theme="dark"] { --chart-2: color-mix(in oklab, var(--accent) 45%, #1c1c1e); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --chart-2: color-mix(in oklab, var(--accent) 45%, #1c1c1e); } }
 
 </style>
 <a class="skip" href="#view">Ir al contenido</a>
