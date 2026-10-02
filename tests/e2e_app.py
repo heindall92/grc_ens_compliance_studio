@@ -326,7 +326,7 @@ with sync_playwright() as p:
     print("Responsive")
     for w in (390, 768):
         page.set_viewport_size({"width": w, "height": 844})
-        page.click('.top [data-act="drawer"]') if w < 900 else None
+        page.click('#tabbar [data-act="drawer"]') if w < 900 else None
         page.wait_for_timeout(250)
         ok(J("document.querySelector('.side').getBoundingClientRect().left") >= -1, f"{w}px: el menú lateral se abre como cajón")
         page.click('.side [data-view="inicio"]')
@@ -338,7 +338,21 @@ with sync_playwright() as p:
             J(f"window.__ENS_STUDIO__.go('{v}')"); page.wait_for_timeout(30); worst = max(worst, J("document.documentElement.scrollWidth"))
         ok(worst <= w + 1, f"{w}px: ninguna vista desborda horizontalmente (máx. {worst})")
         J("window.__ENS_STUDIO__.go('panel')"); page.screenshot(path=str(OUT / f"07_movil_{w}.png"))
+    print("Barra de pestañas (móvil)")
+    page.set_viewport_size({"width": 390, "height": 844}); J("window.__ENS_STUDIO__.openCase('techserv')"); page.wait_for_timeout(200)
+    tb = J("(() => { const t = document.getElementById('tabbar'); const r = t.getBoundingClientRect(); return { vis: getComputedStyle(t).display !== 'none', n: t.querySelectorAll('button').length, bottom: Math.round(innerHeight - r.bottom), cur: t.querySelector('[aria-current=\"page\"]')?.dataset.view, badge: t.querySelector('.tb-badge')?.textContent }; })()")
+    ok(tb["vis"] and tb["n"] == 5 and tb["bottom"] >= 8, f"390 px: barra de pestañas inferior con 5 botones, flotando sobre el borde ({tb})")
+    ok(tb["cur"] == "panel" and tb["badge"] == str(J("window.__ENS_STUDIO__.audit.filter(f => f.sev === 'NC mayor').length")), "Marca la vista actual y el número de NC mayores")
+    page.click('#tabbar [data-view="soa"]'); page.wait_for_timeout(150)
+    ok(J("window.__ENS_STUDIO__.go && document.querySelector('#tabbar [aria-current=\"page\"]').dataset.view") == "soa", "Una pestaña lleva a su vista")
+    J("window.scrollTo(0, document.documentElement.scrollHeight)"); page.wait_for_timeout(100)
+    ok(J("(() => { const els = [...document.querySelectorAll('#view > *')]; const last = els[els.length - 1].getBoundingClientRect().bottom; return last <= document.getElementById('tabbar').getBoundingClientRect().top + 1; })()"), "El final del contenido queda por encima de la barra")
+    page.click('#tabbar [data-act="drawer"]'); page.wait_for_timeout(300)
+    ok(J("document.querySelector('.side').getBoundingClientRect().left") >= -1, "«Más» abre el menú completo")
+    page.keyboard.press("Escape"); page.wait_for_timeout(100)
+    ok(J("document.activeElement.closest('#tabbar') !== null"), "Esc cierra el menú y devuelve el foco a «Más»")
     page.set_viewport_size({"width": 1440, "height": 900})
+    ok(J("getComputedStyle(document.getElementById('tabbar')).display") == "none", "En escritorio no hay barra de pestañas")
 
     ok(not errors, "Sin errores de JavaScript ni diálogos" + ("" if not errors else f": {errors[:3]}"))
     b.close()

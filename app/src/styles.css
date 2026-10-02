@@ -717,7 +717,7 @@ body { background: var(--bg); }
    contenido al pasar el ratón, con el foco de teclado o con el botón (táctil). Todo se maqueta al ancho
    completo y la barra recorta: los iconos no se mueven y solo cambian anchos, posiciones y opacidades,
    controlados por --x (0 plegada, 1 desplegada). La barra flota separada 12 px de los bordes, como un panel. */
-.rail-tg, .rail-sp, .nav-glow, .nav-item .lk { display: none; }
+.rail-tg, .nav-glow, .nav-item .lk { display: none; }
 @media (min-width: 901px) {
   :root { --rail-full: 280px; --rail-mini: 76px; --rail-w: var(--rail-full); --rail-t: .4s var(--ease); --rail-d: calc(var(--rail-full) - var(--rail-mini)); }
   :root[data-mini] { --rail-w: var(--rail-mini); }
@@ -736,13 +736,18 @@ body { background: var(--bg); }
   :root[data-mini] .side:is(:hover, .kb, .menu-open):not(.hold), :root[data-mini][data-rail-open] .side { box-shadow: var(--glass-inset), var(--sh-3); background: var(--surface); }
   .side > * { flex: none; }
   /* Lo que solo se ve desplegada */
-  .brand-txt, .proj-txt, .proj-switch > .ic, .nav-item .lbl, .nav-item .lk, .me-txt, .nav-group { opacity: var(--x); transition: opacity .2s ease; white-space: nowrap; }
+  .brand-txt, .proj-txt, .proj-switch > .ic, .nav-item .lbl, .nav-item .lk, .me-txt, .nav-group > span { opacity: var(--x); transition: opacity .2s ease; white-space: nowrap; }
   /* Cabecera */
   .brand { padding: 2px 0 2px 11px; width: calc(var(--rail-full) - 24px); }
-  .rail-tg { display: inline-grid; position: absolute; z-index: 1; width: 34px; height: 34px;
-    top: calc(16px + (1 - var(--x)) * 44px); right: calc(12px + (1 - var(--x)) * 9px); transition: top var(--rail-t), right var(--rail-t); }
-  .rail-sp { display: block; height: calc((1 - var(--x)) * 38px); transition: height var(--rail-t); }
-  .proj-switch { width: calc(52px + var(--x) * var(--rail-d)); padding-left: 10px; transition: width var(--rail-t), background .15s; }
+  /* Plegar y desplegar: botón de panel lateral en la barra superior, como en macOS */
+  .top .rail-tg { display: inline-grid; margin-left: -6px; }
+  /* Selector de proyecto: plegado queda solo el icono; la caja aparece al desplegar */
+  .proj-switch { width: calc(52px + var(--x) * var(--rail-d)); padding-left: 10px; transition: width var(--rail-t);
+    position: relative; isolation: isolate; border-color: transparent; background: transparent; }
+  .proj-switch::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; border: 1px solid var(--line);
+    background: var(--surface-2); opacity: var(--x); transition: opacity .2s ease; }
+  .proj-switch:hover { background: transparent; border-color: transparent; }
+  .proj-switch:hover::before { background: var(--hover); border-color: var(--line-2); }
   .side .menu { width: calc(var(--rail-full) - 24px); }
   /* Navegación con resaltado deslizante */
   .nav { position: relative; width: calc(var(--rail-full) - 24px); }
@@ -754,7 +759,7 @@ body { background: var(--bg); }
   .nav .nav-item:hover { background: transparent; }
   .nav .nav-item[aria-current="page"], .nav .nav-item[aria-current="page"]:hover { background: var(--accent-soft); }
   .nav-group { position: relative; }
-  .nav-group::before { content: ""; position: absolute; left: 12px; width: 28px; top: 50%; height: 1px; background: var(--line-2); opacity: calc(1 - var(--x)); }
+  .nav-group::before { content: ""; position: absolute; left: 14px; width: 24px; top: 50%; height: 1px; background: var(--line-2); opacity: calc(1 - var(--x)); transition: opacity .2s ease; }
   .nav-note { width: calc(var(--rail-full) - 32px); opacity: var(--x); max-height: calc(var(--x) * 140px); overflow: hidden;
     transition: opacity .2s, max-height var(--rail-t), padding var(--rail-t), margin var(--rail-t); }
   :root[data-mini] .side:not(:hover):not(.kb):not(.menu-open) .nav-note { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; border-width: 0; }
@@ -762,10 +767,16 @@ body { background: var(--bg); }
   /* El contador viaja de la esquina del icono al extremo derecho */
   /* Todos los contadores con el mismo ancho mínimo y alineados al borde derecho: el borde derecho del contador
      va de la esquina del icono (plegada) a 10 px del final de la opción (desplegada) */
-  .nav-item .count { position: absolute; margin: 0; top: calc(1px + var(--x) * 9px); left: calc(28px + var(--x) * (100% - 38px));
-    transform: translateX(calc(var(--x) * -100%)); min-width: 24px; height: 17px; padding: 0 6px; box-sizing: border-box;
-    display: inline-flex; align-items: center; justify-content: center; font-size: .64rem; line-height: 1; font-variant-numeric: tabular-nums;
-    transition: top var(--rail-t), left var(--rail-t), transform var(--rail-t); box-shadow: 0 0 0 2px var(--surface); }
+  /* Contadores: desplegada, una cápsula alineada a la derecha con el mismo ancho mínimo; plegada, un punto del
+     color de la severidad en la esquina del icono (como las insignias de la barra lateral de macOS) */
+  .nav-item .count { position: absolute; margin: 0; top: 50%; left: calc(100% - 10px); transform: translate(-100%, -50%);
+    min-width: 24px; height: 18px; padding: 0 6px; box-sizing: border-box; pointer-events: none;
+    display: inline-flex; align-items: center; justify-content: center; font-size: .66rem; line-height: 1; font-variant-numeric: tabular-nums;
+    opacity: var(--x); transition: opacity .2s ease; }
+  .nav-item:has(.count)::after { content: ""; position: absolute; left: 32px; top: 7px; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted); box-shadow: 0 0 0 2px var(--glass-strong); opacity: calc(1 - var(--x)); transition: opacity .2s ease; pointer-events: none; }
+  .nav-item:has(.count.warn)::after { background: var(--warn); }
+  .nav-item:has(.count.crit)::after { background: var(--crit); }
   .nav-item .lk { display: block; position: absolute; left: calc(100% - 22px); top: 50%; transform: translate(-50%, -50%); color: var(--muted); opacity: calc(var(--x) * .8); }
   .nav-item[data-locked] .lbl, .nav-item:has(.count) .lbl { padding-right: 34px; }
   /* Pie */
@@ -798,3 +809,27 @@ body { background: var(--bg); }
 :root { --chart-1: var(--accent); --chart-2: color-mix(in oklab, var(--accent) 40%, #ffffff); }
 :root[data-theme="dark"] { --chart-2: color-mix(in oklab, var(--accent) 45%, #1c1c1e); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --chart-2: color-mix(in oklab, var(--accent) 45%, #1c1c1e); } }
+
+/* ============ Barra de pestañas inferior (móvil) ============
+   Como la de iOS: flota sobre el contenido con material translúcido, respeta el área segura inferior y
+   muestra el número de no conformidades mayores en Auditoría. «Más» abre el menú completo en cajón. */
+.tabbar { display: none; }
+@media (max-width: 900px) {
+  .tabbar { display: flex; position: fixed; z-index: 40; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); height: 62px; padding: 6px; gap: 2px;
+    border-radius: 26px; background: var(--glass-strong); backdrop-filter: blur(24px) saturate(1.8); -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    border: 1px solid var(--glass-line); box-shadow: var(--glass-inset), var(--sh-3); }
+  .tabbar button { all: unset; box-sizing: border-box; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    border-radius: 20px; font-size: .66rem; font-weight: 600; letter-spacing: .01em; color: var(--muted); cursor: pointer; position: relative; -webkit-tap-highlight-color: transparent; }
+  .tabbar button span:not(.tb-badge) { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tabbar button[aria-current="page"] { background: var(--accent-soft); color: var(--accent-2); }
+  .tabbar button:active { transform: scale(.95); transition: transform .1s ease-out; }
+  .tabbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .tabbar button.locked { color: var(--muted); }
+  .tabbar .tb-lock { position: absolute; top: 6px; left: calc(50% + 8px); color: var(--muted); }
+  .tabbar .tb-badge { position: absolute; top: 3px; left: calc(50% + 6px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px;
+    background: #d70015; color: #fff; font: 700 .62rem/18px var(--f); text-align: center; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px var(--surface); }
+  .main { padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+  .toast { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .side { z-index: 50; }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .tabbar { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; } }

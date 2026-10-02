@@ -69,7 +69,7 @@ document.addEventListener('keydown', (ev) => {
   }
   if (ev.key === 'Escape') {
     if (ui.menu || ui.drawer || ui.confirm) {
-      const back = ui.menu ? '.proj-switch' : ui.drawer ? '.top [data-act="drawer"]' : null;
+      const back = ui.menu ? '.proj-switch' : ui.drawer ? '#tabbar [data-act="drawer"]' : null;
       ui.menu = null; ui.drawer = false; ui.confirm = null; render();
       const b = back && document.querySelector(back); if (b) b.focus({ preventScroll: true });
     }

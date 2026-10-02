@@ -720,7 +720,7 @@ body { background: var(--bg); }
    contenido al pasar el ratón, con el foco de teclado o con el botón (táctil). Todo se maqueta al ancho
    completo y la barra recorta: los iconos no se mueven y solo cambian anchos, posiciones y opacidades,
    controlados por --x (0 plegada, 1 desplegada). La barra flota separada 12 px de los bordes, como un panel. */
-.rail-tg, .rail-sp, .nav-glow, .nav-item .lk { display: none; }
+.rail-tg, .nav-glow, .nav-item .lk { display: none; }
 @media (min-width: 901px) {
   :root { --rail-full: 280px; --rail-mini: 76px; --rail-w: var(--rail-full); --rail-t: .4s var(--ease); --rail-d: calc(var(--rail-full) - var(--rail-mini)); }
   :root[data-mini] { --rail-w: var(--rail-mini); }
@@ -739,13 +739,18 @@ body { background: var(--bg); }
   :root[data-mini] .side:is(:hover, .kb, .menu-open):not(.hold), :root[data-mini][data-rail-open] .side { box-shadow: var(--glass-inset), var(--sh-3); background: var(--surface); }
   .side > * { flex: none; }
   /* Lo que solo se ve desplegada */
-  .brand-txt, .proj-txt, .proj-switch > .ic, .nav-item .lbl, .nav-item .lk, .me-txt, .nav-group { opacity: var(--x); transition: opacity .2s ease; white-space: nowrap; }
+  .brand-txt, .proj-txt, .proj-switch > .ic, .nav-item .lbl, .nav-item .lk, .me-txt, .nav-group > span { opacity: var(--x); transition: opacity .2s ease; white-space: nowrap; }
   /* Cabecera */
   .brand { padding: 2px 0 2px 11px; width: calc(var(--rail-full) - 24px); }
-  .rail-tg { display: inline-grid; position: absolute; z-index: 1; width: 34px; height: 34px;
-    top: calc(16px + (1 - var(--x)) * 44px); right: calc(12px + (1 - var(--x)) * 9px); transition: top var(--rail-t), right var(--rail-t); }
-  .rail-sp { display: block; height: calc((1 - var(--x)) * 38px); transition: height var(--rail-t); }
-  .proj-switch { width: calc(52px + var(--x) * var(--rail-d)); padding-left: 10px; transition: width var(--rail-t), background .15s; }
+  /* Plegar y desplegar: botón de panel lateral en la barra superior, como en macOS */
+  .top .rail-tg { display: inline-grid; margin-left: -6px; }
+  /* Selector de proyecto: plegado queda solo el icono; la caja aparece al desplegar */
+  .proj-switch { width: calc(52px + var(--x) * var(--rail-d)); padding-left: 10px; transition: width var(--rail-t);
+    position: relative; isolation: isolate; border-color: transparent; background: transparent; }
+  .proj-switch::before { content: ""; position: absolute; inset: -1px; z-index: -1; border-radius: inherit; border: 1px solid var(--line);
+    background: var(--surface-2); opacity: var(--x); transition: opacity .2s ease; }
+  .proj-switch:hover { background: transparent; border-color: transparent; }
+  .proj-switch:hover::before { background: var(--hover); border-color: var(--line-2); }
   .side .menu { width: calc(var(--rail-full) - 24px); }
   /* Navegación con resaltado deslizante */
   .nav { position: relative; width: calc(var(--rail-full) - 24px); }
@@ -757,7 +762,7 @@ body { background: var(--bg); }
   .nav .nav-item:hover { background: transparent; }
   .nav .nav-item[aria-current="page"], .nav .nav-item[aria-current="page"]:hover { background: var(--accent-soft); }
   .nav-group { position: relative; }
-  .nav-group::before { content: ""; position: absolute; left: 12px; width: 28px; top: 50%; height: 1px; background: var(--line-2); opacity: calc(1 - var(--x)); }
+  .nav-group::before { content: ""; position: absolute; left: 14px; width: 24px; top: 50%; height: 1px; background: var(--line-2); opacity: calc(1 - var(--x)); transition: opacity .2s ease; }
   .nav-note { width: calc(var(--rail-full) - 32px); opacity: var(--x); max-height: calc(var(--x) * 140px); overflow: hidden;
     transition: opacity .2s, max-height var(--rail-t), padding var(--rail-t), margin var(--rail-t); }
   :root[data-mini] .side:not(:hover):not(.kb):not(.menu-open) .nav-note { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; border-width: 0; }
@@ -765,10 +770,16 @@ body { background: var(--bg); }
   /* El contador viaja de la esquina del icono al extremo derecho */
   /* Todos los contadores con el mismo ancho mínimo y alineados al borde derecho: el borde derecho del contador
      va de la esquina del icono (plegada) a 10 px del final de la opción (desplegada) */
-  .nav-item .count { position: absolute; margin: 0; top: calc(1px + var(--x) * 9px); left: calc(28px + var(--x) * (100% - 38px));
-    transform: translateX(calc(var(--x) * -100%)); min-width: 24px; height: 17px; padding: 0 6px; box-sizing: border-box;
-    display: inline-flex; align-items: center; justify-content: center; font-size: .64rem; line-height: 1; font-variant-numeric: tabular-nums;
-    transition: top var(--rail-t), left var(--rail-t), transform var(--rail-t); box-shadow: 0 0 0 2px var(--surface); }
+  /* Contadores: desplegada, una cápsula alineada a la derecha con el mismo ancho mínimo; plegada, un punto del
+     color de la severidad en la esquina del icono (como las insignias de la barra lateral de macOS) */
+  .nav-item .count { position: absolute; margin: 0; top: 50%; left: calc(100% - 10px); transform: translate(-100%, -50%);
+    min-width: 24px; height: 18px; padding: 0 6px; box-sizing: border-box; pointer-events: none;
+    display: inline-flex; align-items: center; justify-content: center; font-size: .66rem; line-height: 1; font-variant-numeric: tabular-nums;
+    opacity: var(--x); transition: opacity .2s ease; }
+  .nav-item:has(.count)::after { content: ""; position: absolute; left: 32px; top: 7px; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted); box-shadow: 0 0 0 2px var(--glass-strong); opacity: calc(1 - var(--x)); transition: opacity .2s ease; pointer-events: none; }
+  .nav-item:has(.count.warn)::after { background: var(--warn); }
+  .nav-item:has(.count.crit)::after { background: var(--crit); }
   .nav-item .lk { display: block; position: absolute; left: calc(100% - 22px); top: 50%; transform: translate(-50%, -50%); color: var(--muted); opacity: calc(var(--x) * .8); }
   .nav-item[data-locked] .lbl, .nav-item:has(.count) .lbl { padding-right: 34px; }
   /* Pie */
@@ -802,6 +813,30 @@ body { background: var(--bg); }
 :root[data-theme="dark"] { --chart-2: color-mix(in oklab, var(--accent) 45%, #1c1c1e); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --chart-2: color-mix(in oklab, var(--accent) 45%, #1c1c1e); } }
 
+/* ============ Barra de pestañas inferior (móvil) ============
+   Como la de iOS: flota sobre el contenido con material translúcido, respeta el área segura inferior y
+   muestra el número de no conformidades mayores en Auditoría. «Más» abre el menú completo en cajón. */
+.tabbar { display: none; }
+@media (max-width: 900px) {
+  .tabbar { display: flex; position: fixed; z-index: 40; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); height: 62px; padding: 6px; gap: 2px;
+    border-radius: 26px; background: var(--glass-strong); backdrop-filter: blur(24px) saturate(1.8); -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    border: 1px solid var(--glass-line); box-shadow: var(--glass-inset), var(--sh-3); }
+  .tabbar button { all: unset; box-sizing: border-box; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    border-radius: 20px; font-size: .66rem; font-weight: 600; letter-spacing: .01em; color: var(--muted); cursor: pointer; position: relative; -webkit-tap-highlight-color: transparent; }
+  .tabbar button span:not(.tb-badge) { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tabbar button[aria-current="page"] { background: var(--accent-soft); color: var(--accent-2); }
+  .tabbar button:active { transform: scale(.95); transition: transform .1s ease-out; }
+  .tabbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .tabbar button.locked { color: var(--muted); }
+  .tabbar .tb-lock { position: absolute; top: 6px; left: calc(50% + 8px); color: var(--muted); }
+  .tabbar .tb-badge { position: absolute; top: 3px; left: calc(50% + 6px); min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 999px;
+    background: #d70015; color: #fff; font: 700 .62rem/18px var(--f); text-align: center; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px var(--surface); }
+  .main { padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+  .toast { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .side { z-index: 50; }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .tabbar { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; } }
+
 </style>
 <a class="skip" href="#view">Ir al contenido</a>
 <div class="app">
@@ -812,6 +847,7 @@ body { background: var(--bg); }
     <div id="view" class="view" tabindex="-1"></div>
   </main>
 </div>
+<nav id="tabbar" class="tabbar" aria-label="Secciones"></nav>
 <div id="palette" hidden></div>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <div id="tip" class="tip" role="tooltip" hidden></div>
@@ -1274,7 +1310,7 @@ const EN = {
   'Busca una medida (op.acc.6), un riesgo, una sección o una acción…': 'Search a measure (op.acc.6), a risk, a section or an action…',
   'Cambiar tema': 'Change theme', 'Abrir menú': 'Open menu', 'Sin resultados.': 'No results.', 'Sin resultados': 'No results',
   'Ir a': 'Go to', 'Acciones': 'Actions', 'Casos de ejemplo': 'Sample cases', 'Medidas': 'Measures', 'Riesgos': 'Risks',
-  'Nuevo proyecto': 'New project', 'Sin proyecto abierto': 'No open project', '· Proyecto de fin de máster en Ciberseguridad & IA (Evolve Academy), módulo de Gobierno, Riesgo y Cumplimiento.': "· Master's final project in Cybersecurity & AI (Evolve Academy), Governance, Risk and Compliance module.", 'Normativa de referencia: Real Decreto 311/2022 (BOE-A-2022-7191), MAGERIT v3, guías CCN-STIC 802, 803, 804, 808 y 825, ISO/IEC 27001:2022.': 'Reference standards: Royal Decree 311/2022 (BOE-A-2022-7191), MAGERIT v3, CCN-STIC guides 802, 803, 804, 808 and 825, ISO/IEC 27001:2022.', 'Herramienta de apoyo y preauditoría: no sustituye a PILAR ni a la auditoría formal del art. 31. Los casos de ejemplo son ficticios.': 'A support and pre-audit tool: it does not replace PILAR or the formal audit under art. 31. The sample cases are fictitious.', 'Diseño y desarrollo · Junior Pentester · eJPTv2 · AI Governance (ISO 42001)': 'Design and development · Junior Pentester · eJPTv2 · AI Governance (ISO 42001)', 'Portafolio': 'Portfolio', 'Correo': 'Email', 'Otra herramienta del autor:': 'Another tool by the author:', ', que relaciona el ENS con ISO/IEC 27001, NIS2 e ISO/IEC 42001.': ', which maps the ENS to ISO/IEC 27001, NIS2 and ISO/IEC 42001.', 'Lectura de Excel con SheetJS CE 0.20.3 y exportación con xlsx-js-style 1.2.0, ambas Apache-2.0. Código bajo licencia MIT.': 'Excel reading with SheetJS CE 0.20.3 and export with xlsx-js-style 1.2.0, both Apache-2.0. Code under the MIT licence.', 'Se guardan sin cifrar. Cualquier página del mismo origen puede leerlos: todos los HTML abiertos desde el disco (file://) y todos los proyectos publicados en heindall92.github.io. Con datos reales de una organización, usa el fichero descargado en un equipo y perfil de navegador propios, y borra los datos al terminar.': 'They are stored unencrypted. Any page on the same origin can read them: every HTML file opened from disk (file://) and every project published on heindall92.github.io. With real organisational data, use the downloaded file on your own computer and browser profile, and delete the data when you finish.', 'Ir al contenido': 'Skip to content', 'Las vistas del proyecto se activan al crear o abrir uno.': 'Project views unlock when you create or open a project.', 'Plegar menú lateral': 'Collapse sidebar', 'Desplegar menú lateral': 'Expand sidebar', 'Plegar menú lateral · [': 'Collapse sidebar · [', 'Desplegar menú lateral · [': 'Expand sidebar · [', 'Elige o crea uno': 'Choose or create one',
+  'Nuevo proyecto': 'New project', 'Sin proyecto abierto': 'No open project', 'Más': 'More', 'SoA': 'SoA', '· Proyecto de fin de máster en Ciberseguridad & IA (Evolve Academy), módulo de Gobierno, Riesgo y Cumplimiento.': "· Master's final project in Cybersecurity & AI (Evolve Academy), Governance, Risk and Compliance module.", 'Normativa de referencia: Real Decreto 311/2022 (BOE-A-2022-7191), MAGERIT v3, guías CCN-STIC 802, 803, 804, 808 y 825, ISO/IEC 27001:2022.': 'Reference standards: Royal Decree 311/2022 (BOE-A-2022-7191), MAGERIT v3, CCN-STIC guides 802, 803, 804, 808 and 825, ISO/IEC 27001:2022.', 'Herramienta de apoyo y preauditoría: no sustituye a PILAR ni a la auditoría formal del art. 31. Los casos de ejemplo son ficticios.': 'A support and pre-audit tool: it does not replace PILAR or the formal audit under art. 31. The sample cases are fictitious.', 'Diseño y desarrollo · Junior Pentester · eJPTv2 · AI Governance (ISO 42001)': 'Design and development · Junior Pentester · eJPTv2 · AI Governance (ISO 42001)', 'Portafolio': 'Portfolio', 'Correo': 'Email', 'Otra herramienta del autor:': 'Another tool by the author:', ', que relaciona el ENS con ISO/IEC 27001, NIS2 e ISO/IEC 42001.': ', which maps the ENS to ISO/IEC 27001, NIS2 and ISO/IEC 42001.', 'Lectura de Excel con SheetJS CE 0.20.3 y exportación con xlsx-js-style 1.2.0, ambas Apache-2.0. Código bajo licencia MIT.': 'Excel reading with SheetJS CE 0.20.3 and export with xlsx-js-style 1.2.0, both Apache-2.0. Code under the MIT licence.', 'Se guardan sin cifrar. Cualquier página del mismo origen puede leerlos: todos los HTML abiertos desde el disco (file://) y todos los proyectos publicados en heindall92.github.io. Con datos reales de una organización, usa el fichero descargado en un equipo y perfil de navegador propios, y borra los datos al terminar.': 'They are stored unencrypted. Any page on the same origin can read them: every HTML file opened from disk (file://) and every project published on heindall92.github.io. With real organisational data, use the downloaded file on your own computer and browser profile, and delete the data when you finish.', 'Ir al contenido': 'Skip to content', 'Las vistas del proyecto se activan al crear o abrir uno.': 'Project views unlock when you create or open a project.', 'Plegar menú lateral': 'Collapse sidebar', 'Desplegar menú lateral': 'Expand sidebar', 'Plegar menú lateral · [': 'Collapse sidebar · [', 'Desplegar menú lateral · [': 'Expand sidebar · [', 'Elige o crea uno': 'Choose or create one',
   'Caso de ejemplo': 'Sample case', 'Mi proyecto': 'My project', 'Mis proyectos': 'My projects',
   'Casos de ejemplo abiertos': 'Open sample cases', 'Importar SoA desde Excel': 'Import SoA from Excel',
   'Todos los proyectos y casos': 'All projects and cases',
@@ -1622,7 +1658,7 @@ function translateDom(root) {
 
 function localize() {
   if (lang() !== 'en') return;
-  for (const id of ['side', 'top', 'view', 'palette', 'toast']) {
+  for (const id of ['side', 'top', 'view', 'palette', 'toast', 'tabbar']) {
     const el = document.getElementById(id);
     if (el) translateDom(el);
   }
@@ -1881,6 +1917,7 @@ function checkSize(f, max, label) { if (f.size > max) { toast(`${label} demasiad
 /* ===== 02-icons.js ===== */
 /* ---------- Iconografía (trazo 1.75, 24×24) ---------- */
 const ICONS = {
+  panelLeft: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>',
   home: '<path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2z"/>',
   dashboard: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
   layers: '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m2 12.5 9.17 4.17a2 2 0 0 0 1.66 0L22 12.5"/><path d="m2 17.5 9.17 4.17a2 2 0 0 0 1.66 0L22 17.5"/>',
@@ -2005,6 +2042,7 @@ function render() {
   applyRail(); $('#side').innerHTML = renderSide(); $('#side').classList.toggle('menu-open', ui.menu === 'proyectos');
   moveGlow(null, true);
   $('#top').innerHTML = renderTop();
+  $('#tabbar').innerHTML = renderTabbar();
   const V = { inicio: vInicio, nuevo: vNuevo, perfil: vPerfil, ajustes: vAjustes, ayuda: vAyuda, panel: vPanel, categorizacion: vCat, riesgos: vRiesgos, soa: vSoa, compensatorias: vMC, hallazgos: vHall, plan: vPlan, auditoria: vAudit, exportar: vExport };
   $('#view').innerHTML = (state && isDemo() && PROJECT_VIEWS.includes(ui.view) ? demoBanner() : '') + (V[ui.view] || vInicio)();
   document.body.classList.toggle('drawer-open', ui.drawer);
@@ -2050,6 +2088,17 @@ function moveGlow(el, instant) {
   g.style.top = el.offsetTop + 'px'; g.style.height = el.offsetHeight + 'px'; nav.classList.add('hov');
   if (instant) { void g.offsetWidth; g.style.transition = ''; }
 }
+/* Barra de pestañas inferior (móvil, ≤ 900 px), como la de iOS; «Más» abre el menú completo */
+function renderTabbar() {
+  const may = state ? auditCount('NC mayor') : 0;
+  const it = (v, label, ic, badge = '') => {
+    const locked = !state && PROJECT_VIEWS.includes(v);
+    return `<button type="button" data-act="nav" data-view="${v}"${ui.view === v ? ' aria-current="page"' : ''}${locked ? ' class="locked" aria-describedby="nav-note"' : ''}>${icon(ic, 21)}<span>${label}</span>${badge}${locked ? icon('lock', 11, 'tb-lock') : ''}</button>`;
+  };
+  const main = ['inicio', 'panel', 'soa', 'auditoria'];
+  return `${it('inicio', 'Inicio', 'home')}${it('panel', 'Panel', 'dashboard')}${it('soa', 'SoA', 'fileCheck')}${it('auditoria', 'Auditoría', 'shieldCheck', may ? `<span class="tb-badge">${may}</span>` : '')}
+    <button type="button" data-act="drawer"${ui.drawer || !main.includes(ui.view) ? ' aria-current="page"' : ''} aria-expanded="${ui.drawer}">${icon('menu', 21)}<span>Más</span></button>`;
+}
 function renderSide() {
   const p = activeMeta();
   const may = auditCount('NC mayor');
@@ -2065,20 +2114,18 @@ function renderSide() {
   return `
     <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M16 6.5c2.6 2.1 5.4 3 8 3v6.3c0 5.2-3.3 8.4-8 9.7-4.7-1.3-8-4.5-8-9.7V9.5c2.6 0 5.4-.9 8-3Z" fill="none" stroke="var(--accent-ink)" stroke-width="1.8" stroke-linejoin="round"/><path d="m12.4 16 2.5 2.5 4.8-5" fill="none" stroke="var(--accent-ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       <span class="brand-txt"><b>ENS Compliance</b><small>Studio</small></span></div>
-    <button type="button" class="icon-btn rail-tg" data-act="rail-toggle" aria-expanded="${!railCollapsed()}" aria-label="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'}" data-tip="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'} · [">${icon(railCollapsed() ? 'chevronRight' : 'chevronLeft', 17)}</button>
-    <span class="rail-sp" aria-hidden="true"></span>
     ${proj}
     ${ui.menu === 'proyectos' ? projectMenu() : ''}
     <nav class="nav" aria-label="Secciones"><span class="nav-glow" aria-hidden="true"></span>
       ${item('inicio', 'Inicio', 'home')}
-      <div class="nav-group">Proyecto</div>
+      <div class="nav-group"><span>Proyecto</span></div>
       ${state ? '' : `<div class="nav-note" id="nav-note" role="note"><b>Sin proyecto abierto</b>Las vistas del proyecto se activan al crear o abrir uno.</div>`}
       ${item('panel', 'Panel', 'dashboard')}
       ${item('categorizacion', 'Categorización', 'layers')}
       ${item('riesgos', 'Análisis de riesgos', 'activity')}
       ${item('soa', 'Declaración de Aplicabilidad', 'fileCheck')}
       ${item('compensatorias', 'Compensatorias', 'scale')}
-      <div class="nav-group">Seguimiento</div>
+      <div class="nav-group"><span>Seguimiento</span></div>
       ${item('hallazgos', 'Evidencia técnica', 'target', state && calc.kpi.hallazgosAbiertos ? `<span class="count warn">${calc.kpi.hallazgosAbiertos}</span>` : '')}
       ${item('plan', 'Plan de acción', 'listChecks', state && abiertas ? `<span class="count">${abiertas}</span>` : '')}
       ${item('auditoria', 'Auditoría', 'shieldCheck', state && may ? `<span class="count crit">${may}</span>` : '')}
@@ -2107,7 +2154,7 @@ function renderTop() {
   const inProj = state && PROJECT_VIEWS.includes(ui.view);
   const temaIc = ws.settings.tema === 'oscuro' ? 'moon' : ws.settings.tema === 'claro' ? 'sun' : 'monitor';
   return `
-    <button type="button" class="icon-btn only-mobile" data-act="drawer" aria-label="Abrir menú">${icon('menu', 20)}</button>
+    <button type="button" class="icon-btn rail-tg" data-act="rail-toggle" aria-expanded="${!railCollapsed()}" aria-controls="side" aria-label="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'}" data-tip="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'} · [">${icon('panelLeft', 18)}</button>
     <div class="crumbs">${inProj ? `<span class="crumb-proj">${esc(state.proyecto?.nombre || '')}</span>${icon('chevronRight', 14, 'muted')}` : ''}<span class="crumb-cur">${TITLES[ui.view] || ''}</span>${inProj ? catPill(calc.categoria) : ''}</div>
     <button type="button" class="search-btn" data-act="palette" aria-label="Buscar y ejecutar comandos">${icon('search', 16)}<span>Buscar medida, riesgo o acción…</span><kbd>Ctrl K</kbd></button>
     <div class="lang-switch" role="group" aria-label="Idioma"><button type="button" data-act="set" data-k="idioma" data-v="es" aria-pressed="${ws.settings.idioma !== 'en'}" title="Español">ES</button><button type="button" data-act="set" data-k="idioma" data-v="en" aria-pressed="${ws.settings.idioma === 'en'}" title="English">EN</button></div>
@@ -3173,7 +3220,7 @@ document.addEventListener('keydown', (ev) => {
   }
   if (ev.key === 'Escape') {
     if (ui.menu || ui.drawer || ui.confirm) {
-      const back = ui.menu ? '.proj-switch' : ui.drawer ? '.top [data-act="drawer"]' : null;
+      const back = ui.menu ? '.proj-switch' : ui.drawer ? '#tabbar [data-act="drawer"]' : null;
       ui.menu = null; ui.drawer = false; ui.confirm = null; render();
       const b = back && document.querySelector(back); if (b) b.focus({ preventScroll: true });
     }

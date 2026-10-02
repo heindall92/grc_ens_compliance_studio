@@ -67,6 +67,7 @@ function render() {
   applyRail(); $('#side').innerHTML = renderSide(); $('#side').classList.toggle('menu-open', ui.menu === 'proyectos');
   moveGlow(null, true);
   $('#top').innerHTML = renderTop();
+  $('#tabbar').innerHTML = renderTabbar();
   const V = { inicio: vInicio, nuevo: vNuevo, perfil: vPerfil, ajustes: vAjustes, ayuda: vAyuda, panel: vPanel, categorizacion: vCat, riesgos: vRiesgos, soa: vSoa, compensatorias: vMC, hallazgos: vHall, plan: vPlan, auditoria: vAudit, exportar: vExport };
   $('#view').innerHTML = (state && isDemo() && PROJECT_VIEWS.includes(ui.view) ? demoBanner() : '') + (V[ui.view] || vInicio)();
   document.body.classList.toggle('drawer-open', ui.drawer);
@@ -112,6 +113,17 @@ function moveGlow(el, instant) {
   g.style.top = el.offsetTop + 'px'; g.style.height = el.offsetHeight + 'px'; nav.classList.add('hov');
   if (instant) { void g.offsetWidth; g.style.transition = ''; }
 }
+/* Barra de pestañas inferior (móvil, ≤ 900 px), como la de iOS; «Más» abre el menú completo */
+function renderTabbar() {
+  const may = state ? auditCount('NC mayor') : 0;
+  const it = (v, label, ic, badge = '') => {
+    const locked = !state && PROJECT_VIEWS.includes(v);
+    return `<button type="button" data-act="nav" data-view="${v}"${ui.view === v ? ' aria-current="page"' : ''}${locked ? ' class="locked" aria-describedby="nav-note"' : ''}>${icon(ic, 21)}<span>${label}</span>${badge}${locked ? icon('lock', 11, 'tb-lock') : ''}</button>`;
+  };
+  const main = ['inicio', 'panel', 'soa', 'auditoria'];
+  return `${it('inicio', 'Inicio', 'home')}${it('panel', 'Panel', 'dashboard')}${it('soa', 'SoA', 'fileCheck')}${it('auditoria', 'Auditoría', 'shieldCheck', may ? `<span class="tb-badge">${may}</span>` : '')}
+    <button type="button" data-act="drawer"${ui.drawer || !main.includes(ui.view) ? ' aria-current="page"' : ''} aria-expanded="${ui.drawer}">${icon('menu', 21)}<span>Más</span></button>`;
+}
 function renderSide() {
   const p = activeMeta();
   const may = auditCount('NC mayor');
@@ -127,20 +139,18 @@ function renderSide() {
   return `
     <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M16 6.5c2.6 2.1 5.4 3 8 3v6.3c0 5.2-3.3 8.4-8 9.7-4.7-1.3-8-4.5-8-9.7V9.5c2.6 0 5.4-.9 8-3Z" fill="none" stroke="var(--accent-ink)" stroke-width="1.8" stroke-linejoin="round"/><path d="m12.4 16 2.5 2.5 4.8-5" fill="none" stroke="var(--accent-ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       <span class="brand-txt"><b>ENS Compliance</b><small>Studio</small></span></div>
-    <button type="button" class="icon-btn rail-tg" data-act="rail-toggle" aria-expanded="${!railCollapsed()}" aria-label="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'}" data-tip="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'} · [">${icon(railCollapsed() ? 'chevronRight' : 'chevronLeft', 17)}</button>
-    <span class="rail-sp" aria-hidden="true"></span>
     ${proj}
     ${ui.menu === 'proyectos' ? projectMenu() : ''}
     <nav class="nav" aria-label="Secciones"><span class="nav-glow" aria-hidden="true"></span>
       ${item('inicio', 'Inicio', 'home')}
-      <div class="nav-group">Proyecto</div>
+      <div class="nav-group"><span>Proyecto</span></div>
       ${state ? '' : `<div class="nav-note" id="nav-note" role="note"><b>Sin proyecto abierto</b>Las vistas del proyecto se activan al crear o abrir uno.</div>`}
       ${item('panel', 'Panel', 'dashboard')}
       ${item('categorizacion', 'Categorización', 'layers')}
       ${item('riesgos', 'Análisis de riesgos', 'activity')}
       ${item('soa', 'Declaración de Aplicabilidad', 'fileCheck')}
       ${item('compensatorias', 'Compensatorias', 'scale')}
-      <div class="nav-group">Seguimiento</div>
+      <div class="nav-group"><span>Seguimiento</span></div>
       ${item('hallazgos', 'Evidencia técnica', 'target', state && calc.kpi.hallazgosAbiertos ? `<span class="count warn">${calc.kpi.hallazgosAbiertos}</span>` : '')}
       ${item('plan', 'Plan de acción', 'listChecks', state && abiertas ? `<span class="count">${abiertas}</span>` : '')}
       ${item('auditoria', 'Auditoría', 'shieldCheck', state && may ? `<span class="count crit">${may}</span>` : '')}
@@ -169,7 +179,7 @@ function renderTop() {
   const inProj = state && PROJECT_VIEWS.includes(ui.view);
   const temaIc = ws.settings.tema === 'oscuro' ? 'moon' : ws.settings.tema === 'claro' ? 'sun' : 'monitor';
   return `
-    <button type="button" class="icon-btn only-mobile" data-act="drawer" aria-label="Abrir menú">${icon('menu', 20)}</button>
+    <button type="button" class="icon-btn rail-tg" data-act="rail-toggle" aria-expanded="${!railCollapsed()}" aria-controls="side" aria-label="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'}" data-tip="${railCollapsed() ? 'Desplegar menú lateral' : 'Plegar menú lateral'} · [">${icon('panelLeft', 18)}</button>
     <div class="crumbs">${inProj ? `<span class="crumb-proj">${esc(state.proyecto?.nombre || '')}</span>${icon('chevronRight', 14, 'muted')}` : ''}<span class="crumb-cur">${TITLES[ui.view] || ''}</span>${inProj ? catPill(calc.categoria) : ''}</div>
     <button type="button" class="search-btn" data-act="palette" aria-label="Buscar y ejecutar comandos">${icon('search', 16)}<span>Buscar medida, riesgo o acción…</span><kbd>Ctrl K</kbd></button>
     <div class="lang-switch" role="group" aria-label="Idioma"><button type="button" data-act="set" data-k="idioma" data-v="es" aria-pressed="${ws.settings.idioma !== 'en'}" title="Español">ES</button><button type="button" data-act="set" data-k="idioma" data-v="en" aria-pressed="${ws.settings.idioma === 'en'}" title="English">EN</button></div>

@@ -85,6 +85,6 @@ with sync_playwright() as pw:
     ctx, p = page_for(b, 390, 844, "light", scale=2)
     go(p, "panel", "techserv"); shot(p, "movil-panel")
     go(p, "soa"); shot(p, "movil-soa")
-    p.click('.top [data-act="drawer"]'); p.wait_for_timeout(400); shot(p, "movil-menu")
+    p.click('#tabbar [data-act="drawer"]'); p.wait_for_timeout(400); shot(p, "movil-menu")
     ctx.close()
     b.close()
