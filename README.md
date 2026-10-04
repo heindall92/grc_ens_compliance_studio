@@ -346,7 +346,7 @@ grc_ens_compliance_studio/
 
 SheetJS CE y `xlsx-js-style` bajo Apache-2.0. Inter (solo para las capturas del README) bajo SIL OFL 1.1. Iconos: [Lucide](https://lucide.dev) (ISC). Texto normativo: RD 311/2022 (BOE-A-2022-7191). Los casos de ejemplo son ficticios.
 
-Proyecto de fin de máster · Máster en Ciberseguridad & IA (Evolve Academy) · Módulo de Gobierno, Riesgo y Cumplimiento. Forma parte de un conjunto de herramientas de normativa junto con [Rosetta](https://github.com/heindall92/rosetta_multinorma), que relaciona el ENS con ISO/IEC 27001, NIS2 e ISO/IEC 42001.
+Proyecto de fin de máster · Máster en Ciberseguridad & IA (Evolve Academy) · Módulo de Gobierno, Riesgo y Cumplimiento. Forma parte de un conjunto de herramientas GRC del mismo autor: [Rosetta](https://github.com/heindall92/rosetta_multinorma), que relaciona el ENS con ISO/IEC 27001, NIS2 e ISO/IEC 42001, y [KAIROS](https://github.com/heindall92/kairos), para la continuidad de negocio (BIA, BCP y DRP).
 
 ## <img src="docs/assets/icons/user-round.svg" width="20" height="20" valign="middle"/> Autor
 

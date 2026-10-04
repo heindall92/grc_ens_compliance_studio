@@ -219,6 +219,17 @@ const FAQ = [
   ['¿Las correspondencias amenaza → medida son oficiales?', 'Son criterio del autor, razonado a partir de MAGERIT v3 y de la guía CCN-STIC 804. Para un sistema real, revísalas con tu analista.'],
   ['¿Qué ocurre al cambiar la categorización?', 'Se recalculan el nivel exigido, la exigencia y los refuerzos de las 73 medidas. Las reglas SOA-01, SOA-02 y REF-01 a REF-03 señalan las declaraciones que ya no corresponden al nuevo nivel.']
 ];
+const SUITE = [
+  ['rosetta', 'Rosetta', 'Mapa multinorma: ENS, ISO/IEC 27001, NIS2 e ISO/IEC 42001 en 115 controles unificados, con equivalencias ENS ↔ ISO alineadas con la CCN-STIC 825.', 'https://heindall92.github.io/rosetta_multinorma/', 'https://github.com/heindall92/rosetta_multinorma'],
+  ['ens', 'ENS Compliance Studio', 'Categorización del sistema, análisis de riesgos MAGERIT, Declaración de Aplicabilidad y preauditoría del ENS.', 'https://heindall92.github.io/grc_ens_compliance_studio/app/dist/ens-compliance-studio.html', 'https://github.com/heindall92/grc_ens_compliance_studio'],
+  ['kairos', 'KAIROS', 'Continuidad de negocio: BIA, BCP y DRP con la ruta crítica de recuperación de cada función.', 'https://heindall92.github.io/kairos/', 'https://github.com/heindall92/kairos']
+];
+function suiteGrc() {
+  const ext = (h, l, ic) => `<a class="btn sm" href="${h}" target="_blank" rel="noopener noreferrer">${icon(ic, 14)}${l}</a>`;
+  return `<section class="suite" aria-labelledby="suite-h"><h3 id="suite-h">Herramientas GRC del autor</h3><p class="muted small">Se complementan: la SoA de ENS Compliance Studio se importa en Rosetta, y KAIROS cubre op.cont, la continuidad que las otras dos solo enumeran.</p>
+    <div class="suite-grid">${SUITE.map(([id, n, d, app, repo]) => `<article class="suite-card${id === 'ens' ? ' here' : ''}"><div class="suite-hd"><b>${n}</b>${id === 'ens' ? '<span class="badge accent">Estás aquí</span>' : ''}</div><p>${d}</p>
+      <div class="row">${id === 'ens' ? ext(repo, 'Código', 'external') : ext(app, 'Abrir la app', 'arrowRight') + ext(repo, 'Código', 'external')}</div></article>`).join('')}</div></section>`;
+}
 function vAyuda() {
   const tabs = [['inicio', 'Primeros pasos', 'flag'], ['flujo', 'Cómo funciona', 'layers'], ['glosario', 'Glosario', 'book'], ['reglas', 'Reglas de preauditoría', 'shieldCheck'], ['atajos', 'Atajos de teclado', 'keyboard'], ['faq', 'Preguntas frecuentes', 'help'], ['acerca', 'Acerca de', 'info']];
   let body = '';
@@ -252,7 +263,7 @@ function vAyuda() {
     body = `<div class="about"><p><b>ENS Compliance Studio ${VERSION}</b> · Proyecto de fin de máster en Ciberseguridad &amp; IA (Evolve Academy), módulo de Gobierno, Riesgo y Cumplimiento.</p>
       <div class="about-card"><span class="avatar c-blue" style="--s:52px">YR</span><div><b>Yoandy Ramírez Delgado</b><small>Diseño y desarrollo · Junior Pentester · eJPTv2 · AI Governance (ISO 42001)</small></div></div>
       <div class="about-links">${[['https://www.linkedin.com/in/yoandyrd92/', 'LinkedIn'], ['https://github.com/heindall92', 'GitHub'], ['https://yoandyramirez.com', 'Portafolio'], ['https://profile.hackthebox.com/profile/019c5812-b4ca-7315-b12f-14db6d2b42fa', 'HackTheBox'], ['mailto:yoandyramirezdelgado@gmail.com', 'Correo']].map(([h, l]) => `<a class="btn sm" href="${h}" target="_blank" rel="noopener noreferrer">${icon('external', 14)}${l}</a>`).join('')}</div>
-      <p>Otra herramienta del autor: <a href="https://github.com/heindall92/rosetta_multinorma" target="_blank" rel="noopener noreferrer">Rosetta</a>, que relaciona el ENS con ISO/IEC 27001, NIS2 e ISO/IEC 42001.</p>
+      ${suiteGrc()}
       <p>Normativa de referencia: Real Decreto 311/2022 (BOE-A-2022-7191), MAGERIT v3, guías CCN-STIC 802, 803, 804, 808 y 825, ISO/IEC 27001:2022.</p>
       <p>Herramienta de apoyo y preauditoría: no sustituye a PILAR ni a la auditoría formal del art. 31. Los casos de ejemplo son ficticios.</p>
       <p class="muted small">Lectura de Excel con SheetJS CE 0.20.3 y exportación con xlsx-js-style 1.2.0, ambas Apache-2.0. Código bajo licencia MIT.</p></div>`;

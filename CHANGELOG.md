@@ -3,6 +3,7 @@
 ## 2.1.0 · octubre de 2026
 
 **Interfaz**
+- Ayuda → Acerca de: tarjetas con las herramientas GRC del autor (Rosetta y KAIROS) para abrir cada app o ver su código; ENS Compliance Studio figura como «Estás aquí». Dos comprobaciones e2e nuevas cubren las tarjetas y sus enlaces.
 - Barra lateral con dos anchos: completa (280 px) y compacta (76 px). Compacta automática entre 901 y 1240 px o al plegarla con el botón o con «[»; en compacta se despliega por encima del contenido con el ratón o el teclado, sin mover los iconos. El resaltado sigue al puntero.
 - La barra flota separada 12 px de los bordes, con esquinas redondeadas. Al plegarla con el botón se pliega en el acto aunque el ratón siga encima. Los contadores tienen el mismo ancho mínimo y van alineados al borde derecho.
 - El botón de plegar pasa a la barra superior (icono de panel lateral, como en macOS). Plegada, la barra muestra solo iconos: el selector de proyecto sin caja y los contadores como un punto del color de la severidad.
