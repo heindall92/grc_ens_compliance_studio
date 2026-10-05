@@ -620,7 +620,7 @@ pre.code { max-width: 100%; font: .78rem/1.55 var(--f-mono); background: var(--s
 .suite { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 18px; }
 .suite h3 { font-size: 1rem; letter-spacing: -.01em; }
 .suite .small { margin-bottom: 0; }
-.suite-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 4px; }
+.suite-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 4px; }
 .suite-card { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border-radius: var(--r-lg); background: var(--surface-2); border: 1px solid var(--line); }
 .suite-card.here { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .suite-hd { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 8px; }

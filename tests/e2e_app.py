@@ -188,9 +188,9 @@ with sync_playwright() as p:
     for t in ["inicio", "flujo", "glosario", "reglas", "atajos", "faq", "acerca"]:
         page.click(f'[data-act="help-tab"][data-tab="{t}"]')
     ok(page.locator(".about").count() == 1, "Todas las pestañas de ayuda")
-    ok(page.locator(".suite-card").count() == 3 and "ENS Compliance Studio" in page.locator(".suite-card.here").inner_text() and page.locator(".suite-card.here a").count() == 1, "Acerca de: tres herramientas GRC, ENS Compliance Studio marcada «Estás aquí» y solo con enlace a su código")
+    ok(page.locator(".suite-card").count() == 4 and "ENS Compliance Studio" in page.locator(".suite-card.here").inner_text() and page.locator(".suite-card.here a").count() == 1, "Acerca de: cuatro herramientas GRC, ENS Compliance Studio marcada «Estás aquí» y solo con enlace a su código")
     suite = J("[...document.querySelectorAll('.suite a')].map(a => [a.href, a.target, a.rel])")
-    hosts = ["heindall92.github.io/rosetta_multinorma", "github.com/heindall92/rosetta_multinorma", "heindall92.github.io/kairos", "github.com/heindall92/kairos", "github.com/heindall92/grc_ens_compliance_studio"]
+    hosts = ["heindall92.github.io/argos-grc", "github.com/heindall92/argos-grc", "heindall92.github.io/rosetta_multinorma", "github.com/heindall92/rosetta_multinorma", "heindall92.github.io/kairos", "github.com/heindall92/kairos", "github.com/heindall92/grc_ens_compliance_studio"]
     ok(all(any(h in u for u, _, _ in suite) for h in hosts) and all(t == "_blank" and "noopener" in r for _, t, r in suite), "Enlaces a las apps y repositorios, en pestaña nueva con noopener")
     page.keyboard.press("Control+k"); page.keyboard.type("op.acc.6"); page.keyboard.press("Enter"); page.wait_for_timeout(300)
     ok(J("window.__ENS_STUDIO__.state && document.querySelector('#soa-op\\\\.acc\\\\.6.open') !== null"), "Ctrl+K → op.acc.6 abre la medida en la SoA")
