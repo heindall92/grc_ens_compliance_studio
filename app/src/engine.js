@@ -413,7 +413,23 @@
     return { grado: calc.kpi.grado, ncMayor: audit.filter((f) => f.sev === SEV.MAYOR).length, ncMenor: audit.filter((f) => f.sev === SEV.MENOR).length, fuera: calc.kpi.fueraApetito };
   }
 
-  return { CVSS_DEF, esPendiente, planAccion, instantanea, DIMS, DIM_LABEL, ENS_LEVELS, NIVELES, NN, NIVEL_LABEL, MATRIZ, MADUREZ, SEV, FAMILIAS,
+  /* ---------- 5. Ecosistema: sobre «yrd-ecosistema» ---------- */
+  /** SoA como sobre «soa»: categoría, niveles por dimensión y, por medida, si aplica, el estado y la implantación.
+   *  Lo leen CTEM-Nexus (plazos según la categoría y activos para la evidencia técnica) y Rosetta. */
+  function aSobreSoa(state, calc, version, ahora) {
+    const p = state.proyecto || {};
+    const datos = calc.filas.map((f) => ({
+      medida: f.codigo, nombre: f.nombre, familia: f.familia, nivel: f.nivel, aplica: !!f.aplicaNorma,
+      estado: f.decl ? String(f.decl.estado || '') : '', implantacion: f.decl ? Math.max(0, Math.min(1, pctDe(f.decl))) : 0,
+      responsable: f.decl ? String(f.decl.responsable || '') : '', riesgos: f.riesgos.length, hallazgosAbiertos: f.hallazgos.length
+    }));
+    return { format: 'yrd-ecosistema', version: 1, origen: { herramienta: 'compliance-studio', version: String(version || ''), generado: (ahora || new Date()).toISOString().replace(/\.\d{3}Z$/, 'Z') },
+      tipo: 'soa', proyecto: String(p.organizacion || p.nombre || '').slice(0, 120), datos,
+      resumen: { categoria: calc.categoria || null, niveles: { ...calc.niveles }, grado: Math.round(calc.kpi.grado * 1000) / 1000, medidas: calc.kpi.medidas, aplicables: calc.kpi.aplicables, implantadas: calc.kpi.implantadas, pendientes: calc.kpi.pendientes,
+        activos: (state.activos || []).map((a) => ({ id: String(a.id), nombre: String(a.nombre || '') })) } };
+  }
+
+  return { aSobreSoa, CVSS_DEF, esPendiente, planAccion, instantanea, DIMS, DIM_LABEL, ENS_LEVELS, NIVELES, NN, NIVEL_LABEL, MATRIZ, MADUREZ, SEV, FAMILIAS,
     isBlank, ensLevel, codeSort, familiaDe, marcoDe, nivelesSistema, categoria, nivelExigido, parseExigencia,
     impacto, nivelDesdeImpacto, riesgoInherente, riesgoResidual, riesgoMax, eficaciaCombinada, probDesdeCvss, sevCvss,
     amenazasEfectivas, registroRiesgos, tratamientoSugerido, pctDe, aplicaDeclarada, calcular, auditar };

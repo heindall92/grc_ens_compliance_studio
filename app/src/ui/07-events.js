@@ -202,6 +202,7 @@ document.addEventListener('click', (ev) => {
     case 'ai-just-use': { const c = el.dataset.code; state.soa[c] = state.soa[c] || {}; state.soa[c].justificacion = ui.ai.just; ui.ai = { ...ui.ai, just: '', justCode: null }; commit('Justificación actualizada'); break; }
     case 'export-xlsx': exportXlsx(); break;
     case 'export-md': saveFile(`${slug()}_informe_preauditoria_${today()}.md`, informeMd()); break;
+    case 'export-soa': saveFile(`${slug()}_soa_ecosistema_${today()}.json`, JSON.stringify(E.aSobreSoa(state, calc, VERSION), null, 1)); break;
     case 'export-json': saveFile(`${slug()}_proyecto_${today()}.json`, JSON.stringify(state, null, 1)); break;
     case 'export-csv': saveFile(`${slug()}_registro_riesgos_${today()}.csv`, riesgosCsv()); break;
     case 'export-plan': saveFile(`${slug()}_plan_accion_${today()}.csv`, planCsv()); break;

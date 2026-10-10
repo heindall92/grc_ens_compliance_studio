@@ -1,5 +1,16 @@
 # Cambios
 
+## 2.2.0 · octubre de 2026
+
+**Ecosistema**
+- **SoA como sobre `yrd-ecosistema`:** Exportar → *Ecosistema: SoA para CTEM-Nexus y Rosetta* descarga la categoría, los niveles por dimensión y el estado de las 73 medidas (aplica, nivel, estado, implantación, responsable, riesgos y hallazgos abiertos), con la lista de activos. CTEM-Nexus ajusta con él los plazos de corrección.
+- **Herramientas GRC del autor:** el bloque de Acerca de pasa a siete herramientas (se suman CTEM-Nexus, ENS AD Auditor y Norvik) y explica que comparten formato de intercambio. Rosetta ya cubre 15 normas y leyes sobre 152 controles.
+- **Exportar en inglés:** las descripciones de las tarjetas de Exportar no se traducían; ahora sí.
+
+**Pruebas**
+- Motor: 16. La nueva compara el sobre con el ejemplo publicado (`GOLDEN=1` lo regenera).
+- End-to-end: 102, con la descarga del sobre, las siete tarjetas y Exportar en inglés. axe: 0 infracciones.
+
 ## 2.1.0 · octubre de 2026
 
 **Interfaz**

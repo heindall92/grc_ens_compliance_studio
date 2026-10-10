@@ -208,3 +208,23 @@ test('plan de acción: agrega hallazgos, riesgos y NC; conserva el estado del us
   assert.equal(v.verificada, true);
   assert.equal(v.estado, 'Verificada');
 });
+
+test('ecosistema: la SoA viaja como sobre «soa» con categoría, niveles y las 73 medidas', () => {
+  const st = seed(); const c = E.calcular(st, ctx);
+  const s = E.aSobreSoa(st, c, '2.2.0', new Date('2026-10-10T08:00:00.500Z'));
+  assert.equal(s.format, 'yrd-ecosistema'); assert.equal(s.version, 1); assert.equal(s.tipo, 'soa');
+  assert.deepEqual(s.origen, { herramienta: 'compliance-studio', version: '2.2.0', generado: '2026-10-10T08:00:00Z' });
+  assert.equal(s.resumen.categoria, 'ALTA');
+  assert.deepEqual(s.resumen.niveles, { D: 'ALTO', I: 'ALTO', C: 'ALTO', A: 'ALTO', T: 'MEDIO' });
+  assert.equal(s.datos.length, 73);
+  assert.equal(s.resumen.aplicables, s.datos.filter((d) => d.aplica).length);
+  for (const d of s.datos) {
+    assert.match(d.medida, /^(org\.\d+|(op|mp)\.[a-z]+\.\d+)$/);
+    assert.ok(d.implantacion >= 0 && d.implantacion <= 1 && Number.isInteger(d.riesgos) && Number.isInteger(d.hallazgosAbiertos));
+  }
+  assert.ok(s.datos.some((d) => d.hallazgosAbiertos > 0), 'los hallazgos abiertos del caso se cruzan con sus medidas');
+  assert.ok(s.resumen.activos.length > 0 && s.resumen.activos.every((a) => a.id));
+  const golden = path.join(__dirname, 'fixtures', 'studio-a-ctem.json');
+  if (process.env.GOLDEN) fs.writeFileSync(golden, JSON.stringify(s, null, 1) + '\n');
+  assert.deepEqual(JSON.parse(fs.readFileSync(golden, 'utf8')), JSON.parse(JSON.stringify(s)), 'el ejemplo publicado coincide con el motor (GOLDEN=1 lo regenera)');
+});

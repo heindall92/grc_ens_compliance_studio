@@ -107,7 +107,7 @@ Es un único fichero HTML. Funciona sin conexión, no tiene servidor y no hace n
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="2"><code>version: 2.1.0&nbsp;&nbsp;·&nbsp;&nbsp;casos: 5&nbsp;&nbsp;·&nbsp;&nbsp;idiomas: es, en&nbsp;&nbsp;·&nbsp;&nbsp;licencia: MIT</code></td>
+      <td colspan="2"><code>version: 2.2.0&nbsp;&nbsp;·&nbsp;&nbsp;casos: 5&nbsp;&nbsp;·&nbsp;&nbsp;idiomas: es, en&nbsp;&nbsp;·&nbsp;&nbsp;licencia: MIT</code></td>
     </tr>
   </tfoot>
 </table>
@@ -283,12 +283,19 @@ node docs/assets/generar.js
 
 </details>
 
+## Ecosistema
+
+ENS Compliance Studio comparte con el resto de herramientas GRC del autor el sobre de intercambio `yrd-ecosistema` (JSON, versión 1).
+
+- **Exportar → Ecosistema: SoA para CTEM-Nexus y Rosetta** descarga un sobre `soa` con la categoría del sistema, los niveles por dimensión y, por cada una de las 73 medidas, si aplica, el nivel exigido, el estado, la implantación, el responsable, los riesgos que trata y los hallazgos abiertos. Lleva también la lista de activos. [CTEM-Nexus](https://heindall92.github.io/ctem-nexus/) ajusta con la categoría los plazos de corrección (en ALTA, un hallazgo crítico pasa de 3 a 2 días) y usa los activos para devolver su evidencia técnica. Ejemplo: [`tests/fixtures/studio-a-ctem.json`](tests/fixtures/studio-a-ctem.json), que la prueba del motor compara con lo que genera el motor.
+- **Evidencia técnica → Importar** acepta los hallazgos que exportan CTEM-Nexus y ENS AD Auditor (`ens-studio-hallazgos`).
+
 ## <img src="docs/assets/icons/terminal.svg" width="20" height="20" valign="middle"/> Calidad
 
 | Suite | Herramienta | Comprobaciones | Qué demuestra |
 |---|---|---|---|
-| Motor | `node --test` | 15 | Paridad con el Excel (73 medidas e indicadores) y con **el código original de MAGERIT Lab**; los 5 casos; ajustes; plan de acción. |
-| Aplicación | Playwright | 98 | Flujo completo, importación del Excel del profesor, exportaciones, barra lateral, teclado y foco, ataques (XSS, contaminación de prototipos, fórmulas, almacenamiento manipulado, ficheros enormes), CSP y diseño a 390 y 768 px. |
+| Motor | `node --test` | 16 | Paridad con el Excel (73 medidas e indicadores) y con **el código original de MAGERIT Lab**; los 5 casos; ajustes; plan de acción; sobre «soa» del ecosistema contra su ejemplo publicado. |
+| Aplicación | Playwright | 102 | Flujo completo, importación del Excel del profesor, exportaciones (incluido el sobre «soa» para CTEM-Nexus y Rosetta), enlaces a las siete herramientas GRC del autor, Exportar en inglés, barra lateral, teclado y foco, ataques (XSS, contaminación de prototipos, fórmulas, almacenamiento manipulado, ficheros enormes), CSP y diseño a 390 y 768 px. |
 | Accesibilidad | axe-core | 0 infracciones | WCAG 2.2 A/AA en todas las vistas, pestañas, asistente y paleta, en tema claro y oscuro, a 1440 y 390 px. |
 | Auditor CLI | pytest | 11 | Resultado exacto sobre el Excel original, mutaciones controladas, **paridad Python ↔ JavaScript** e informe Markdown con carga maliciosa. |
 
