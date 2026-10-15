@@ -1,5 +1,10 @@
 # Cambios
 
+## Sin publicar
+
+**Contrato con Rosetta 2.13.0**
+- **Refuerzos del ENS leídos igual en los dos repositorios:** `tests/fixtures/ens-exigencias-refuerzos.json` recoge las 219 exigencias del anexo II (73 medidas × 3 niveles) con sus refuerzos obligatorios y alternativos. Studio lo comprueba con `parseExigencia` y Rosetta con `exigenciaRefuerzos`: si una de las dos herramientas cambia la lectura, su CI falla. Rosetta importa además la tabla de refuerzos de las copias de Studio.
+
 ## 2.2.0 · octubre de 2026
 
 **Ecosistema**
