@@ -228,3 +228,13 @@ test('ecosistema: la SoA viaja como sobre «soa» con categoría, niveles y las 
   if (process.env.GOLDEN) fs.writeFileSync(golden, JSON.stringify(s, null, 1) + '\n');
   assert.deepEqual(JSON.parse(fs.readFileSync(golden, 'utf8')), JSON.parse(JSON.stringify(s)), 'el ejemplo publicado coincide con el motor (GOLDEN=1 lo regenera)');
 });
+
+test('contrato con Rosetta 2.13.0: las 219 exigencias de refuerzos del anexo II se leen igual en los dos repositorios', () => {
+  // tests/fixtures/ens-exigencias-refuerzos.json es el mismo fichero que comprueba Rosetta (tests/engine.test.mjs)
+  const c = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'ens-exigencias-refuerzos.json'), 'utf8'));
+  assert.equal(c.formato, 'contrato-refuerzos-ens'); assert.equal(c.version, 1); assert.equal(c.casos.length, 219);
+  for (const x of c.casos) {
+    assert.equal(D.anexo[x.medida][x.nivel], x.exigencia, `${x.medida} ${x.nivel}: el anexo de Studio dice otra cosa`);
+    assert.deepEqual(E.parseExigencia(x.exigencia), { aplica: x.aplica, obligatorios: x.obligatorios, grupos: x.grupos }, `${x.medida} ${x.nivel}`);
+  }
+});
