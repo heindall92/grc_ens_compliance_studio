@@ -1,5 +1,9 @@
 # Cambios
 
+## 2.2.1 · octubre de 2026
+
+- **La web abre la app desde la raíz.** `https://heindall92.github.io/grc_ens_compliance_studio/` mostraba el README, porque GitHub Pages publica la rama `main` y en la raíz no había `index.html`. Ahora un `index.html` lleva al instante a `app/dist/ens-compliance-studio.html` y conserva el ancla (`#inicio`, …), así que siguen funcionando la raíz y los enlaces largos que usan las demás herramientas del ecosistema.
+
 ## 2.2.0 · octubre de 2026
 
 **Ecosistema**
