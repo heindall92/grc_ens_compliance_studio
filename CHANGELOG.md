@@ -1,6 +1,8 @@
 # Cambios
 
-## Sin publicar
+## 2.2.1 · octubre de 2026
+
+- **La web abre la app desde la raíz.** `https://heindall92.github.io/grc_ens_compliance_studio/` mostraba el README, porque GitHub Pages publica la rama `main` y en la raíz no había `index.html`. Ahora un `index.html` lleva al instante a `app/dist/ens-compliance-studio.html` y conserva el ancla (`#inicio`, …), así que siguen funcionando la raíz y los enlaces largos que usan las demás herramientas del ecosistema.
 
 **Contrato con Rosetta 2.13.0**
 - **Refuerzos del ENS leídos igual en los dos repositorios:** `tests/fixtures/ens-exigencias-refuerzos.json` recoge las 219 exigencias del anexo II (73 medidas × 3 niveles) con sus refuerzos obligatorios y alternativos. Studio lo comprueba con `parseExigencia` y Rosetta con `exigenciaRefuerzos`: si una de las dos herramientas cambia la lectura, su CI falla. Rosetta importa además la tabla de refuerzos de las copias de Studio.
