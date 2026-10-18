@@ -67,22 +67,31 @@ function snapshot() {
   state.historial.push(s); state.historial = state.historial.slice(-24);
 }
 let saveT = null;
+/* La escritura se aplaza 200 ms para agrupar cambios seguidos. Al ocultar o cerrar la página se adelanta:
+ * así una recarga o un cierre justo después de editar no pierde el último cambio. */
+function flushSave() {
+  if (!saveT) return;
+  clearTimeout(saveT); saveT = null;
+  if (!state || !ws.activeId) return;
+  store.set(PKEY(ws.activeId), state);
+  const p = ws.projects.find((x) => x.id === ws.activeId);
+  if (p) { p.updated = new Date().toISOString(); p.nombre = state.proyecto?.nombre || p.nombre; p.organizacion = state.proyecto?.organizacion || ''; p.categoria = calc?.categoria; p.grado = calc?.kpi.grado; p.ncMayor = audit ? audit.filter((f) => f.sev === 'NC mayor').length : 0; }
+  saveWs();
+}
 function saveProject() {
   if (!state || !ws.activeId) return;
   clearTimeout(saveT);
-  saveT = setTimeout(() => {
-    store.set(PKEY(ws.activeId), state);
-    const p = ws.projects.find((x) => x.id === ws.activeId);
-    if (p) { p.updated = new Date().toISOString(); p.nombre = state.proyecto?.nombre || p.nombre; p.organizacion = state.proyecto?.organizacion || ''; p.categoria = calc?.categoria; p.grado = calc?.kpi.grado; p.ncMayor = audit ? audit.filter((f) => f.sev === 'NC mayor').length : 0; }
-    saveWs();
-  }, 200);
+  saveT = setTimeout(flushSave, 200);
 }
+addEventListener('pagehide', flushSave);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushSave(); });
 function commit(msg) { recompute(); snapshot(); saveProject(); render(); if (msg) toast(msg); }
 
 /* ---------- Proyectos ---------- */
 const activeMeta = () => ws.projects.find((p) => p.id === ws.activeId) || null;
 const isDemo = () => activeMeta()?.kind === 'demo';
 function openProject(id, view = 'panel') {
+  flushSave(); // el cambio pendiente es del proyecto que se deja
   const st = store.get(PKEY(id));
   if (!st) { toast('No se encuentra el proyecto'); return; }
   state = migrate(st); ws.activeId = id; saveWs();

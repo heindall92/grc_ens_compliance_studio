@@ -239,6 +239,10 @@ with sync_playwright() as p:
     ok(st["prob"] == "M" and st["tipo"] == "[D]" and st["val"]["D"] == 10 and st["val"]["I"] == 0 and st["n"] == 1, "Valores fuera de esquema normalizados (probabilidad, tipo, valoración, ids)")
     ok(st["cvss"] == 10 and st["mad"] == "L0" and st["cubre"] == ["R-001"] and st["op"] == "" and st["pct"] is None, "CVSS acotado, madurez y tratamiento en lista blanca, referencias rotas eliminadas")
 
+    page.click('nav [data-view="categorizacion"]'); page.wait_for_selector('[data-act="add-cat"]')
+    n0 = J("window.__ENS_STUDIO__.state.categorizacion.length")
+    page.click('[data-act="add-cat"]'); page.reload(); page.wait_for_selector("#view h1")
+    ok(J("window.__ENS_STUDIO__.state.categorizacion.length") == n0 + 1, "Un cambio justo antes de recargar no se pierde: la escritura aplazada se adelanta al cerrar la página")
     print("Seguridad: localStorage manipulado y ficheros grandes")
     ws_evil = {"profile": {"nombre": payload, "color": '"><img src=x onerror=alert(1)>'}, "settings": {"tema": payload, "acento": '" onload="x', "cvss": {"ma": "NaN"}, "reglasOff": ["<b>"]}, "projects": [{"id": "../../etc", "nombre": "x"}], "activeId": "__proto__"}
     J(f"localStorage.setItem('ens-studio/v2/ws', {json.dumps(json.dumps(ws_evil))})")
