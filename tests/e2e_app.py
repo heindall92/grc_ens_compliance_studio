@@ -196,9 +196,9 @@ with sync_playwright() as p:
     for t in ["inicio", "flujo", "glosario", "reglas", "atajos", "faq", "acerca"]:
         page.click(f'[data-act="help-tab"][data-tab="{t}"]')
     ok(page.locator(".about").count() == 1, "Todas las pestañas de ayuda")
-    ok(page.locator(".suite-card").count() == 7 and "ENS Compliance Studio" in page.locator(".suite-card.here").inner_text() and page.locator(".suite-card.here a").count() == 1, "Acerca de: siete herramientas GRC, ENS Compliance Studio marcada «Estás aquí» y solo con enlace a su código")
+    ok(page.locator(".suite-card").count() == 8 and "ENS Compliance Studio" in page.locator(".suite-card.here").inner_text() and page.locator(".suite-card.here a").count() == 1, "Acerca de: siete herramientas GRC, ENS Compliance Studio marcada «Estás aquí» y solo con enlace a su código")
     suite = J("[...document.querySelectorAll('.suite a')].map(a => [a.href, a.target, a.rel])")
-    hosts = ["heindall92.github.io/argos-grc", "github.com/heindall92/argos-grc", "heindall92.github.io/rosetta_multinorma", "github.com/heindall92/rosetta_multinorma", "heindall92.github.io/kairos", "github.com/heindall92/kairos", "github.com/heindall92/grc_ens_compliance_studio", "heindall92.github.io/ctem-nexus", "github.com/heindall92/ens_ad-auditor", "github.com/heindall92/Norvik_Gobernanza"]
+    hosts = ["heindall92.github.io/argos-grc", "github.com/heindall92/argos-grc", "heindall92.github.io/rosetta_multinorma", "github.com/heindall92/rosetta_multinorma", "heindall92.github.io/kairos", "github.com/heindall92/kairos", "github.com/heindall92/grc_ens_compliance_studio", "heindall92.github.io/ctem-nexus", "github.com/heindall92/ens_ad-auditor", "heindall92.github.io/mcp-shield", "github.com/heindall92/mcp-shield", "github.com/heindall92/Norvik_Gobernanza"]
     ok(all(any(h in u for u, _, _ in suite) for h in hosts) and all(t == "_blank" and "noopener" in r for _, t, r in suite), "Enlaces a las apps y repositorios, en pestaña nueva con noopener")
     page.keyboard.press("Control+k"); page.keyboard.type("op.acc.6"); page.keyboard.press("Enter"); page.wait_for_timeout(300)
     ok(J("window.__ENS_STUDIO__.state && document.querySelector('#soa-op\\\\.acc\\\\.6.open') !== null"), "Ctrl+K → op.acc.6 abre la medida en la SoA")
@@ -239,6 +239,10 @@ with sync_playwright() as p:
     ok(st["prob"] == "M" and st["tipo"] == "[D]" and st["val"]["D"] == 10 and st["val"]["I"] == 0 and st["n"] == 1, "Valores fuera de esquema normalizados (probabilidad, tipo, valoración, ids)")
     ok(st["cvss"] == 10 and st["mad"] == "L0" and st["cubre"] == ["R-001"] and st["op"] == "" and st["pct"] is None, "CVSS acotado, madurez y tratamiento en lista blanca, referencias rotas eliminadas")
 
+    page.click('nav [data-view="categorizacion"]'); page.wait_for_selector('[data-act="add-cat"]')
+    n0 = J("window.__ENS_STUDIO__.state.categorizacion.length")
+    page.click('[data-act="add-cat"]'); page.reload(); page.wait_for_selector("#view h1")
+    ok(J("window.__ENS_STUDIO__.state.categorizacion.length") == n0 + 1, "Un cambio justo antes de recargar no se pierde: la escritura aplazada se adelanta al cerrar la página")
     print("Seguridad: localStorage manipulado y ficheros grandes")
     ws_evil = {"profile": {"nombre": payload, "color": '"><img src=x onerror=alert(1)>'}, "settings": {"tema": payload, "acento": '" onload="x', "cvss": {"ma": "NaN"}, "reglasOff": ["<b>"]}, "projects": [{"id": "../../etc", "nombre": "x"}], "activeId": "__proto__"}
     J(f"localStorage.setItem('ens-studio/v2/ws', {json.dumps(json.dumps(ws_evil))})")

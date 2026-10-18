@@ -107,7 +107,7 @@ Es un único fichero HTML. Funciona sin conexión, no tiene servidor y no hace n
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="2"><code>version: 2.2.0&nbsp;&nbsp;·&nbsp;&nbsp;casos: 5&nbsp;&nbsp;·&nbsp;&nbsp;idiomas: es, en&nbsp;&nbsp;·&nbsp;&nbsp;licencia: MIT</code></td>
+      <td colspan="2"><code>version: 2.2.2&nbsp;&nbsp;·&nbsp;&nbsp;casos: 5&nbsp;&nbsp;·&nbsp;&nbsp;idiomas: es, en&nbsp;&nbsp;·&nbsp;&nbsp;licencia: MIT</code></td>
     </tr>
   </tfoot>
 </table>
@@ -295,7 +295,7 @@ ENS Compliance Studio comparte con el resto de herramientas GRC del autor el sob
 | Suite | Herramienta | Comprobaciones | Qué demuestra |
 |---|---|---|---|
 | Motor | `node --test` | 16 | Paridad con el Excel (73 medidas e indicadores) y con **el código original de MAGERIT Lab**; los 5 casos; ajustes; plan de acción; sobre «soa» del ecosistema contra su ejemplo publicado. |
-| Aplicación | Playwright | 102 | Flujo completo, importación del Excel del profesor, exportaciones (incluido el sobre «soa» para CTEM-Nexus y Rosetta), enlaces a las siete herramientas GRC del autor, Exportar en inglés, barra lateral, teclado y foco, ataques (XSS, contaminación de prototipos, fórmulas, almacenamiento manipulado, ficheros enormes), CSP y diseño a 390 y 768 px. |
+| Aplicación | Playwright | 103 | Flujo completo, persistencia de un cambio justo antes de recargar, importación del Excel del profesor, exportaciones (incluido el sobre «soa» para CTEM-Nexus y Rosetta), enlaces a las siete herramientas GRC del autor, Exportar en inglés, barra lateral, teclado y foco, ataques (XSS, contaminación de prototipos, fórmulas, almacenamiento manipulado, ficheros enormes), CSP y diseño a 390 y 768 px. |
 | Accesibilidad | axe-core | 0 infracciones | WCAG 2.2 A/AA en todas las vistas, pestañas, asistente y paleta, en tema claro y oscuro, a 1440 y 390 px. |
 | Auditor CLI | pytest | 11 | Resultado exacto sobre el Excel original, mutaciones controladas, **paridad Python ↔ JavaScript** e informe Markdown con carga maliciosa. |
 
