@@ -107,7 +107,7 @@ Es un único fichero HTML. Funciona sin conexión, no tiene servidor y no hace n
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="2"><code>version: 2.2.0&nbsp;&nbsp;·&nbsp;&nbsp;casos: 5&nbsp;&nbsp;·&nbsp;&nbsp;idiomas: es, en&nbsp;&nbsp;·&nbsp;&nbsp;licencia: MIT</code></td>
+      <td colspan="2"><code>version: 2.2.2&nbsp;&nbsp;·&nbsp;&nbsp;casos: 5&nbsp;&nbsp;·&nbsp;&nbsp;idiomas: es, en&nbsp;&nbsp;·&nbsp;&nbsp;licencia: MIT</code></td>
     </tr>
   </tfoot>
 </table>

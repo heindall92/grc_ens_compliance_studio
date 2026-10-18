@@ -1,5 +1,10 @@
 # Cambios
 
+## 2.2.2 · octubre de 2026
+
+- **Herramientas GRC del autor:** Ayuda → Acerca de pasa a ocho herramientas. Se suma **MCP-Shield**, que audita las configuraciones MCP de los asistentes de IA (Claude Desktop, Cursor, VS Code): cadena de suministro, secretos, ficheros y *tool poisoning*. Sus hallazgos entran en CTEM-Nexus 1.2.1 con su sobre `yrd-ecosistema` y llegan a Rosetta como evidencia por control. La versión de la app, del README y de `package.json` vuelve a coincidir (la app decía 2.2.0).
+- **Pruebas.** La e2e de Acerca de comprueba las ocho tarjetas.
+
 ## 2.2.1 · octubre de 2026
 
 - **La web abre la app desde la raíz.** `https://heindall92.github.io/grc_ens_compliance_studio/` mostraba el README, porque GitHub Pages publica la rama `main` y en la raíz no había `index.html`. Ahora un `index.html` lleva al instante a `app/dist/ens-compliance-studio.html` y conserva el ancla (`#inicio`, …), así que siguen funcionando la raíz y los enlaces largos que usan las demás herramientas del ecosistema.

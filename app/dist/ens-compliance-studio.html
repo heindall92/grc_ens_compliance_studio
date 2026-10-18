@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mosUtWFuK2Km5IOSqiYWkl3QoXdx4Zqg1aL4jX5rHDc=' 'sha256-dYb/Duadfx8GzsFx6PY5WhLdwRXLvAqxm0Bl5Pnip2c=' 'sha256-n9UwH07VeTKl8o1dnX7gG6B9/zH/Lp0rJkeye6JW8sk=' 'sha256-zAFRMKqFIefwiPiImOupSczcv7ON8L0Sm0S3Jzw6b0E=' 'sha256-HHq/KZP/LNYeUI+SaOms2gCYyXlvOSXSug0leQcmU+I='; style-src 'sha256-gKOCsaTh8XiKPmWUs4ywzN+YxAMHVHr0t1u8yYzRzMA='; style-src-attr 'unsafe-inline'; font-src 'none'; img-src data: blob:; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mosUtWFuK2Km5IOSqiYWkl3QoXdx4Zqg1aL4jX5rHDc=' 'sha256-dYb/Duadfx8GzsFx6PY5WhLdwRXLvAqxm0Bl5Pnip2c=' 'sha256-aswVTzsZyl13VObOOVNm9M55aFbBzRwn3Q3d9Xi8HGY=' 'sha256-zAFRMKqFIefwiPiImOupSczcv7ON8L0Sm0S3Jzw6b0E=' 'sha256-HHq/KZP/LNYeUI+SaOms2gCYyXlvOSXSug0leQcmU+I='; style-src 'sha256-gKOCsaTh8XiKPmWUs4ywzN+YxAMHVHr0t1u8yYzRzMA='; style-src-attr 'unsafe-inline'; font-src 'none'; img-src data: blob:; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ENS Compliance Studio</title>
@@ -1613,11 +1613,12 @@ const EN = {
   'Hospital de un servicio autonómico de salud, con historia clínica electrónica, imagen médica y equipos de electromedicina heredados. La trazabilidad es ALTA, las copias no están aisladas frente a ransomware y hay una medida marcada como compensada sin ficha que la respalde.': 'A hospital in a regional health service, with an electronic health record, medical imaging and legacy medical devices. Traceability is HIGH, backups are not isolated from ransomware and one measure is marked compensated without a record to support it.',
   'Startup de 14 personas que ofrece cita previa en la nube a ayuntamientos. Categoría BÁSICA, pero su SoA está sin firmar, lleva más de un año sin revisarse y declara medidas que no le exigen. Su API deja ver citas de otros clientes.': 'A 14-person startup offering cloud appointments to municipalities. BASIC category, but its SoA is unsigned, has not been reviewed for over a year and declares measures it is not required to have. Its API lets one client see another client’s appointments.',
   // Herramientas GRC del autor (7) y ecosistema
-  'Se complementan y comparten un formato de intercambio: ARGOS te entrena, Rosetta traduce entre marcos, ENS Compliance Studio prepara la conformidad con el ENS, KAIROS cubre la continuidad, CTEM-Nexus mide la exposición técnica, ENS AD Auditor revisa el directorio y Norvik gobierna el conjunto.': 'They work together and share one exchange format: ARGOS trains you, Rosetta translates between frameworks, ENS Compliance Studio prepares ENS conformity, KAIROS covers continuity, CTEM-Nexus measures technical exposure, ENS AD Auditor reviews the directory and Norvik governs the whole.',
+  'Se complementan y comparten un formato de intercambio: ARGOS te entrena, Rosetta traduce entre marcos, ENS Compliance Studio prepara la conformidad con el ENS, KAIROS cubre la continuidad, CTEM-Nexus mide la exposición técnica, ENS AD Auditor revisa el directorio, MCP-Shield audita los asistentes de IA y Norvik gobierna el conjunto.': 'They work together and share one exchange format: ARGOS trains you, Rosetta translates between frameworks, ENS Compliance Studio prepares ENS conformity, KAIROS covers continuity, CTEM-Nexus measures technical exposure, ENS AD Auditor reviews the directory, MCP-Shield audits AI assistants and Norvik governs the whole.',
   'Laboratorio de práctica GRC: rutas, máquinas con flags y simulacros cronometrados de ENS, ISO/IEC 27001 y continuidad, con rangos y logros.': 'GRC practice lab: ENS, ISO/IEC 27001 and continuity paths, machines with flags and timed mock exams, with ranks and badges.',
   'Mapa multinorma: 15 normas y leyes de la UE, EE. UU. y Latinoamérica sobre 152 controles unificados, con equivalencias ENS ↔ ISO alineadas con la CCN-STIC 825.': 'Multi-framework map: 15 standards and laws from the EU, the US and Latin America on 152 unified controls, with ENS ↔ ISO equivalences aligned with CCN-STIC 825.',
   'Gestión de la exposición: prioriza hallazgos de escáneres y pentest y dibuja las rutas de ataque hacia los activos críticos.': 'Exposure management: prioritises scanner and pentest findings and draws the attack paths to critical assets.',
   'Audita el Directorio Activo frente a las medidas de control de acceso del ENS (op.acc).': 'Audits Active Directory against the ENS access control measures (op.acc).',
+  'Audita las configuraciones MCP de los asistentes de IA (Claude Desktop, Cursor, VS Code): cadena de suministro, secretos, ficheros y tool poisoning.': 'Audits the MCP configurations of AI assistants (Claude Desktop, Cursor, VS Code): supply chain, secrets, files and tool poisoning.',
   'Gobernanza de escritorio: roles, responsables y políticas que unen al resto de herramientas.': 'Desktop governance: roles, owners and policies that tie the other tools together.',
   'Ecosistema: SoA para CTEM-Nexus y Rosetta': 'Ecosystem: SoA for CTEM-Nexus and Rosetta', 'Descargar .json': 'Download .json',
   'Exportar e importar': 'Export and import', 'Informe de preauditoría': 'Pre-audit report', 'Proyecto completo': 'Full project', 'Importar una SoA': 'Import an SoA', 'Elegir .xlsx': 'Choose .xlsx', 'Importar': 'Import',
@@ -1760,7 +1761,7 @@ const HALL = D.mapping.hallazgo_categorias;
 const CAT_AM = D.catalogos.AMENAZAS;
 const CAT_SAL = D.catalogos.SALVAGUARDAS;
 const TIPOS = D.catalogos.TIPOS_ACTIVO;
-const VERSION = '2.2.0';
+const VERSION = '2.2.2';
 
 const clone = (o) => JSON.parse(JSON.stringify(o));
 const $ = (s, r = document) => r.querySelector(s);
@@ -2537,11 +2538,12 @@ const SUITE = [
   ['kairos', 'KAIROS', 'Continuidad de negocio: BIA, BCP y DRP con la ruta crítica de recuperación de cada función.', 'https://heindall92.github.io/kairos/', 'https://github.com/heindall92/kairos'],
   ['ctem', 'CTEM-Nexus', 'Gestión de la exposición: prioriza hallazgos de escáneres y pentest y dibuja las rutas de ataque hacia los activos críticos.', 'https://heindall92.github.io/ctem-nexus/', 'https://github.com/heindall92/ctem-nexus'],
   ['adaudit', 'ENS AD Auditor', 'Audita el Directorio Activo frente a las medidas de control de acceso del ENS (op.acc).', 'https://heindall92.github.io/ens_ad-auditor/', 'https://github.com/heindall92/ens_ad-auditor'],
+  ['mcpshield', 'MCP-Shield', 'Audita las configuraciones MCP de los asistentes de IA (Claude Desktop, Cursor, VS Code): cadena de suministro, secretos, ficheros y tool poisoning.', 'https://heindall92.github.io/mcp-shield/', 'https://github.com/heindall92/mcp-shield'],
   ['norvik', 'Norvik', 'Gobernanza de escritorio: roles, responsables y políticas que unen al resto de herramientas.', null, 'https://github.com/heindall92/Norvik_Gobernanza']
 ];
 function suiteGrc() {
   const ext = (h, l, ic) => `<a class="btn sm" href="${h}" target="_blank" rel="noopener noreferrer">${icon(ic, 14)}${l}</a>`;
-  return `<section class="suite" aria-labelledby="suite-h"><h3 id="suite-h">Herramientas GRC del autor</h3><p class="muted small">Se complementan y comparten un formato de intercambio: ARGOS te entrena, Rosetta traduce entre marcos, ENS Compliance Studio prepara la conformidad con el ENS, KAIROS cubre la continuidad, CTEM-Nexus mide la exposición técnica, ENS AD Auditor revisa el directorio y Norvik gobierna el conjunto.</p>
+  return `<section class="suite" aria-labelledby="suite-h"><h3 id="suite-h">Herramientas GRC del autor</h3><p class="muted small">Se complementan y comparten un formato de intercambio: ARGOS te entrena, Rosetta traduce entre marcos, ENS Compliance Studio prepara la conformidad con el ENS, KAIROS cubre la continuidad, CTEM-Nexus mide la exposición técnica, ENS AD Auditor revisa el directorio, MCP-Shield audita los asistentes de IA y Norvik gobierna el conjunto.</p>
     <div class="suite-grid">${SUITE.map(([id, n, d, app, repo]) => `<article class="suite-card${id === 'ens' ? ' here' : ''}"><div class="suite-hd"><b>${n}</b>${id === 'ens' ? '<span class="badge accent">Estás aquí</span>' : ''}</div><p>${d}</p>
       <div class="row">${id === 'ens' || !app ? ext(repo, 'Código', 'external') : ext(app, 'Abrir la app', 'arrowRight') + ext(repo, 'Código', 'external')}</div></article>`).join('')}</div></section>`;
 }
